@@ -1,0 +1,59 @@
+{% extends "dashboard/base.html" %}
+
+     
+
+{% block content %}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Dashboard</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+    
+        
+                        <div class="card mb-4">
+                          <a class="btn btn-success pt-2 pb-2" href="{% url 'home:products_add' %}"><h2>
+                            Add Products
+                          </h2></a>
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Products
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Branch</th>
+                                        <th scope="col">Rate</th>
+
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in products %}
+                                      <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{i.name}}</td>
+                                        <td>{{i.price}}</td>
+                                        <td>{{i.category.name}}</td>
+                                         <td>{{i.branch.name}}</td>
+                                         <td>{{i.rate}}</td>
+                                      </tr>
+                                  {% endfor %}
+                                    </tbody>
+                                  </table>
+                                  
+                         
+                            </div>
+                        </div>
+                    </div>
+                </main>
+          
+            </div>
+    {% endblock %}
+     
+ 
