@@ -1,0 +1,62 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style type="text/css">
+.container{
+    margin-top: 10%;
+margin-left:20%;
+}
+</style>
+<div class="container">
+    <div class="row">
+     
+        <div class="col">
+            <form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+                {{form|crispy}}
+                <div class="row">
+                    {% for i in product.image.all %}
+                     <div class="col">
+                      
+                        <img style="height:5%px; width:30%;"  src="{{i.image.url}}">
+                   
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="btn btn-primary mt-2" type="submit">Submit</button>
+        </form>
+           
+ 
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    
+    $("#id_category").change(function () {
+            const categoryId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+            $.ajax({                       // initialize an AJAX request
+                type: "POST",
+                url: '{% url "home:products_add" %}',
+                data: {
+                    'category': categoryId,       // add the country id to the POST parameters
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {   // `data` is from `get_topics_ajax` view function
+                   
+                    let html_data2="<option value=''>---------</option>";
+                    data.forEach(function (data) {
+                        html_data2 += `<option value='${data.id}'>${data.child}</option>`
+                    });
+                    $("#id_branch").html(html_data2);
+                  
+                }
+            });
+        });
+    
+    
+
+    </script>
+{% endblock %}

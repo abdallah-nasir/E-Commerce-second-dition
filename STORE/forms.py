@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from bootstrap_datepicker_plus import DatePickerInput,TimePickerInput,DateTimePickerInput
 
 
 class ProductForm(forms.ModelForm):
@@ -7,7 +8,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model=Product
         fields="__all__"
-        exclude=["image"]
+        exclude=["image","stars"]
     
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -45,6 +46,46 @@ class ManiForm(forms.ModelForm):
         
     
 
- 
+class RateForm(forms.ModelForm):
+    review=forms.CharField()
+    stars=forms.CharField()
+    class Meta:
+        model=Rate
+        fields=["user","review","stars"]
+    
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model=Profile
+        fields="__all__"
+        exclude=["user"]
+    
+class AddressEdit(forms.ModelForm):
+    class Meta:
+        model=Address
+        fields="__all__"
+        exclude=["profile","primary"]
+    
+class DealForm(forms.ModelForm):
+    expire_date =forms.DateField(widget=DatePickerInput())
+    class Meta:
+        model=Deals
+        fields="__all__"
+        exclude=['expired']
+    
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model=Category
+        fields="__all__"
+    
+        
+class BranchForm(forms.ModelForm):
+    class Meta:
+        model=Branch
+        fields="__all__"
     
     
+        
+class ManuForm(forms.ModelForm):
+    class Meta:
+        model=Branch
+        fields="__all__"

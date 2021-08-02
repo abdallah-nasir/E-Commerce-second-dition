@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.sites',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -41,8 +42,16 @@ INSTALLED_APPS = [
     "STORE",
     # packages
     'crispy_forms',
+    'bootstrap_datepicker_plus',
     'django_filters',
+    "cities_light",
+    'allauth',   
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,17 +77,80 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 "STORE.processors.global_context",
+                "STORE.processors.global_profile",
+                # "STORE.processors.global_newsletter",
+                "STORE.processors.global_wishlist",
+
             ],
         }, 
     },  
 ]
 
 WSGI_APPLICATION = 'E_commerce.wsgi.application'
+
+#cities
+# CITIES_LIGHT_APP_NAME = 'STORE'
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ["ar"]
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['EG']
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+
 # crispy forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
+#allauth  
+SITE_ID=1
+LOGIN_REDIRECT_URL ="home:home"
+ACCOUNT_ADAPTER="allauth.account.adapter.DefaultAccountAdapter"
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS =True
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL=LOGIN_REDIRECT_URL
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL =True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =1
+ACCOUNT_EMAIL_CONFIRMATION_HMAC =True
+ACCOUNT_EMAIL_REQUIRED =True
+ACCOUNT_EMAIL_VERIFICATION ="mandatory"   
+ACCOUNT_EMAIL_SUBJECT_PREFIX ="Site"
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN =60
+ACCOUNT_EMAIL_MAX_LENGTH=245
+ACCOUNT_MAX_EMAIL_ADDRESSES=1
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT =3
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT =120
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION =True
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE =True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET =True
+ACCOUNT_LOGOUT_REDIRECT_URL ="home:home"
+ACCOUNT_PASSWORD_INPUT_RENDER_VALUE =True
+ACCOUNT_SESSION_REMEMBER =None
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE =True
+ACCOUNT_SIGNUP_REDIRECT_URL =LOGIN_REDIRECT_URL
+# ACCOUNT_USERNAME_BLACKLIST 
+ACCOUNT_UNIQUE_EMAIL =True
+ACCOUNT_USERNAME_MIN_LENGTH =1
+ACCOUNT_USERNAME_REQUIRED =True
+SOCIALACCOUNT_AUTO_SIGNUP =False
+SOCIALACCOUNT_EMAIL_VERIFICATION =ACCOUNT_EMAIL_VERIFICATION
+SOCIALACCOUNT_QUERY_EMAIL =ACCOUNT_EMAIL_REQUIRED
+SOCIALACCOUNT_STORE_TOKENS =True
+# ACCOUNT_FORMS = {'login': 'shop.forms.MyCustomLoginForm'} 
 
+      
+AUTHENTICATION_BACKENDS = [
+    # ............
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
 
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+    #      ...
+]
 
-
+# payment keys
+CLIENT_ID="AUVCElDtljJUDVWukP9yrdedNic0J1B1XY1MtNfPhqxQU47F1F1A7C6ixKabvUCRZCTpkFihHBaTPR-F"
+CLIENT_SECRET="ENepKuG3KheVNsthJjDS7B2amndWXWwaAQz3PJj8Ddi6O-QFQenD9frvveoUdGLrUdJUQ0DlzVap_b9Z"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -114,12 +186,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Cairo'
 
 USE_I18N = True
 
 USE_L10N = True
-
+        
 USE_TZ = True
 
 
@@ -141,9 +213,3 @@ MEDIA_ROOT= BASE_DIR/"media"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-from django.contrib.messages import constants as messages
-MESSAGE_TAGS = {
-    messages.ERROR: 'danger'
-}

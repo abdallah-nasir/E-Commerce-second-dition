@@ -13,7 +13,7 @@
     
         
                         <div class="card mb-4">
-                          <a class="btn btn-success pt-2 pb-2" href="{% url 'home:products_add' %}"><h2>
+                          <a class="btn btn-primary pt-2 pb-2" href="{% url 'home:products_add' %}"><h2>
                             Add Products
                           </h2></a>
                             <div class="card-header">
@@ -30,6 +30,7 @@
                                         <th scope="col">Category</th>
                                         <th scope="col">Branch</th>
                                         <th scope="col">Rate</th>
+                                        <th scope="col">Action</th>
 
                                       </tr>
                                     </thead>
@@ -40,8 +41,14 @@
                                         <td>{{i.name}}</td>
                                         <td>{{i.price}}</td>
                                         <td>{{i.category.name}}</td>
-                                         <td>{{i.branch.name}}</td>
-                                         <td>{{i.rate}}</td>
+                                         <td>{{i.branch.child}}</td>
+                                         <td>{{i.average.average}} stars</td>
+                                          <td>
+                                            <a class="btn btn-success" href='{% url "home:products_modify" id=i.id %}'>EDIT</a>
+                                            <a class="btn btn-danger" href='{% url "home:product_delete" id=i.id %}'>DELETE</a>
+
+                                          </td>
+
                                       </tr>
                                   {% endfor %}
                                     </tbody>
