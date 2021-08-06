@@ -42,17 +42,18 @@ INSTALLED_APPS = [
     "STORE",
     # packages
     'crispy_forms',
-    'bootstrap_datepicker_plus',
+    'bootstrap_datepicker_plus',   
     'django_filters',
     "cities_light",
-    'allauth',   
+    # "django_countries",
+    'allauth',         
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
-]
+]       
 
-
+     
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -88,10 +89,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'E_commerce.wsgi.application'
 
+#COUNTRIES
+# COUNTRIES_ONLY = ["SA","EG","AE"]
+      
 #cities
 # CITIES_LIGHT_APP_NAME = 'STORE'
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ["ar"]
-CITIES_LIGHT_INCLUDE_COUNTRIES = ['EG']
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ["aec","en"]
+CITIES_LIGHT_INCLUDE_COUNTRIES = ["EG","AE","SA"]
 CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
 
 # crispy forms

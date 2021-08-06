@@ -31,20 +31,21 @@ def global_profile(request):
         # return redirect(reverse("account_login"))
     context={"profile":profile}
     return  context
-def global_wishlist(request):
-    if request.user.is_authenticated:
+def global_wishlist(request):     
+    if request.user.is_authenticated:    
+
         wishlist=Wishlist.objects.filter(user=request.user)
         if len(wishlist) != 1:
            for i in wishlist[1:]:
-               i.delete()    
-               print("deleted")
+               i.delete()      
+               
         try:
             device=request.COOKIES["device"]
             repeat_wish=Wishlist.objects.filter(device=device)
             if len(repeat_wish) != 1:    
                 for i in repeat_wish[1:]:    
                     i.delete()
-                    print("deleted device")
+                  
             if Wishlist.objects.filter(user=request.user).exists():
                 wishlist=Wishlist.objects.get(user=request.user)
                 wishlist.device=device
@@ -53,13 +54,15 @@ def global_wishlist(request):
                 wishlist=Wishlist.objects.get(device=device,user=None)
                 wishlist.user=request.user
                 wishlist.save()
-            # for i in Wishlist.objects.filter(user=request.user,device=device):
-            #     print(i.device,i.user)
+            lists=Wishlist.objects.filter(user=request.user,device=device)
+            if len(lists) != 1:
+                for i in lists[1:]:
+                    i.delete()
             wishlist,created=Wishlist.objects.get_or_create(user=request.user,device=device)
-            print("user hetre")
+           
         except:
             wishlist,created=Wishlist.objects.get_or_create(user=request.user)
-            print("user except pass")
+
             pass
 
     else:      
@@ -69,17 +72,18 @@ def global_wishlist(request):
             if len(wishlist) != 1:
                 for i in wishlist[1:]:
                     i.delete() 
+                  
             wishlist,created=Wishlist.objects.get_or_create(device=device)
-            print("anonymous here")
+           
         except:
             wishlist={}
-            print("anonymous passed")
+          
             pass    
     context={'wishlist':wishlist}
     return context
 def global_context(request):        
     if request.user.is_authenticated:
-        repeat_product=Product_Cart.objects.filter(user=request.user,ordered=True,delivered=False)
+
         repeat_cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
         # order=
         if len(repeat_cart) != 1:    
@@ -95,23 +99,38 @@ def global_context(request):
                 cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
                 cart.device=device
                 cart.save()
+                for i in cart.products.all():
+                    i.device=device
+                    i.save()
                 print("saved device")
-            if Cart.objects.filter(device=device,user=None,ordered=False,delivered=True).exists():
+            if Cart.objects.filter(device=device,user=None,ordered=True,delivered=False).exists():
                 cart=Cart.objects.get(device=device,user=None,ordered=True,delivered=False)
                 cart.user=request.user
                 cart.save()
+                for i in cart.products.all():
+                    i.user=request.user
+                    i.save()
+            for i in Product_Cart.objects.filter(user=request.user,ordered=True,delivered=False):
+                i.device=device
+                i.save()
             repeat_device_product=Product_Cart.objects.filter(device=device,user=None,ordered=True,delivered=False)
             for i in repeat_device_product:
                 i.user=request.user
                 i.save()
-            for i in repeat_product:
+            for i in Product_Cart.objects.filter(user=request.user,ordered=True,delivered=False):
                 i.device=device
                 i.save()
+            carts=Cart.objects.filter(user=request.user,device=device,ordered=True,delivered=False)
+            if len(carts) != 1:
+                for i in carts[1:]:
+                    i.delete()
             cart,created=Cart.objects.get_or_create(user=request.user,device=device,ordered=True,delivered=False)
         except:
             cart,created=Cart.objects.get_or_create(user=request.user,ordered=True,delivered=False)
             pass    
     else:    
+        for i in Cart.objects.all():
+            print(i.user,i.device,i.id)
         try:        
             device=request.COOKIES["device"]     
             repeat_cart=Cart.objects.filter(device=device,ordered=True,delivered=False)

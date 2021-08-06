@@ -45,10 +45,10 @@ path("filter/manufacrurer",views.manu_filter_delete,name="manu_delete"),
 path("filter/rate",views.rate_filter_delete,name="rate_delete"),
 
 # Cart
-path("add-to-cart/<str:id>/",views.add_to_cart,name="cart_add"),
+path("add-to-cart/",views.add_to_cart,name="cart_add"),
 path("remove-from-cart/<str:id>/",views.remove_from_cart,name="cart_remove"),
-path("whislist-add/<str:id>/",views.wishlist_add,name="wishlist_add"),
-path("whislist-remove/<str:id>/",views.wishlist_remove,name="wishlist_remove"),
+path("whislist-add/",views.wishlist_add,name="wishlist_add"),
+path("whislist-remove/",views.wishlist_remove,name="wishlist_remove"),
 path("quantity/add/<str:id>/",views.quantity_add,name="quantity_add"),
 path("cart/clear/",views.cart_clear,name="cart_clear"),
 path("whislist-list-remove/",views.wishlist_list_remove,name="wishlist_list_remove"),
@@ -56,10 +56,13 @@ path("make_primary/",views.make_primary,name="make_primary"),
 path("make-new-address/",views.make_new_address,name="make_new_address"),
 path("address_edit/<str:id>/",views.address_edit,name="address_edit"),  
 path("make-payment-option/",views.make_payment_option,name="make_payment_option"),
-path("quantity_add/<str:id>/",views.cart_quantity_add,name="cart_quantity_add"),
-path("quantity_remove/<str:id>/",views.cart_quantity_remove,name="cart_quantity_remove"),
+path("quantity_add/",views.cart_quantity_add,name="cart_quantity_add"),
+path("quantity_remove/",views.cart_quantity_remove,name="cart_quantity_remove"),
 path("coupon/",views.coupon,name="coupon"),
-### PAYMNETS
+path("shipping/<str:id>/",views.shipping_cost,name="shipping"),
+     
+
+### PAYMNETS     
 
 path("create/<str:id>/",views.create,name="create"),
 

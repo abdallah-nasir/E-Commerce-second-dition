@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from google_currency import convert
 import json  
+from django_countries.fields import CountryField
+from cities_light.models import Country,Region,City
+
 # Create your models here.
 
 
@@ -212,7 +215,7 @@ class Filter(models.Model):
 class Product_Cart(models.Model):
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ForeignKey(Product,blank=True,null=True,on_delete=models.CASCADE)
-    cart_id=models.PositiveIntegerField(blank=True,null=True)
+    # cart_id=models.PositiveIntegerField(blank=True,null=True)
     quantity=models.PositiveIntegerField(default=1)
     size=models.ForeignKey(Size,default=1,null=True,on_delete=models.SET_NULL)
     color=models.ForeignKey(Color,default=1,null=True,on_delete=models.SET_NULL)
@@ -240,13 +243,21 @@ class Product_Cart(models.Model):
         # pro=Product.objects.filter(id__in=)
             # print(i)   
         return pro 
+class Shipping(models.Model):
+    country=models.CharField(max_length=50,blank=True,null=True)
+    amount=models.PositiveIntegerField(default=0)
+    def __str__(self):
+        return self.country
+
 class Cart(models.Model):
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product_Cart,blank=True)
     device=models.CharField(blank=True,null=True,max_length=200)
+    price=models.FloatField(default=0)
+    shipping=models.ForeignKey(Shipping,blank=True,null=True,on_delete=models.CASCADE)
     ordered=models.BooleanField(default=False)
     delivered=models.BooleanField(default=False)
-   
+    
     def __str__(self):     
         try:
             name=self.user.username
@@ -258,12 +269,43 @@ class Cart(models.Model):
         for i in self.products.all():
             count=len(self.products.all())
         return count  
-    
+    def before_discount(self):
+        price=0       
+        for i in self.products.all(): 
+            price +=i.discount()
+        return price 
     def total_price(self):
         price=0   
         for i in self.products.all(): 
             price +=i.discount()
-        return price   
+        order=Order.objects.filter(user=self.user,ordered=True,delivered=False)
+        if order.exists():
+            my_order=Order.objects.get(user=self.user,ordered=True,delivered=False)
+            if my_order.address:
+                address=Address.objects.get(profile__user=self.user,primary=True)
+                shipping=Shipping.objects.get(country=address.country.name)
+                price -=shipping.amount
+                my_order.price =price
+                my_order.save()
+        return price      
+    def order_shipping(self):
+        price=0
+        try:
+            order=Order.objects.get(user=self.user,delivered=False,ordered=True)
+            if order.address:
+                address=Address.objects.get(profile__user=self.user,primary=True)
+                shipping=Shipping.objects.get(country=address.country.name)
+                price=shipping.amount
+        except:
+            price=0
+        return price
+    def shipping_price(self):
+        price=0   
+        for i in self.products.all(): 
+            price +=i.discount()
+        if self.shipping:
+            price -= self.shipping.amount 
+        return price 
 CHOICES=(   
     ("processing","processing"),
     ("shipped","shipped"),
@@ -278,10 +320,11 @@ PAYMENTS=(
 class Address(models.Model):
     profile=models.ForeignKey(Profile,on_delete=models.CASCADE)
     phone=models.CharField(max_length=50)
-    street=models.CharField(max_length=300)
-    # address_2=models.CharField(blank=True,max_length=300)
-    country=models.CharField(max_length=100)
+    country=models.ForeignKey(Country,null=True,on_delete=models.CASCADE)
+    region=models.ForeignKey(Region,null=True,on_delete=models.CASCADE)
     city=models.ForeignKey(City,on_delete=models.CASCADE)
+    street=models.CharField(max_length=300)
+
     zip=models.CharField(max_length=100)
     primary=models.BooleanField(default=False)
     def __str__(self):
@@ -317,7 +360,7 @@ class Order(models.Model):
     # def order_count(self):    
     #     orders=Order.objects.filter(use)
 
-class Wishlist(models.Model):
+class Wishlist(models.Model):     
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product,blank=True)
     device=models.CharField(max_length=200)

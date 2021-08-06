@@ -8,7 +8,13 @@
 #quant{
     padding-top:0.7rem !important;
 }
-
+#button-id{
+    cursor: pointer;
+}
+#button-id:hover{
+    background-color: #ff4500;
+    color:#fff;
+}
 </style>
         <!--====== App Content ======-->
         <div class="app-content">
@@ -96,26 +102,34 @@
 
                                                     <span class="table-p__price">${{i.discount}}</span></td>
                                                 <td>
-                                                    <div class="table-p__input-counter-wrap">
-                                                        <form method="POST">
-
+                                                    <div id="cartList" class="table-p__input-counter-wrap">
+                                                       
+                                                               
                                                       
                                                         <!--====== Input Counter ======-->
                                                         <div class="input-counter">
 
-                                                           <a href="{% url 'home:cart_quantity_remove' id=i.id %}"><span class="input-counter__minus fas fa-minus"></span></a> 
-                                                           <span id="quant" class="input-counter__text input-counter--text-primary-style">{{i.quantity}}</span>
-                                                            <!-- <input class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"> -->
+                                                           <div id="remove-from-cart" data-index="{{i.id}}"  value="{{i.id}}"  ><span class="input-counter__minus fas fa-minus"></span></div> 
+                                                           <span value="{{i.id}}"  id="quant" class="input-counter__text input-counter--text-primary-style quant">
+                                                            <div class="cart-list-{{i.id}}">
+                                                                {{i.quantity}}
+                                                               
+                                                            </div>  
+                                                            
+                                                            </span>
 
-                                                           <a href="{% url 'home:cart_quantity_add' id=i.id %}"><span class="input-counter__plus fas fa-plus"></span></a> </div>
+                                                            <!-- <input class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"> -->
+                                                            <input  type="hidden" class="product-id-{{i.id}}" value="{{i.id}}" />
+                                                            <div  id="add-to-cart" data-index="{{i.id}}"  value="{{i.id}}"  ><span class="input-counter__plus fas fa-plus"></span></div>
+                                                         </div>
                                                         <!--====== End - Input Counter ======-->
-                                                    </form>
+                                                    
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="table-p__del-wrap">
 
-                                                        <a class="far fa-trash-alt table-p__delete-link" href="{% url 'home:cart_remove' id=i.products.id %}"></a></div>
+                                                        <a href="{% url 'home:cart_remove' id=i.id %}"  class="far fa-trash-alt table-p__delete-link "></div></a>
                                                 </td>
                                             </tr>
                                             <!--====== End - Row ======-->
@@ -159,7 +173,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 u-s-m-b-30">
-                                <form  class="f-cart" method="POST">
+                                <form action="{% url 'home:shipping' id=cart.id %}" class="f-cart" method="POST">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 u-s-m-b-30">
@@ -171,11 +185,12 @@
 
                                                     <!--====== Select Box ======-->
 
-                                                    <label class="gl-label" for="shipping-country">COUNTRY *</label><select class="select-box select-box--primary-style" id="shipping-country">
-                                                        <option selected value="">Choose Country</option>
-                                                        <option value="uae">United Arab Emirate (UAE)</option>
-                                                        <option value="uk">United Kingdom (UK)</option>
-                                                        <option value="us">United States (US)</option>
+                                                    <label class="gl-label" for="shipping-country">COUNTRY *</label><select name="country" class="select-box select-box--primary-style" id="shipping-country" required>
+                                                        <option  value="" selected>Choose Country</option>
+                                                    {% for i in countries %}
+                                                <option   value="{{i.id}}">{{i.name|title}}</option>
+
+                                                    {% endfor %}
                                                     </select>
                                                     <!--====== End - Select Box ======-->
                                                 </div>
@@ -183,11 +198,19 @@
 
                                                     <!--====== Select Box ======-->
 
-                                                    <label class="gl-label" for="shipping-state">STATE/PROVINCE *</label><select class="select-box select-box--primary-style" id="shipping-state">
+                                                    <label class="gl-label" for="shipping-state">Region *</label><select name="region" class="select-box select-box--primary-style" id="shipping-region"required>
+                                                        <option selected value="">Choose Region</option>
+
+                                                    </select>
+                                                    <!--====== End - Select Box ======-->
+                                                </div>
+                                                <div class="u-s-m-b-30">
+
+                                                    <!--====== Select Box ======-->
+
+                                                    <label class="gl-label" for="shipping-state">STATE/PROVINCE *</label><select name="city" class="select-box select-box--primary-style" id="shipping-state" required>
                                                         <option selected value="">Choose State/Province</option>
-                                                        {% for i in cities %}
-                                                        <option value="{{i.id}}">{{i.name|title}},{{i.region|title}}</option>
-                                                       {% endfor %}
+
                                                     </select>
                                                     <!--====== End - Select Box ======-->
                                                 </div>
@@ -195,10 +218,10 @@
 
                                                     <label class="gl-label" for="shipping-zip">ZIP/POSTAL CODE *</label>
 
-                                                    <input class="input-text input-text--primary-style" type="text" id="shipping-zip" placeholder="Zip/Postal Code"></div>
+                                                    <input class="input-text input-text--primary-style" type="number" id="shipping-zip" placeholder="Zip/Postal Code" required></div>
                                                 <div class="u-s-m-b-30">
 
-                                                    <a class="f-cart__ship-link btn--e-transparent-brand-b-2" href="cart.html">CALCULATE SHIPPING</a></div>
+                                                    <button type="submit" id="button-id" class="f-cart__ship-link btn--e-transparent-brand-b-2" >CALCULATE SHIPPING</button></div>
 
                                                 <span class="gl-text">Note: There are some countries where free shipping is available otherwise our flat rate charges or country delivery charges will be apply.</span>
                                             </div>
@@ -220,20 +243,21 @@
                                                     <table class="f-cart__table">
                                                         <tbody>
                                                             <tr>
+                                                                <td>SUBTOTAL</td>
+                                                                <td>${{cart.before_discount}}</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <td>SHIPPING</td>
-                                                                <td>$0.00</td>
+                                                                <td>${{cart.shipping.amount}}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>TAX</td>
                                                                 <td>$0.00</td>
                                                             </tr>
-                                                            <tr>
-                                                                <td>SUBTOTAL</td>
-                                                                <td>${{cart.total_price}}</td>
-                                                            </tr>
+                                                          
                                                             <tr>
                                                                 <td>GRAND TOTAL</td>
-                                                                <td>${{cart.total_price}}</td>
+                                                            <td>${{cart.shipping_price}}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -255,8 +279,112 @@
             <!--====== End - Section 3 ======-->
         </div>
         <!--====== End - App Content ======-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">       
+        $("#shipping-country").change(function () {
+            const countryId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+            $.ajax({                       // initialize an AJAX request
+                type: "POST",
+                url: '{% url "home:cart" %}',
+                data: {
+                    'country': countryId,       // add the country id to the POST parameters
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {   // `data` is from `get_topics_ajax` view function
+                   
+                    let html_data2="<option value=''>Choose Region</option>";
+                    let html_data1="<option value=''>Choose State/Province</option>";
+                    data.forEach(function (data) {
+                        html_data2 += `
+                        <option value='${data.id}'>${data.name}</option>
+                        `
+                    });
+                    $("#shipping-region").html(html_data2);
+                    $("#shipping-state").html(html_data1);
+
+                }
+            });
+        });
 
 
+$("#shipping-region").change(function () {
+            const regionId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+            $.ajax({                       // initialize an AJAX request
+                type: "POST",
+                url: '{% url "home:cart" %}',
+                data: {
+                    'region': regionId,       // add the country id to the POST parameters
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {   // `data` is from `get_topics_ajax` view function
+                   
+                    let html_data2="<option value=''>Choose State/Province</option>";
+                    
+                    data.forEach(function (data) {
+                        html_data2 += `
+                        <option value='${data.id}'>${data.name}</option>
+                        `
+                    });
+                    $("#shipping-state").html(html_data2);
+                  
+                }
+            });
+        });
+
+     
+$(document).on('click',"#add-to-cart",function(){
+            var _vm=$(this);
+            var _index=_vm.attr('data-index');
+            var _productId=$(".product-id-"+_index).val();
+            // Ajax
+            $.ajax({
+            
+
+                url:"{% url 'home:cart_quantity_add' %}",
+                data:{
+                    'id':_productId,
+                    
+                    },
+                dataType:'json',
+                beforeSend:function(){
+                    _vm.attr('disabled',true);
+                },
+                success:function(res){
+                    $(".cart-list-"+res.id).text(res.quantity);
+                    _vm.attr('disabled',false);
+                }
+            });
+            // End
+        });
+                
+$(document).on('click',"#remove-from-cart",function(){
+            var _vm=$(this);
+            var _index=_vm.attr('data-index');
+            var _productId=$(".product-id-"+_index).val();
+            // Ajax
+            $.ajax({
+            
+
+                url:"{% url 'home:cart_quantity_remove' %}",
+                data:{
+                    'id':_productId,
+                    
+                    },
+                dataType:'json',
+                beforeSend:function(){
+                    _vm.attr('disabled',true);
+                },
+                success:function(res){
+                    $(".cart-list-"+res.id).text(res.quantity);
+                    _vm.attr('disabled',false);
+                }
+            });
+            // End
+        });
+
+ 
+            </script>
 {% endblock %}
 
 

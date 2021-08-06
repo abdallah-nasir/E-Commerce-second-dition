@@ -9,7 +9,7 @@ class FilterAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display=["products","user","ordered","delivered","device"]
 class WishlsitAdmin(admin.ModelAdmin):
-    list_display=["user","device"]
+    list_display=["user","device","id"]
 class AddressAdmin(admin.ModelAdmin):
     list_display=["profile","primary"]
 class DealAdmin(admin.ModelAdmin):
@@ -36,3 +36,4 @@ admin.site.register(Contact)
 admin.site.register(NewsLetter)     
 admin.site.register(Deals,DealAdmin)     
 admin.site.register(Coupon)
+admin.site.register(Shipping)

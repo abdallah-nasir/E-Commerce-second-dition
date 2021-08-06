@@ -128,26 +128,26 @@
                                                 <div class="gl-inline">
                                                     <div class="u-s-m-b-30">
 
-                                                        <label class="gl-label" for="address-phone">PHONE *</label>
+                                                        <!--====== Select Box ======-->
 
-                                                        <input class="input-text input-text--primary-style" name="phone" type="number" id="address-phone" required></div>
-                                                    <div class="u-s-m-b-30">
+                                                        <label class="gl-label" for="address-country">COUNTRY *</label>
+                                                        <select name="country"  class="select-box select-box--primary-style" id="address-country" required>
+                                                            <option selected value="">Choose Country</option>
+                                                            {% for i in countries %}
+                                                            <option value="{{i.id}}">{{i.name|title}}</option>
 
-                                                        <label class="gl-label" for="address-street">STREET ADDRESS *</label>
-
-                                                        <input class="input-text input-text--primary-style" name="street" type="text" id="address-street" placeholder="House Name and Street" required></div>
-                                                </div>
-                                                <div class="gl-inline">
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--====== End - Select Box ======-->
+                                                    </div>
                                                     <div class="u-s-m-b-30">
 
                                                         <!--====== Select Box ======-->
 
-                                                        <label class="gl-label" for="address-country">COUNTRY *</label>
-                                                        <select name="state"  class="select-box select-box--primary-style" id="address-country">
-                                                            <option selected value="">Choose Country</option>
-                                                            <option value="uae">United Arab Emirate (UAE)</option>
-                                                            <option value="uk">United Kingdom (UK)</option>
-                                                            <option value="us">United States (US)</option>
+                                                        <label class="gl-label" for="address-state">REGION *</label>
+                                                        <select name='region' class="select-box select-box--primary-style" id="address-region" required>
+                                                            <option selected value="">Choose Region</option>
+                
                                                         </select>
                                                         <!--====== End - Select Box ======-->
                                                     </div>
@@ -158,14 +158,24 @@
                                                         <label class="gl-label" for="address-state">CITY *</label>
                                                         <select name='city' class="select-box select-box--primary-style" id="address-state" required>
                                                             <option selected value="">Choose State/Province</option>
-                                                            {% for i in cities %}
-                                                            <option value="{{i.id}}">{{i.name|title}}, {{i.region|title}}</option>
-
-                                                            {% endfor %}
+                           
                                                         </select>
                                                         <!--====== End - Select Box ======-->
                                                     </div>
                                                 </div>
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+
+                                                        <label class="gl-label" for="address-phone">PHONE *</label>
+
+                                                        <input class="input-text input-text--primary-style" name="phone" type="number" id="address-phone" required></div>
+                                                    <div class="u-s-m-b-30">
+
+                                                        <label class="gl-label" for="address-street">STREET ADDRESS *</label>
+
+                                                        <input class="input-text input-text--primary-style" name="street" type="text" id="address-street" placeholder="House Name and Street" required></div>
+                                                </div>
+                                            
                                                 <div class="gl-inline">
                                                     <!-- <div class="u-s-m-b-30">
 
@@ -194,5 +204,58 @@
         </div>
         <!--====== End - App Content ======-->
 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
+    <script type="text/javascript">       
+        $("#address-country").change(function () {
+            const countryId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+            $.ajax({                       // initialize an AJAX request
+                type: "POST",
+                url: '{% url "home:address_add" slug=profile.user %}',
+                data: {
+                    'country': countryId,       // add the country id to the POST parameters
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {   // `data` is from `get_topics_ajax` view function
+                   
+                    let html_data2="<option value=''>Choose Region</option>";
+                    let html_data1="<option value=''>Choose State/Province</option>";
+                    data.forEach(function (data) {
+                        html_data2 += `
+                        <option value='${data.id}'>${data.name}</option>
+                        `
+                    });
+                    $("#address-region").html(html_data2);
+                    $("#address-state").html(html_data1);
+
+                }
+            });
+        });
+
+
+$("#address-region").change(function () {
+            const regionId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+            $.ajax({                       // initialize an AJAX request
+                type: "POST",
+                url: '{% url "home:address_add" slug=profile.user %}',
+                data: {
+                    'region': regionId,       // add the country id to the POST parameters
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {   // `data` is from `get_topics_ajax` view function
+                   
+                    let html_data2="<option value=''>Choose State/Province</option>";
+                    
+                    data.forEach(function (data) {
+                        html_data2 += `
+                        <option value='${data.id}'>${data.name}</option>
+                        `
+                    });
+                    $("#address-state").html(html_data2);
+                  
+                }
+            });
+        });
+        
+            </script>
 {% endblock %}

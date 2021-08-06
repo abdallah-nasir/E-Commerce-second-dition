@@ -9,6 +9,8 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
+from cities_light.models import Country,Region
+
 # import login_required()
 # Create your views here.    
 from datetime import date   
@@ -47,21 +49,28 @@ def products(request):
         if len(repeat_user) != 1:
             for i in repeat_user[1:]:
                 i.delete()           
-        filter_user,creatde=Filter.objects.get_or_create(user=request.user)
-        # cart,created=Cart.pbjects
-        # print(carts)   
+        # filters=Filter.objects.filter(user=request.user)
         try:      
-            device=request.COOKIES["device"]
-            filter_user.device=device
-            filter_user.save()
-           
-            if len(Filter.objects.filter(device=device)) != 1:
-                for i in Filter.objects.filter(device=device):
+            device=request.COOKIES["device"] 
+            filters=Filter.objects.filter(device=device)
+            if len(filters) != 1:
+                for i in filters[1:]:
                     i.delete()
-            for i in Filter.objects.filter(user=None,device=device):
-                i.user=request.user
-                i.save()
+            if Filter.objects.filter(user=request.user).exists():
+                filter_user=Filter.objects.get(user=request.user)
+                filter_user.device=device
+                filter_user.save()
+            if filters.exists():
+                filter_user=Filter.objects.get(device=device)
+                filter_user.user=request.user
+                filter_user.save()
+            if len(Filter.objects.filter(user=request.user,device=device)) != 1:
+                for i in Filter.objects.filter(user=request.user,device=device)[1:]:
+                    i.delete()
+            filter_user,creatde=Filter.objects.get_or_create(user=request.user,device=device)   
+            print("herereer")
         except:
+            filter_user,creatde=Filter.objects.get_or_create(user=request.user)   
             pass
             
               
@@ -150,16 +159,15 @@ def products(request):
     else:  
         try:   
             device=request.COOKIES["device"] 
-        except:     
-            device=[]       
+            repeat_anonymous=Filter.objects.filter(device=device)
+            if  len(repeat_anonymous) != 1:    
+                for i in repeat_anonymous:   
+                    i.delete()
+            filter_user,created=Filter.objects.get_or_create(device=device)
+        except:           
             pass        
-        repeat_anonymous=Filter.objects.filter(device=device)
-        if  len(repeat_anonymous) != 1:    
-            for i in repeat_anonymous:   
-                i.delete()
+
     
-        # same=Product_Cart.objects.filter(device=device,ordered=True,delivered=False) 
-        filter_user,created=Filter.objects.get_or_create(device=device)
         if free:
             try:
                 filter_user.shipping=True
@@ -167,13 +175,7 @@ def products(request):
             except:
                 messages.error(request,"sorry,invalid value")
                 pass
-        # if size:
-        #     try:
-        #         filter_user.size_id=size
-        #         filter_user.save()    
-        #     except:
-        #         messages.error(request,"sorry,invalid value")
-        #         pass
+
 
         if price_1 and price_2:
             try:
@@ -191,20 +193,7 @@ def products(request):
             except:
                 messages.error(request,"sorry.invalid value")
                 pass
-        # if color:                        
-        #     try:
-        #         filter_user.color_id=color 
-        #         filter_user.save()
-        #     except:
-        #         messages.error(request,"sorry.invalid value")
-        #         pass
-        # if manu:    
-        #     try:
-        #         filter_user.manufacturer_id=manu      
-        #         filter_user.save()
-        #     except:
-        #         messages.error(request,"sorry.invalid value")
-        #         pass
+    
         if select_filter:
             try:
                 filter_user.sort= select_filter
@@ -317,61 +306,54 @@ def this_product(request,id):
 
     context={"product":product,"same":same,"form":form,"reviews":reviews,"details":details}
     return render(request,"this_product.html",context)
-
 def cart(request):
-    cities=City.objects.all()
-    if request.user.is_authenticated:
-        repeat_product=Product_Cart.objects.filter(user=request.user,ordered=True,delivered=False)
-        repeat_cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
-        # order=
-        if len(repeat_cart) != 1:    
-            for i in repeat_cart:
-                i.delete()
+    countries=Country.objects.all()
+    if request.is_ajax():
+        country=request.POST.get("country")
+        region=request.POST.get('region')
+
         try:
-            device=request.COOKIES['device']
-            repeat_cart=Cart.objects.filter(device=device,ordered=True,delivered=False)
-            if len(repeat_cart) != 1:
-                for i in repeat_cart:
-                    i.delete()
-            if Cart.objects.filter(user=request.user,ordered=True,delivered=False).exists():
-                cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
-                cart.device=device
-                cart.save()
-                print("saved device")
-            if Cart.objects.filter(device=device,user=None,ordered=False,delivered=True).exists():
-                cart=Cart.objects.get(device=device,user=None,ordered=True,delivered=False)
-                cart.user=request.user
-                cart.save()
-            repeat_device_product=Product_Cart.objects.filter(device=device,user=None,ordered=True,delivered=False)
-            for i in repeat_device_product:
-                i.user=request.user
-                i.save()
-            for i in repeat_product:
-                i.device=device
-                i.save()
-            cart,created=Cart.objects.get_or_create(user=request.user,device=device,ordered=True,delivered=False)
+            my_region=Region.objects.filter(country_id=country)           
+            cities=City.objects.filter(region_id=region)
+            response_content=cities.values()
+            if country:
+                response_content=my_region.values()
+            elif region:
+                response_content=cities.values()
+        except Exception:       
+            response_content=list({})        
+        return JsonResponse(list(response_content),safe=False)        
+        
+    if request.user.is_authenticated:  
+        try:     
+            device=request.COOKIES["device"]
+            cart=Cart.objects.get(user=request.user,ordered=True,delivered=False,device=device)  
             if len(cart.products.all()) == 0:
                 return redirect(reverse("home:empty"))
         except:
-            cart,created=Cart.objects.get_or_create(user=request.user,ordered=True,delivered=False)
-            if len(cart.products.all()) == 0:
-                return redirect(reverse("home:empty"))
-            pass 
-    else:    
-        try:        
-            device=request.COOKIES["device"]     
-            repeat_cart=Cart.objects.filter(device=device,ordered=True,delivered=False)
-            if len(repeat_cart) !=1:
-                for i in repeat_cart:
-                    i.delete()
-            cart,created=Cart.objects.get_or_create(device=device,ordered=True,delivered=False)
-            if len(cart.products.all()) == 0:
-                return redirect(reverse("home:empty"))
-        except:    
-            return redirect(reverse("home:empty"))
             pass
-    context={"cities":cities}
+    else:   
+        try:    
+            device=request.COOKIES["device"]
+            cart=Cart.objects.get(device=device,ordered=True,delivered=False)
+            if len(cart.products.all()) == 0:
+                return redirect(reverse("home:empty"))
+        except:
+            pass  
+    context={"countries":countries} 
     return render(request,"cart.html",context)
+  
+def shipping_cost(request,id):  
+    cart=Cart.objects.get(id=id)
+    price=cart.price
+    country=request.POST.get("country")
+    try:
+        shipping=Shipping.objects.get(id=country)
+    except: 
+        pass
+    cart.shipping=shipping
+    cart.save()
+    return redirect(reverse("home:cart"))
   
 def empty(request):
       
@@ -398,8 +380,14 @@ def cart_clear(request):
             i.delete()
     return redirect(reverse("home:cart"))
 
-def add_to_cart(request,id):
+def add_to_cart(request):
     device=request.COOKIES["device"]
+    try:
+        id=request.GET["id"]
+        print(id)
+    except:
+        messages.error(request,"invalid data")
+        return redirect(reverse("home:products"))
     product=get_object_or_404(Product,id=id)
     if request.user.is_authenticated:
         repeat_product=Product_Cart.objects.filter(user=request.user,delivered=False)
@@ -438,6 +426,8 @@ def add_to_cart(request,id):
             cart.save()
             print("cart authenticated")         
             messages.success(request,"Item Added Successfully")    
+            data={"id":product_cart.id,"amounts":cart.order_product_length()}
+            return JsonResponse(data)
     else:
         device=request.COOKIES["device"]
         repeat_product=Product_Cart.objects.filter(device=device,delivered=False)
@@ -462,44 +452,67 @@ def add_to_cart(request,id):
             cart.save()
             print("cart anonymous")         
             messages.success(request,"Item Added Successfully") 
+            data={"id":product_cart.id,"amounts":cart.order_product_length()}
+            return JsonResponse(data)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     
         # product_cart.
 
-def cart_quantity_add(request,id):
-    product_cart=Product_Cart.objects.get(id=id)
+def cart_quantity_add(request):
+    try:
+        id=request.GET["id"]
+        product_cart=Product_Cart.objects.get(id=id)
+        print(id)
+    except:
+        print("passed")
+        messages.error(request,"invalid data")
+        return redirect(reverse("home:cart"))
     if product_cart.quantity >= 10:
         messages.error(request,"you have reached the maximum quantity")
         return redirect(reverse("home:cart"))
-
-    product_cart.quantity +=1
-    product_cart.save()
+    if request.is_ajax():
+        print("ajax")
+        product_cart.quantity +=1
+        product_cart.save()
+        data={"id":product_cart.id,"quantity":product_cart.quantity}
+        # response_content=product_cart
+        return JsonResponse(data)   
     return redirect(reverse("home:cart"))
     
-def cart_quantity_remove(request,id):
-    product_cart=Product_Cart.objects.get(id=id)
-    product_cart.quantity -=1
-    product_cart.save()
-    if product_cart.quantity <= 0:
-        product_cart.delete()
+def cart_quantity_remove(request):
+    try:
+        id=request.GET["id"]
+        product_cart=Product_Cart.objects.get(id=id)
+        print(id)
+    except:
+        print("passed")
+        messages.error(request,"invalid data")
+        return redirect(reverse("home:cart"))
+    if request.is_ajax():
+        product_cart.quantity -=1
+        product_cart.save()
+        if product_cart.quantity <= 0:
+            product_cart.delete()
+        data={"id":product_cart.id,"quantity":product_cart.quantity}
+        return JsonResponse(data)   
+
     return redirect(reverse("home:cart"))
     
 
-
+   
 def remove_from_cart(request,id):
     device=request.COOKIES["device"]
-    product=get_object_or_404(Product,id=id)
+    product=get_object_or_404(Product_Cart,id=id)
     if request.user.is_authenticated:
-        repeat_product=Product_Cart.objects.get(user=request.user,ordered=True,delivered=False,products_id=product.id)
+        repeat_product=Product_Cart.objects.get(user=request.user,ordered=True,delivered=False,id=product.id)
         repeat_product.delete()
         print("delted")
-        # repeat_cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
-        # repeat_cart.products.remove(product)
         messages.success(request,"Item removed Successfully")    
+      
     else:
-        repeat_product=Product_Cart.objects.get(device=device,ordered=True,delivered=False,products_id=product.id)
+        repeat_product=Product_Cart.objects.get(device=device,ordered=True,delivered=False,id=product.id)
         repeat_product.delete()
-        print("delted")
+        print("delted")   
         # repeat_cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
         # repeat_cart.products.remove(product)
         messages.success(request,"Item removed Successfully")        
@@ -655,13 +668,14 @@ def make_new_address(request):
     street=request.POST.get("street")
     city=request.POST.get("city")
     country=request.POST.get("country")
+    region=request.POST.get("region")
     zip=request.POST.get("zip")                      
     if len(Address.objects.filter(profile=profile)) >= 3:   
         messages.error(request,"sorry,you should have 3 Address only")
         return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-    else:
+    else:     
         try:
-            Address.objects.create(profile=profile,phone=phone,street=street,country=country,city_id=city,zip=zip)
+            Address.objects.create(profile=profile,phone=phone,street=street,country_id=country,region_id=region,city_id=city,zip=zip)
         except:  
             messages.error(request,"sorry, invalid data")
             return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
@@ -764,7 +778,7 @@ def coupon(request):
     return redirect(reverse("home:order",kwargs={"id":order.cart.id}))
 
 def order(request,id):
-    cities=City.objects.all()
+    countries=Country.objects.all()
     if request.user.is_authenticated:
         profile=get_object_or_404(Profile,user=request.user)
         repeat_order=Order.objects.filter(user=request.user,ordered=True,delivered=False)
@@ -804,46 +818,62 @@ def order(request,id):
             phone=request.POST.get("phone")
             street=request.POST.get("street")
             city=request.POST.get("city")
-            country=request.POST.get("country")
             zip=request.POST.get("zip")
             default=request.POST.get("default")
             primary=request.POST.get("primary")
-            print(default)                      
+            country=request.POST.get("country")
+            region=request.POST.get('region')
+            if request.is_ajax():
+                try:  
+                    my_region=Region.objects.filter(country_id=country)           
+                    cities=City.objects.filter(region_id=region)
+                    response_content=cities.values()
+                    if country:
+                        response_content=my_region.values()
+                    elif region:
+                        response_content=cities.values()
+                except Exception:       
+                    response_content=list({})        
+                return JsonResponse(list(response_content),safe=False)
             if len(Address.objects.filter(profile=profile)) >= 3:
                 messages.error(request,"sorry,you should have 3 Address only")
                 return redirect(reverse("home:order",kwargs={"id":cart.id}))       
+
             if default == None:
-                address=Address.objects.create(profile=profile,phone=phone,street=street,country=country,city_id=city,zip=zip)              
-                order.address= address
-                order.save()
-                if primary == "on":
-                    for i in Address.objects.filter(profile=profile):
-                        i.primary=False
-                        i.save()
+                try:
+                    address=Address.objects.create(profile=profile,phone=phone,street=street,country_id=country,region_id=region,city_id=city,zip=zip)              
+                    order.address= address
+                    order.save()
+                    if primary == "on":
+                        for i in Address.objects.filter(profile=profile):
+                            i.primary=False
+                            i.save()
                     address.primary =True
                     address.save()
-
-                if notes:
-                    order.notes=notes                    
-                    order.save()
-
+                    if notes:
+                        order.notes=notes                       
+                        order.save()
+                    return redirect(reverse("home:order",kwargs={"id":order.cart.id}))  
+                except:
+                    messages.error(request,"invalid data")   
+                    return redirect(reverse("home:order",kwargs={"id":order.cart.id}))
             elif default == "on":
-                try:
+               
+                try: 
                     address=Address.objects.get(profile=profile,primary=True)
                     order.address=address
                     order.save()
                     if notes:     
                         order.notes=notes
                         order.save()  
+                        print("on")
                 except:
                     messages.error(request,"you dont have a primary address")
                     return redirect(reverse("home:order",kwargs={"id":cart.id}))
-            
-
     else:               
         messages.error(request,"you must login to place your order")
         return redirect(reverse("account_login"))
-    context={"order":order,"cities":cities,"my_address":my_address,"all":all_address}
+    context={"order":order,"countries":countries,"my_address":my_address,"all":all_address}
     return render(request,"checkout.html",context)
 def profile(request,slug):    
     if request.user.is_authenticated:
@@ -920,21 +950,36 @@ def profile_edit(request,slug):
  
 def address(request,slug):
     if request.user.is_authenticated:
-        city=City.objects.all()
+        countries=Country.objects.all()
         profile=Profile.objects.get(user=request.user)
         info=Address.objects.filter(profile=profile)
         order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
         canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-
+        if request.is_ajax():
+            region=request.POST.get("region")
+            country=request.POST.get("country")
+            city=request.POST.get("city")
+            try:
+                my_region=Region.objects.filter(country_id=country)           
+                cities=City.objects.filter(region_id=region)
+                response_content=cities.values()
+                if country:
+                    response_content=my_region.values()
+                elif region:
+                    response_content=cities.values()
+            except Exception:       
+                response_content=list({})        
+            return JsonResponse(list(response_content),safe=False)        
+    
     else:        
         messages.error(request,"please login First....")
         return redirect(reverse("account_login"))
 
-    context={"profile":profile,"cities":city,"info":info,"canceled":canceled_order,"order":order}
+    context={"profile":profile,"countries":countries,"info":info,"canceled":canceled_order,"order":order}
     return render(request,"address_book.html",context)
 def address_add(request,slug):    
     if request.user.is_authenticated:
-        cities=City.objects.all()
+        countries=Country.objects.all()
         profile=Profile.objects.get(user=request.user)
         info=Address.objects.filter(profile=profile)
         order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
@@ -943,28 +988,43 @@ def address_add(request,slug):
                 return redirect(reverse("home:address",kwargs={"slug":profile.user}))
         else:
             if request.method == 'POST':
+                country=request.POST.get("country")
+                city=request.POST.get("city")
+                region=request.POST.get("region")
                 phone=request.POST.get("phone")
                 street=request.POST.get("street")
-                state=request.POST.get("state")
-                city=request.POST.get("city")
                 zip=request.POST.get("zip")
+                if request.is_ajax():
+                    try:
+                        my_region=Region.objects.filter(country_id=country)           
+                        cities=City.objects.filter(region_id=region)
+                        response_content=cities.values()
+                        if country:
+                            response_content=my_region.values()
+                        elif region:
+                            response_content=cities.values()
+                    except Exception:       
+                        response_content=list({})        
+                    return JsonResponse(list(response_content),safe=False)        
+      
                 try:
-                    address=Address.objects.create(profile=profile,phone=phone,street=street,country=state,city_id=city,zip=zip)
+                    print(country,region,city)
+                    address=Address.objects.create(profile=profile,phone=phone,street=street,country_id=country,region_id=region,city_id=city,zip=zip)
                     if len(Address.objects.filter(profile=profile)) ==1:
                         address.primary=True
                         address.save()
                     messages.success(request,"Address Added successfully")
-                    return redirect(reverse("home:address_add",kwargs={"slug":profile.user}))
+                    return redirect(reverse("home:address",kwargs={"slug":profile.user}))
                 except:
-                    messages.error(request,"invalid data")
+                    messages.error(request,"invalid data")   
                     return redirect(reverse("home:address_add",kwargs={"slug":profile.user}))
 
-
-    else:
+ 
+    else:         
         messages.error(request,"please login First....")
         return redirect(reverse("account_login"))
 
-    context={"profile":profile,"cities":cities,"canceled":canceled_order,"order":order,"info":info}
+    context={"profile":profile,"countries":countries,"canceled":canceled_order,"order":order,"info":info}
     return render(request,"address_add.html",context)
 
 def address_edit(request,id):
@@ -972,6 +1032,7 @@ def address_edit(request,id):
     form=AddressEdit(request.POST or None,instance=address)
     if form.is_valid():
         form.save()
+        return redirect(reverse("home:address",kwargs={"slug":request.user}))
     else:
         messages.error(request,"invalid data")
     return redirect(reverse("home:address",kwargs={"slug":request.user}))
@@ -1132,42 +1193,29 @@ def category(request,slug):
         repeat_user=Filter.objects.filter(user=request.user)   
         if len(repeat_user) != 1:
             for i in repeat_user[1:]:
-                i.delete()    
-
-        product_cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
-       
-        filter_user,creatde=Filter.objects.get_or_create(user=request.user)
-        # cart,created=Cart.pbjects
-        # print(carts)   
+                i.delete()           
+        # filters=Filter.objects.filter(user=request.user)
         try:      
-            device=request.COOKIES["device"]
-            filter_user.device=device
-            filter_user.save()
-           
-            if len(Filter.objects.filter(device=device)) != 1:
-                for i in Filter.objects.filter(device=device):
+            device=request.COOKIES["device"] 
+            filters=Filter.objects.filter(device=device)
+            if len(filters) != 1:
+                for i in filters[1:]:
                     i.delete()
-            for i in Filter.objects.filter(user=None,device=device):
-                i.user=request.user
-                i.save()
-            for i in product_cart:
-                if i.device != device:
-                    i.device =device   
-                    i.save()           
-                    print("product_cart saved")
-            for i in Product_Cart.objects.filter(user=None,device=device,delivered=False,ordered=True):
-                i.user=request.user
-                i.save()
-            for i in Cart.objects.filter(user=None,device=device,delivered=False,ordered=True):
-                i.user=request.user
-                i.save()  
-            for i in Cart.objects.filter(user=request.user,ordered=True,delivered=False):
-                if i.device != device:
-                    i.device=device       
-                    i.save()
+            if Filter.objects.filter(user=request.user).exists():
+                filter_user=Filter.objects.get(user=request.user)
+                filter_user.device=device
+                filter_user.save()
+            if filters.exists():
+                filter_user=Filter.objects.get(device=device)
+                filter_user.user=request.user
+                filter_user.save()
+            if len(Filter.objects.filter(user=request.user,device=device)) != 1:
+                for i in Filter.objects.filter(user=request.user,device=device)[1:]:
+                    i.delete()
+            filter_user,creatde=Filter.objects.get_or_create(user=request.user,device=device)   
         except:
+            filter_user,creatde=Filter.objects.get_or_create(user=request.user)   
             pass
-              
               
         if free:
             try:
@@ -1689,51 +1737,30 @@ def branch(request,slug):
                        
 def wishlist(request):
     if request.user.is_authenticated:
-        wishlist=Wishlist.objects.filter(user=request.user)
-        if len(wishlist) != 1:
-           for i in wishlist:
-               i.delete()    
         try:
             device=request.COOKIES["device"]
-            repeat_wish=Wishlist.objects.filter(device=device)
-            if len(repeat_wish) != 1:    
-                for i in repeat_wish:    
-                    i.delete()
-            if Wishlist.objects.filter(user=request.user).exists():
-                wishlist=Wishlist.objects.get(user=request.user)
-                wishlist.device=device
-                wishlist.save()
-            if Wishlist.objects.filter(device=device,user=None).exists():
-                wishlist=Wishlist.objects.get(device=device,user=None)
-                wishlist.user=request.user
-                wishlist.save()
-            wishlist,created=Wishlist.objects.get_or_create(user=request.user,device=device)
-            if len(wishlist.products.all()) == 0:
-                return redirect(reverse("home:empty")) 
-        except:
-            wishlist,created=Wishlist.objects.get_or_create(user=request.user)
-            if len(wishlist.products.all()) == 0:
+            wish=Wishlist.objects.get(user=request.user,device=device)
+            if len(wish.products.all()) == 0:
                 return redirect(reverse("home:empty"))
+        except:
             pass
-
-    else:     
-        try:
+    else:   
+        try:    
             device=request.COOKIES["device"]
-            wishlist=Wishlist.objects.filter(device=device)
-            if len(wishlist) != 1:
-                for i in wishlist: 
-                    i.delete() 
-            wishlist,created=Wishlist.objects.get_or_create(device=device)
-            if len(wishlist.products.all()) == 0:
+            wish=Wishlist.objects.get(device=device)
+            if len(wish.products.all()) == 0:
                 return redirect(reverse("home:empty"))
         except:
-            return redirect(reverse("home:empty"))
-            pass    
-    context={'wishlist':wishlist}
+            pass  
               
     context={'wishlist':wishlist}   
     return render(request,"wishlist.html",context)
-def wishlist_add(request,id):
+def wishlist_add(request):
+    try:
+        id=request.GET["id"]
+    except:
+        messages.error(request,"invalid data")
+        return redirect(reverse("home:wishlist"))
     product=get_object_or_404(Product,id=id)
     device=request.COOKIES["device"]
     if request.user.is_authenticated:
@@ -1749,6 +1776,8 @@ def wishlist_add(request,id):
             list.device=device
             list.save()
             messages.success(request,"Item Added Successfully") 
+            data={"id":list.id}
+            return JsonResponse(data)
     else:
         repeat_list=Wishlist.objects.filter(device=device)
         if len(repeat_list) != 1:
@@ -1760,9 +1789,16 @@ def wishlist_add(request,id):
         else:
             list.products.add(product)
             messages.success(request,"Item Added Successfully") 
+            data={"id":list.id}
+            return JsonResponse(data)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-def wishlist_remove(request,id):
+def wishlist_remove(request):
+    try:
+        id=request.GET["id"]
+    except:
+        messages.error(request,"invalid data")
+        return redirect(reverse("home:wishlist"))
     product=get_object_or_404(Product,id=id)
     if request.user.is_authenticated:
         repeat_list=Wishlist.objects.filter(user=request.user)
@@ -1773,6 +1809,8 @@ def wishlist_remove(request,id):
         if product in list.products.all():
             list.products.remove(product)
             messages.success(request,"Item Rmoved Successfully") 
+            data={"id":list.id}
+            return JsonResponse(data)
         else:
             messages.error(request,"you dont have this Item in your list") 
     else:
@@ -1785,6 +1823,8 @@ def wishlist_remove(request,id):
         if product in list.products.all():
             list.products.remove(product)
             messages.success(request,"Item Rmoved Successfully") 
+            data={"id":list.id}
+            return JsonResponse(data)
         else:
             messages.error(request,"you dont have this Item in your list") 
   

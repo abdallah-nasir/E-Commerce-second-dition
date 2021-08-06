@@ -1035,7 +1035,7 @@
 
                                         <a class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
 
-                                            <span class="total-item-round">{{cart.products.count}}</span></a>
+                                            <span id="cart-len" class="total-item-round">{{cart.order_product_length}}</span></a>
 
                                         <!--====== Dropdown ======-->
 
@@ -1068,7 +1068,7 @@
                                                             <span class="mini-product__price">${{i.discount}}</span></div>
                                                     </div>
 
-                                                    <a class="mini-product__delete-link far fa-trash-alt" href="{%url 'home:cart_remove' id=i.products.id %}"></a>
+                                                    <a class="mini-product__delete-link far fa-trash-alt" href="{% url 'home:cart_remove' id=i.id  %}"></a>
                                                 </div>
                                                 <!--====== End - Card for mini cart ======-->
                                                     {% endfor %}
@@ -1083,7 +1083,7 @@
 
                                                     <span class="subtotal-text">SUBTOTAL</span>
 
-                                                    <span class="subtotal-value">${{cart.total_price}}</span></div>
+                                                    <span class="subtotal-value">${{cart.before_discount}}</span></div>
                                                 <div class="mini-action">
                                                         {% if request.user.is_authenticated %}
                                                     <a class="mini-link btn--e-brand-b-2" href="{% url 'home:order' id=cart.id %}">PROCEED TO CHECKOUT</a>

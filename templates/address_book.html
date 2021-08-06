@@ -140,7 +140,7 @@
                                                             <a class="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id=".address-{{i.id}}">Edit</a>
 
                                                         <td>{{i.profile.user.first_name|title}} {{i.profile.user.last_name|title}}</td>
-                                                        <td>{{i.street}} {{i.city}}  {{i.country|upper}}</td>
+                                                        <td>{{i.street}} {{i.city}} </td>
                                                         <td>{{i.phone}}</td>
                                                         {% if i.primary %}
                                                         <td>
@@ -197,42 +197,52 @@
                                 <div class="gl-inline">
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-phone">PHONE *</label>
+                                        <!--====== Select Box ======-->
 
-                                        <input class="input-text input-text--primary-style" name="phone" type="number" id="address-phone" placeholder="{{i.phone}}"></div>
+                                        <label class="gl-label" for="address-country">COUNTRY *</label><select name="country" class="select-box select-box--primary-style" id="address-country" required>
+                                            <option selected value="{{i.country.id}}">{{i.country|upper}}</option>
+                                            {% for b in countries %}
+                                            <option  value="{{b.id}}">{{b.name|upper}}</option>
+
+                                            {% endfor %}
+                                        </select>
+                                        <!--====== End - Select Box ======-->
+                                    </div>
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-street">STREET ADDRESS *</label>
+                                        <!--====== Select Box ======-->
 
-                                        <input class="input-text input-text--primary-style" name="street" type="text" id="address-street" placeholder="{{i.street}}"></div>
+                                        <label class="gl-label" for="address-state">REGION *</label><select name="region" class="select-box select-box--primary-style" id="address-region" required>
+                                            <option selected value="{{i.region.id}}">{{i.region}}</option>
+                                          
+                                        </select>
+                                        <!--====== End - Select Box ======-->
+                                    </div>
+                                    <div class="u-s-m-b-30">
+
+                                        <!--====== Select Box ======-->
+
+                                        <label class="gl-label" for="address-state">CITY *</label><select name="city" class="select-box select-box--primary-style" id="address-state" required>
+                                            <option selected value="{{i.city.id}}">{{i.city}}</option>
+                                          
+                                        </select>
+                                        <!--====== End - Select Box ======-->
+                                    </div>
                                 </div>
                                 <div class="gl-inline">
                                     <div class="u-s-m-b-30">
 
-                                        <!--====== Select Box ======-->
+                                        <label class="gl-label" for="address-street">STREET ADDRESS *</label>
 
-                                        <label class="gl-label" for="address-country">COUNTRY *</label><select name="country" class="select-box select-box--primary-style" id="address-country">
-                                            <option selected value="{{i.country}}">{{i.country|upper}}</option>
-                                            <option value="uae">United Arab Emirate (UAE)</option>
-                                            <option value="uk">United Kingdom (UK)</option>
-                                            <option value="us">United States (US)</option>
-                                        </select>
-                                        <!--====== End - Select Box ======-->
-                                    </div>
+                                        <input class="input-text input-text--primary-style" name="street" type="text" id="address-street" placeholder="{{i.street}}" required></div>
                                     <div class="u-s-m-b-30">
 
-                                        <!--====== Select Box ======-->
+                                        <label class="gl-label" for="address-phone">PHONE *</label>
 
-                                        <label class="gl-label" for="address-state">CITY *</label><select name="city" class="select-box select-box--primary-style" id="address-state">
-                                            <option selected value="{{i.city.id}}">{{i.city}}</option>
-                                          {% for i in cities  %}
-                                          <option value="{{i.id}}">{{i.name|title}} , {{i.region|title}}</option>
+                                        <input class="input-text input-text--primary-style" name="phone" type="number" id="address-phone" placeholder="{{i.phone}}" required></div>
 
-                                          {% endfor %}
-                                        </select>
-                                        <!--====== End - Select Box ======-->
-                                    </div>
                                 </div>
+                           
                                 <div class="gl-inline">
                                     <!-- <div class="u-s-m-b-30">
 
@@ -243,7 +253,7 @@
 
                                         <label class="gl-label" for="address-street">ZIP/POSTAL CODE *</label>
 
-                                        <input name="zip" class="input-text input-text--primary-style" type="number" id="address-postal" placeholder="{{i.zip}}"></div>
+                                        <input name="zip" class="input-text input-text--primary-style" type="number" id="address-postal" placeholder="{{i.zip}}" required></div>
                                 </div>
                                 <div class="gl-modal-btn-group">
 
@@ -258,4 +268,59 @@
         </div>
         <!--====== End - Shipping Address Add Modal ======-->
         {% endfor %}
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">       
+            $("#address-country").change(function () {
+                const countryId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+                $.ajax({                       // initialize an AJAX request
+                    type: "POST",
+                    url: '{% url "home:address_add" slug=profile.user %}',
+                    data: {
+                        'country': countryId,       // add the country id to the POST parameters
+                        'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                    },
+                    success: function (data) {   // `data` is from `get_topics_ajax` view function
+                       
+                        let html_data2="<option value=''>Choose Region</option>";
+                        let html_data1="<option value=''>Choose State/Province</option>";
+                        data.forEach(function (data) {
+                            html_data2 += `
+                            <option value='${data.id}'>${data.name}</option>
+                            `
+                        });
+                        $("#address-region").html(html_data2);
+                        $("#address-state").html(html_data1);
+    
+                    }
+                });
+            });
+    
+    
+    $("#address-region").change(function () {
+                const regionId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+                $.ajax({                       // initialize an AJAX request
+                    type: "POST",
+                    url: '{% url "home:address_add" slug=profile.user %}',
+                    data: {
+                        'region': regionId,       // add the country id to the POST parameters
+                        'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                    },
+                    success: function (data) {   // `data` is from `get_topics_ajax` view function
+                       
+                        let html_data2="<option value=''>Choose State/Province</option>";
+                        
+                        data.forEach(function (data) {
+                            html_data2 += `
+                            <option value='${data.id}'>${data.name}</option>
+                            `
+                        });
+                        $("#address-state").html(html_data2);
+                      
+                    }
+                });
+            });
+            
+                </script>
 {% endblock %}
