@@ -2,6 +2,42 @@
 {% load static %}
 {% block content %}
 {% load crispy_forms_tags %}
+
+<style type="text/css">
+
+    #ajax-cart{
+        padding: 12px;
+        margin-top:2px;
+        font-size: 13px;
+        width: 100%;
+        text-align: center;
+        margin-right:10%;
+        display: block;
+        color:#fff;
+        background-color:#ff4500;
+        
+    }
+    #ajax-cart:hover{
+        cursor:pointer;
+    }
+    .remove{
+        background-color:#ff4500 !important;
+    }
+    #link{
+        color:#fff;
+        size:10px;
+    }
+    #wishlist{
+    color:#ff4500;
+    }
+    #wishlist-add:hover{
+        cursor:pointer;
+    }
+    #wishlist:hover{
+        cursor:pointer;
+    }
+</style>
+
         <!--====== App Content ======-->
 <div class="app-content">
   
@@ -351,9 +387,10 @@
                                                     <div class="product-m__quick-look">
             
                                                         <a class="fas fa-search" data-modal="modal" data-modal-id=".pro-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
-                                                    <div class="product-m__add-cart">
-            
-                                                        <a class="btn--e-brand" href="{% url 'home:cart_add' id=i.id %}" id="ajax-cart" data-modal="modal" data-modal-id="#add-to-cart-{{i.id}}">Add to Cart</a></div>
+                                                        <div class="product-m__add-cart">
+                                                            <input type="hidden" class="product-id-{{i.id}}"  value="{{i.id}}">
+                                                        <div class="btn--e-brand " value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#add-to-cart-{{i.id}}">Add to Cart</div>
+                                                    </div>
                                                 </div>
                                                 <div class="product-m__content">
                                                     <div class="product-m__category">
@@ -382,12 +419,24 @@
                                                             <!-- <span>{{i.details}}</span> -->
                                                         </div>
                                                         <div class="product-m__wishlist">
+                                                           
+                                                            <div class="red-heart-{{i.id}}">
+                                                            
+                                                               
                                                             {% if  i in wishlist.products.all %}
-                                                            <a id="wishlist" class="fas fa-heart" href="{% url 'home:wishlist_remove' id=i.id %}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></a></div>
-                                                          {% else %}
-                                                          <a   class="fas fa-heart" href="{% url 'home:wishlist_add' id=i.id %}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                                            <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
+                                                            <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                                       
+                                                          {% else %}
+                                                          <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
+                                                          <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                                       
                                                             {% endif %}
+                                                       </div>
+                                                        </div>
+
+                                                          
                                                         </div>
                                                     </div>
                                             </div>
@@ -490,11 +539,21 @@
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
 
-                                            <span class="pd-detail__click-wrap"><i class="far fa-heart u-s-m-r-6"></i>
+                                            <div class="red-heart-{{i.id}}">
+                                                            
+                                                               
+                                                {% if  i in wishlist.products.all %}
+                                                <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                <a href="{% url 'home:wishlist_add' id=i.id %}">Add to Wishlist</a>
-
-                                                <span class="pd-detail__click-count">(222)</span></span></div>
+                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                           
+                                              {% else %}
+                                              <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
+                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                           
+                                                {% endif %}
+                                           </div>
+                                    </div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
@@ -675,11 +734,128 @@ $('#select').change(function(){
     $('#my-form').submit()
                 });
 
-                $('#rate').click(function(){
-                    $('#rate-form').submit();
-                            }
-                            );
+        $('#rate').click(function(){
+            $('#rate-form').submit();
+                    }
+                    );
 
+                    $(document).on('click',"#ajax-cart",function(){
+                        var _vm=$(this);
+                        var _index=_vm.attr('data-index');
+                        var _productId=$(".product-id-"+_index).val();
+                        // Ajax
+                        $.ajax({
+                        
+            
+                            url:"{% url 'home:cart_add' %}",
+                            data:{
+                                'id':_productId,
+                                
+                                },
+                            dataType:'json',
+                            beforeSend:function(){
+                                _vm.attr('disabled',true);
+                            },
+                            success:function(res){
+                                $("#cart-items").val('');
+                                // Append Element
+                                var _html=`
+                           
+                            <div  class="card-mini-product">
+                            <div class="mini-product">
+                                <div class="mini-product__image-wrapper">
+        
+                                    <a class="mini-product__link" href="${res.product_url}">
+        
+                                        <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
+                                <div class="mini-product__info-wrapper">
+        
+                                    <span class="mini-product__category">
+        
+                                        <a href="${res.product_category_url}">${res.product_category}</a></span>
+        
+                                    <span class="mini-product__name">
+        
+                                        <a href="${res.product_url}">${res.product_name}</a></span>
+        
+                                    <span class="mini-product__quantity">${res.product_quantity} x</span>
+        
+                                    <span class="mini-product__price">${res.product_price}</span></div>
+                            </div>
+        
+                            <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
+                        </div>
+                        
+                            `;
+                               
+                            $("#cart-items").append(_html);
+                                $("#cart-len-1").text(res.amounts);
+                                $("#cart-len-2").text(res.amounts);
+                                ("#cart-total").text(res.total);
+                                _vm.attr('disabled',false);
+                            }
+                        });
+                        // End
+                });
+                $(document).on('click',"#wishlist-add",function(){
+                        var _vm=$(this);
+                        var _index=_vm.attr('data-index');
+                        var _productId=$(".wishlist-add-"+_index).val();
+                        // Ajax
+                        $.ajax({
+                        
+            
+                            url:"{% url 'home:wishlist_add' %}",
+                            data:{
+                                'id':_productId,
+                                
+                                },
+                            dataType:'json',
+                            beforeSend:function(){
+                                _vm.attr('disabled',true);
+                            },
+                            success:function(res){
+                            let html_data2=`
+                            <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
+            
+                            <div id="wishlist" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>`;
+                       
+                            $(".red-heart-"+_productId).html(html_data2);
+                            _vm.attr('disabled',false);
+                                        }
+                                        });
+                                        // End
+                                    });    
+                $(document).on('click',"#wishlist",function(){
+                    var _vm=$(this);
+                    var _index=_vm.attr('data-index');
+                    var _productId=$(".wishlist-add-"+_index).val();
+                    // Ajax
+                    $.ajax({
+                    
+            
+                        url:"{% url 'home:wishlist_remove' %}",
+                        data:{
+                            'id':_productId,         
+                            
+                            },
+                        dataType:'json',
+                        beforeSend:function(){
+                            _vm.attr('disabled',true);
+                        },
+                        success:function(res){
+                        let html_data2=`
+                        <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
+            
+                        <div  id="wishlist-add" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="${_productId}Add to Wishlist"></div>
+                        `;
+                    
+                        $(".red-heart-"+_productId).html(html_data2);
+                        _vm.attr('disabled',false);
+                                    }
+                                    });
+                                    // End
+                                });  
 $("#").change(function () {
     const productId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
     $.ajax({                       // initialize an AJAX request

@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-
+<style type="text/css">
+ 
+    
+    .remove{
+        background-color:#ff4500 !important;
+    }
+    #link{
+        color:#fff;
+        size:10px;
+    }
+    #wishlist{
+    color:#ff4500;
+    }
+    #wishlist-add:hover{
+        cursor:pointer;
+    }
+    #wishlist:hover{
+        cursor:pointer;
+    }
+    </style>
  
         <div class="app-content">
 
@@ -101,11 +120,21 @@
                                 <div class="u-s-m-b-15">
                                     <div class="pd-detail__inline">
 
-                                        <span class="pd-detail__click-wrap"><i class="far fa-heart u-s-m-r-6"></i>
+                                        <span id="red-heart" class="pd-detail__click-wrap">
+                                            {% if  product in wishlist.products.all %}
+                                            <input class="wishlist-add-{{product.id}}" type="hidden" value="{{product.id}}">
 
-                                            <a href="{% url 'home:wishlist_add' id=product.id %}">Add to Wishlist</a>
+                                            <a id="wishlist" data-index="{{product.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"><i class="fas fa-heart"></i> </a>
+                                       
+                                          {% else %}
+                                          <input class="wishlist-add-{{product.id}}" type="hidden" value="{{product.id}}">
+                                          <a  id="wishlist-add" data-index="{{product.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a>
+                                       
+                                            {% endif %}
+                                         
 
-                                            <span class="pd-detail__click-count">(222)</span></span></div>
+                                            </span>
+                                        </div>
                                 </div>
                                 <div class="u-s-m-b-15">
                                     <div class="pd-detail__inline">
@@ -686,34 +715,126 @@
 $('#sort-review').click(function(){
     $('#comments-form').submit()
 });
-$("#add_to_cart").change(function () {
-        const productId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        $.ajax({                       // initialize an AJAX request
-            type: "POST",
-            url: '{% url "home:quantity_add" id=product.id %}',
-            data: {
-                'product': productId,       // add the country id to the POST parameters
-                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function (data) {   // `data` is from `get_topics_ajax` view function
-                
-                let html_data2=`
-                                        `
-                ;
-                data.forEach(function (data) {
-                    html_data2 += `
-                    
-                <p>success</p>
-                
-                    `
-                });
-                $("#test").html(html_data2);
-                
-            }
-        });
-       
-    });
 
+$(document).on('click',"#ajax-cart",function(){
+    var _vm=$(this);
+    var _index=_vm.attr('data-index');
+    var _productId=$(".product-id-"+_index).val();
+   
+    // Ajax
+    $.ajax({
+    
+
+        url:"{% url 'home:cart_add' %}",
+        data:{
+            'id':_productId,
+            
+            },
+        dataType:'json',
+        beforeSend:function(){
+            _vm.attr('disabled',true);
+        },
+        success:function(res){
+            $("#cart-items").val('');
+                // Append Element
+                var _html=`
+           
+            <div  class="card-mini-product">
+            <div class="mini-product">
+                <div class="mini-product__image-wrapper">
+
+                    <a class="mini-product__link" href="${res.product_url}">
+
+                        <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
+                <div class="mini-product__info-wrapper">
+
+                    <span class="mini-product__category">
+
+                        <a href="${res.product_category_url}">${res.product_category}</a></span>
+
+                    <span class="mini-product__name">
+
+                        <a href="${res.product_url}">${res.product_name}</a></span>
+
+                    <span class="mini-product__quantity">${res.product_quantity} x</span>
+
+                    <span class="mini-product__price">${res.product_price}</span></div>
+            </div>
+
+            <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
+        </div>
+        
+            `;
+               
+            $("#cart-items").append(_html);
+            $("#cart-len-1").text(res.amounts);
+            $("#cart-len-2").text(res.amounts);
+            $("#cart-total").text(res.total);
+            _vm.attr('disabled',false);
+        }
+        
+    });
+    // End
+});
+$(document).on('click',"#wishlist-add",function(){
+    var _vm=$(this);
+    var _index=_vm.attr('data-index');
+    var _productId=$(".wishlist-add-"+_index).val();
+    // Ajax
+    $.ajax({
+    
+
+        url:"{% url 'home:wishlist_add' %}",
+        data:{
+            'id':_productId,
+            
+            },
+        dataType:'json',
+        beforeSend:function(){
+            _vm.attr('disabled',true);
+        },
+        success:function(res){
+        let html_data2=`
+        <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
+
+        <a id="wishlist" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></a>`;
+   
+        $("#red-heart").html(html_data2);
+        _vm.attr('disabled',false);
+                    }
+                    });
+                    // End
+                });    
+$(document).on('click',"#wishlist",function(){
+var _vm=$(this);
+var _index=_vm.attr('data-index');
+var _productId=$(".wishlist-add-"+_index).val();
+// Ajax
+$.ajax({
+
+
+    url:"{% url 'home:wishlist_remove' %}",
+    data:{
+        'id':_productId,         
+        
+        },
+    dataType:'json',
+    beforeSend:function(){
+        _vm.attr('disabled',true);
+    },
+    success:function(res){
+    let html_data2=`
+    <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
+
+    <a id="wishlist-add" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="${_productId}Add to Wishlist"></a>
+    `;
+
+    $("#red-heart").html(html_data2);
+    _vm.attr('disabled',false);
+                }
+                });
+                // End
+            });  
 
 </script>
 {% endblock %}

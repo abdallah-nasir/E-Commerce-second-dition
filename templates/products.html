@@ -25,8 +25,14 @@
     color:#fff;
     size:10px;
 }
+#wishlist-add:hover{
+    cursor:pointer;
+}
 #wishlist{
 color:#ff4500;
+}
+#wishlist:hover{
+    cursor:pointer;
 }
 </style>
         <!--====== App Content ======-->
@@ -541,11 +547,21 @@ color:#ff4500;
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
 
-                                            <span class="pd-detail__click-wrap"><i class="far fa-heart u-s-m-r-6"></i>
+                                            <div class="red-heart-{{i.id}}">
+                                                            
+                                                               
+                                                {% if  i in wishlist.products.all %}
+                                                <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                <a href="{% url 'home:wishlist_add'  %}">Add to Wishlist</a>
-
-                                                <span class="pd-detail__click-count">(222)</span></span></div>
+                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                           
+                                              {% else %}
+                                              <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
+                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                           
+                                                {% endif %}
+                                           </div>
+                                    </div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
@@ -739,6 +755,7 @@ $('#rate-form').submit();
             var _vm=$(this);
             var _index=_vm.attr('data-index');
             var _productId=$(".product-id-"+_index).val();
+           
             // Ajax
             $.ajax({
             
@@ -753,9 +770,44 @@ $('#rate-form').submit();
                     _vm.attr('disabled',true);
                 },
                 success:function(res){
-                    $("#cart-len").text(res.amounts);
+                    $("#cart-items").val('');
+                        // Append Element
+                        var _html=`
+                   
+                    <div  class="card-mini-product">
+                    <div class="mini-product">
+                        <div class="mini-product__image-wrapper">
+
+                            <a class="mini-product__link" href="${res.product_url}">
+
+                                <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
+                        <div class="mini-product__info-wrapper">
+
+                            <span class="mini-product__category">
+
+                                <a href="${res.product_category_url}">${res.product_category}</a></span>
+
+                            <span class="mini-product__name">
+
+                                <a href="${res.product_url}">${res.product_name}</a></span>
+
+                            <span class="mini-product__quantity">${res.product_quantity} x</span>
+
+                            <span class="mini-product__price">${res.product_price}</span></div>
+                    </div>
+
+                    <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
+                </div>
+                
+                    `;
+                       
+                    $("#cart-items").append(_html);
+                    $("#cart-len-1").text(res.amounts);
+                    $("#cart-len-2").text(res.amounts);
+                    $("#cart-total").text(res.total);
                     _vm.attr('disabled',false);
                 }
+                
             });
             // End
     });
@@ -798,7 +850,7 @@ $('#rate-form').submit();
 
             url:"{% url 'home:wishlist_remove' %}",
             data:{
-                'id':_productId,
+                'id':_productId,         
                 
                 },
             dataType:'json',

@@ -421,12 +421,19 @@ def add_to_cart(request):
         else:
             cart.products.add(product_cart)   
             cart.device=device
-            product_cart.ordered=True     
+            product_cart.ordered=True        
             product_cart.save()    
             cart.save()
-            print("cart authenticated")         
+            print("cart authenticated")            
             messages.success(request,"Item Added Successfully")    
-            data={"id":product_cart.id,"amounts":cart.order_product_length()}
+            print(product_cart.products.image.first().image.url)
+            data={"id":product_cart.id,"amounts":cart.order_product_length(),
+                "product_category":product_cart.products.category.name,"product_name":product_cart.products.name,
+                "product_price":product_cart.discount(),"product_quantity":product_cart.quantity,
+                "product_image":product_cart.products.image.first().image.url,"product_url":product_cart.get_url(),
+                "product_category_url":product_cart.get_category_url(),"total":cart.before_discount(),
+                "product_remove":product_cart.get_cart_remove_url()} 
+            print(data)   
             return JsonResponse(data)
     else:
         device=request.COOKIES["device"]
@@ -502,7 +509,11 @@ def cart_quantity_remove(request):
    
 def remove_from_cart(request,id):
     device=request.COOKIES["device"]
-    product=get_object_or_404(Product_Cart,id=id)
+    try:  
+        product=get_object_or_404(Product_Cart,id=id)
+    except:
+        messages.error(request,"invalid data")
+        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     if request.user.is_authenticated:
         repeat_product=Product_Cart.objects.get(user=request.user,ordered=True,delivered=False,id=product.id)
         repeat_product.delete()
@@ -1792,7 +1803,7 @@ def wishlist_add(request):
             data={"id":list.id}
             return JsonResponse(data)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-
+ 
 def wishlist_remove(request):
     try:
         id=request.GET["id"]
@@ -1994,7 +2005,7 @@ def category_delete(request,id):
     category.delete()
     return redirect(reverse("home:category"))
 
-def branch(request):
+def dashboard_branch(request):
     branch=Branch.objects.all()
     return render(request,"dashboard/branch.html",{"branch":branch})
     

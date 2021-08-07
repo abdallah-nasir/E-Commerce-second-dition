@@ -8,7 +8,8 @@ from google_currency import convert
 import json  
 from django_countries.fields import CountryField
 from cities_light.models import Country,Region,City
-
+from django.shortcuts import render,redirect,reverse
+import requests
 # Create your models here.
 
 
@@ -243,6 +244,16 @@ class Product_Cart(models.Model):
         # pro=Product.objects.filter(id__in=)
             # print(i)   
         return pro 
+
+    def get_url(self): 
+        url=f"http://127.0.0.1:8000/product/{self.products.id}/"
+        return url   
+    def get_category_url(self):
+        url=f"http://127.0.0.1:8000/category/{self.products.category.name}/"
+        return url   
+    def get_cart_remove_url(self):  
+        url=f"http://127.0.0.1:8000/remove-from-cart/{self.id}/"
+        return url   
 class Shipping(models.Model):
     country=models.CharField(max_length=50,blank=True,null=True)
     amount=models.PositiveIntegerField(default=0)
