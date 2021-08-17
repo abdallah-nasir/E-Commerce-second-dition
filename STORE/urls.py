@@ -18,6 +18,7 @@ path("wishlist/",views.wishlist,name="wishlist"),
 path("product/<str:id>/",views.this_product,name="this_product"),
 path("cart/",views.cart,name="cart"),
 path("order/<str:id>/",views.order,name="order"),
+path("order/<str:id>/confirm/",views.order_confirm,name="order_confirm"),
 path("empty/",views.empty,name="empty"),   
 path("account/<str:slug>/",views.profile,name="profile"), 
 path("profile/<str:slug>/",views.profile_account,name="profile_account"),   
@@ -43,6 +44,7 @@ path("filter/size",views.size_filter_delete,name="size_delete"),
 path("filter/category",views.category_filter_delete,name="category_delete"),
 path("filter/manufacrurer",views.manu_filter_delete,name="manu_delete"),
 path("filter/rate",views.rate_filter_delete,name="rate_delete"),
+path("search/",views.search,name="search"),
 
 # Cart
 path("add-to-cart/",views.add_to_cart,name="cart_add"),
@@ -61,11 +63,11 @@ path("quantity_remove/",views.cart_quantity_remove,name="cart_quantity_remove"),
 path("coupon/",views.coupon,name="coupon"),
 path("shipping/<str:id>/",views.shipping_cost,name="shipping"),
      
-
+    
 ### PAYMNETS     
 
-path("create/<str:id>/",views.create,name="create"),
-
+path("create/<str:id>/",views.create,name="create"),  
+path("capture/<str:order_id>/<str:id>/",views.capture,name="capture"),  
 #       Dashboard              
 path("dashboard/",views.dashboard,name="dashboard"),
 path("dashboard/products/add",views.add_products,name="products_add"),

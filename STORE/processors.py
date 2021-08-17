@@ -2,6 +2,7 @@ from .models import *
 from django.core.paginator import Paginator
 from django.shortcuts import render,redirect,reverse
 from django.contrib import messages
+from accept.payment import *
 
 def global_newsletter(request):
     news=NewsLetter.objects.first()
@@ -92,9 +93,9 @@ def global_context(request):
         try:
             device=request.COOKIES['device']
             repeat_cart=Cart.objects.filter(device=device,ordered=True,delivered=False)
-            if len(repeat_cart) != 1:
-                for i in repeat_cart[1:]:
-                    i.delete()
+            # if len(repeat_cart) != 1:
+            #     for i in repeat_cart[1:]:
+            #         i.delete()
             if Cart.objects.filter(user=request.user,ordered=True,delivered=False).exists():
                 cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
                 cart.device=device
@@ -129,19 +130,67 @@ def global_context(request):
             cart,created=Cart.objects.get_or_create(user=request.user,ordered=True,delivered=False)
             pass    
     else:    
-        for i in Cart.objects.all():
-            print(i.user,i.device,i.id)
         try:        
             device=request.COOKIES["device"]     
             repeat_cart=Cart.objects.filter(device=device,ordered=True,delivered=False)
-            if len(repeat_cart) !=1:
-                for i in repeat_cart[1:]:
-                    i.delete()
-            cart,created=Cart.objects.get_or_create(device=device,ordered=True,delivered=False)
+            # if len(repeat_cart) !=1:
+            #     for i in repeat_cart[1:]:
+            #         i.delete()
+            try:
+                if len(repeat_cart) > 1:
+                    cart=Cart.objects.filter(device=device,ordered=True,delivered=False).last()
+                else:
+                    cart=Cart.objects.get(device=device,ordered=True,delivered=False)
+                print("here")
+            except:
+                cart=Cart.objects.create(device=device,ordered=True,delivered=False)
+                print("created")
         except:    
             cart=[]     
             pass
     context={"cart":cart}
     return context           
+API_KEY="ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRFNE1ESTVMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuU0VhV0IwbjlMVklMeHVKd1NqTFVldDNWc0pqMDVMZjBOVUNuTmZROGZJOFdxREswb3FUOE1pYjBUeTY2MHlXZzRsUGNXU3dhTHZDc0x5RVd1LUtRaVE=" #PAYMOB
 
-     
+def global_PayMob(request):
+    if request.user.is_authenticated:
+        try:
+            order=Order.objects.get(user=request.user,ordered=True,delivered=False)
+            # if order.track_number:
+            accept = AcceptAPI(API_KEY)
+            trans=accept.inquire_transaction(merchant_order_id=order.id,order_id=order.track_number)
+            if trans["success"] == True:
+                order.track_number=trans["id"]
+                order.delivered=True
+                order.cart.delivered=True  
+                print("here")
+                for i in order.cart.products.all():
+                    i.delivered=True
+                    i.products.most_buy +=1
+                    i.products.save()
+                    i.save()
+                order.cart.save()
+                order.save()
+                print(trans)
+                return redirect(reverse("home:home"))
+            # print("trans")
+        except: 
+            order=0
+            print("not trans") 
+            pass   
+    else:
+        order=0
+        pass
+    context={"trans":order} 
+    return context
+    
+    
+def global_ajax(request):
+    if request.is_ajax():
+        ajax="ajax"
+        print(ajax)
+    else:
+        ajax="not here"
+        print(ajax)
+    context={"ajax":ajax}
+    return context

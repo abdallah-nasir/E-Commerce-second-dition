@@ -3,38 +3,37 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <style type="text/css">
-
-    #ajax-cart{
-        padding: 12px;
-        margin-top:2px;
-        font-size: 13px;
-        width: 100%;
-        text-align: center;
-        margin-right:10%;
-        display: block;
-        color:#fff;
-        background-color:#ff4500;
-        
-    }
-    #ajax-cart:hover{
-        cursor:pointer;
-    }
-    .remove{
-        background-color:#ff4500 !important;
-    }
-    #link{
-        color:#fff;
-        size:10px;
-    }
-    #wishlist{
-    color:#ff4500;
-    }
-    #wishlist-add:hover{
-        cursor:pointer;
-    }
-    #wishlist:hover{
-        cursor:pointer;
-    }
+#ajax-cart{
+    padding: 12px;
+    margin-top:2px;
+    font-size: 13px;
+    width: 100%;
+    text-align: center;
+    margin-right:10%;
+    display: block;
+    color:#fff;
+    background-color:#ff4500;
+    
+}
+#ajax-cart:hover{
+    cursor:pointer;
+}
+.remove{
+    background-color:#ff4500 !important;
+}
+#link{
+    color:#fff;
+    size:10px;
+}
+#wishlist-add:hover{
+    cursor:pointer;
+}
+#wishlist{
+color:#ff4500;
+}
+#wishlist:hover{
+    cursor:pointer;
+}
 </style>
         <!--====== App Content ======-->
 <div class="app-content">
@@ -44,8 +43,11 @@
             <div class="u-s-p-y-90">
                 <div class="container">
                     <div class="row">
+                        {% if products %}
                         <div class="col-lg-3 col-md-12">
+                           
                             <div class="shop-w-master">
+                                
                                 <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
 
                                     <span>FILTERS</span></h1>
@@ -53,26 +55,42 @@
                                     <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">{{branch.child}}</h1>
+                                                <h1 class="shop-w__h">CATEGORY</h1>
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-category" data-toggle="collapse"></span>
                                             </div>
                                             <div class="shop-w__wrap collapse show" id="s-category">
                                                 <ul class="shop-w__category-list gl-scroll">
-                                                    {% for i in branch.my_products|slice:"0:6" %}
-                                                    
+                                                    {% for i in category %}
                                                     <li class="has-list">
 
-                                                        <a href="{% url 'home:this_product' id=i.id %}">{{i.name}}</a>
+                                                        <a href="{% url 'home:category_filter' slug=i.name %}">{{i.name}}</a>
 
-                                                        <!-- <span class="category-list__text u-s-m-l-6">({{i.my_products.count}})</span> -->
+                                                        <span class="category-list__text u-s-m-l-6">({{i.same_category.count}})</span>
 
-                                                        <!-- <span class="js-shop-category-span is-expanded fas fa-plus u-s-m-l-6"></span> -->
-                                                       
+                                                        <span class="js-shop-category-span is-expanded fas fa-plus u-s-m-l-6"></span>
+                                                        <ul style="display:block">
+                                                          {% for b in i.same_category %}
+                                                            <li class="has-list">
+
+                                                                <a href="{% url 'home:category_filter' slug=i.name %}">{{b.child}}</a>
+
+                                                                <span class="js-shop-category-span fas fa-plus u-s-m-l-6"></span>
+                                                                <ul>
+                                                                    {% for c in i.my_products|slice:"0:6" %}
+                                                                    <li>
+
+                                                                        <a href="{% url 'home:this_product' id=c.id %}">{{c.name}}</a></li>
+                                                                        {% endfor %}
+                                                                    <li class="has-list">
+                                                                            <a href="{% url 'home:category_filter' slug=i.name %}">show more</a>
+                                                                        </li>
+                                                                </ul>
+                                                            </li>
+                                                      {% endfor %}
+                                                        </ul>
                                                     </li>
                                                     {% endfor %}
-                                                    <h3><a class="shop-w__h" href="{% url 'home:branch_filter' slug=branch.child %}">See More</a></h3>
-
                                                 </ul>
                                             </div>
                                         </div>
@@ -194,12 +212,12 @@
                                                             
                                                             <label for="price-min"></label>
 
-                                                            <input class="input-text input-text--primary-style" name="price_1"  type="text" id="price-min" placeholder="Min"></div>
+                                                            <input class="input-text input-text--primary-style" name="price_1"  type="text" id="price-min" placeholder="Min" required></div>
                                                         <div>
 
                                                             <label for="price-max"></label>
 
-                                                            <input class="input-text input-text--primary-style" name="price_2" type="text" id="price-max" placeholder="Max"></div>
+                                                            <input class="input-text input-text--primary-style" name="price_2" type="text" id="price-max" placeholder="Max" required></div>
                                                         <div>
 
                                                             <button  class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
@@ -208,7 +226,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="u-s-m-b-30">
+                                    <!-- <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
                                                 <h1 class="shop-w__h">MANUFACTURER</h1>
@@ -236,8 +254,8 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="u-s-m-b-30">
+                                    </div> -->
+                                    <!-- <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
                                                 <h1 class="shop-w__h">COLOR</h1>
@@ -263,8 +281,8 @@
                                             </div>
                                             </form>
                                         </div>
-                                    </div>
-                         <div class="u-s-m-b-30"> 
+                                    </div> -->
+                         <!-- <div class="u-s-m-b-30"> 
                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
                                                 <h1 class="shop-w__h">SIZE</h1>
@@ -297,30 +315,24 @@
 
                                            
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="col-lg-9 col-md-12">
+                        {%endif%}
+                        <div {% if products %} class="col-lg-9 col-md-12"{% else %} class="col-lg-12 col-md-12" {% endif %} >
                             <div class="shop-p">
                            
                                 <div class="shop-p__toolbar u-s-m-b-30">
                                     <div class="shop-p__meta-wrap u-s-m-b-60">
 
                                         <span class="shop-p__meta-text-1">FOUND {{products.paginator.count}} RESULTS</span>
+                                       
                                         <div class="shop-p__meta-text-2">
 
                                             <span>Your Filter:</span>
                                                        <br>
-                                                       {% if my_filter.manufacturer %}
-                                                       Manufacturer: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:manu_delete' %}">{{my_filter.manufacturer}}  <i class="fas fa-times"></i></a>
-                                                     {% endif %}
-                                                     {% if my_filter.color %}
-                                                     Color: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:color_delete' %}">{{my_filter.color}}  <i class="fas fa-times"></i></a>
-                                                   {% endif %}
-                                                   {% if my_filter.size %}
-                                                   Size: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:size_delete' %}">{{my_filter.size}}  <i class="fas fa-times"></i></a>
-                                                 {% endif %}
                                                       {% if my_filter.rating %}                                                                                                         
                                                       Rate: <div class="gl-tag btn--e-brand-shadow">
                                                     {% with ''|center:my_filter.star_loop.loop as range %}
@@ -340,24 +352,26 @@
                                           {% endif %}
                            
                                         </div>
+                                       
                                     </div>
+                                    {% if products %}
                                     <div class="shop-p__tool-style">
                                         <div class="tool-style__group u-s-m-b-8">
 
                                             <span class="js-shop-grid-target is-active">Grid</span>
 
                                             <span class="js-shop-list-target">List</span></div>
-                                        <form id="my-form" method="POST">
+                                        <form id="my-form"  method="POST">
                                             {%csrf_token%}
                                             <div class="tool-style__form-wrap">
                                                 
                                                 <div class="u-s-m-b-8"><select id="show" name="paginat" class="select-box select-box--transparent-b-2">
-                                                    <option value="8" {% if paginated == 8 %}selected{% endif %}>Show: 8</option>
-                                                    <option value="12"  {% if paginated == 12 %}selected{% endif %}>Show: 12</option>
-                                                    <option value="16"  {% if paginated == 16 %}selected{% endif %}>Show: 16</option>
-                                                    <option value="28"  {% if paginated == 28 %}selected{% endif %}>Show: 28</option>
-                                                </select></div>
-                                                <div class="u-s-m-b-8"><select id="select" name="select_filter" class="select-box select-box--transparent-b-2">
+                                                        <option value="8" {% if paginated == 8 %}selected{% endif %}>Show: 8</option>
+                                                        <option value="12"  {% if paginated == 12 %}selected{% endif %}>Show: 12</option>
+                                                        <option value="16"  {% if paginated == 16 %}selected{% endif %}>Show: 16</option>
+                                                        <option value="28"  {% if paginated == 28 %}selected{% endif %}>Show: 28</option>
+                                                    </select></div>
+                                                <div id="select" class="u-s-m-b-8"><select  name="select_filter" class="select-box select-box--transparent-b-2">
                                                         <option  value="1" {% if selected == 1 %}selected{% endif %}>Sort By: Newest Items</option>
                                                         <option  value="2" {% if selected == 2 %}selected{% endif %}>Sort By: Latest Items</option>
                                                         <!-- <option value="3" {% if selected == 3 %}selected{% endif %}>Sort By: Best Selling</option>
@@ -365,17 +379,20 @@
                                                         <option  value="5"{% if selected == 5 %}selected{% endif %}>Sort By: Lowest Price</option>
                                                         <option  value="6" {% if selected == 6 %}selected{% endif %}>Sort By: Highest Price</option>
                                                     </select></div>
+                                                <!-- <button class="btn btn-primary" type="submit">submit</button> -->
+
                                             </div>
-                                            <!-- <button class="btn btn-primary" type="submit">submit</button> -->
                                         </form>
                                     </div>
+                                    {% endif %}                      
                                 </div>
                                 
-                               
+                              
                                 <div class="shop-p__collection">
+                                    {% if products %}
                                     <div  id="test"class="row is-grid-active">
                                         {% for i in products %}
-                                                                
+                                       
                                         <div class="col-lg-4 col-md-6 col-sm-6">
                                             <div class="product-m" >
                                                 <div class="product-m__thumb">
@@ -387,7 +404,7 @@
                                                     <div class="product-m__quick-look">
             
                                                         <a class="fas fa-search" data-modal="modal" data-modal-id=".pro-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
-                                                        <div class="product-m__add-cart">
+                                                    <div class="product-m__add-cart">
                                                             <input type="hidden" class="product-id-{{i.id}}"  value="{{i.id}}">
                                                         <div class="btn--e-brand " value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#add-to-cart-{{i.id}}">Add to Cart</div>
                                                     </div>
@@ -412,7 +429,7 @@
             
                                                         <span class="product-m__review">({{i.average.average|floatformat:1}} of 5)</span>
                                                     </div>
-                                                    <div class="product-m__price"> ${{i.discount}}</div> <del class="pd-detail__del">${{i.price}}</del>
+                                                    <div class="product-m__price"> ${{i.discount}}</div><del class="pd-detail__del">${{i.price}}</del>
                                                     <div class="product-m__hover">
                                                         <div class="product-m__preview-description">
             
@@ -534,7 +551,6 @@
 
                                         <!-- <span class="pd-detail__preview-desc">{{i.details}}</span> -->
                                     </div>
-                                   
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
 
@@ -553,6 +569,15 @@
                                                 {% endif %}
                                            </div>
                                     </div>
+                                    </div>
+                                    <div class="u-s-m-b-15">
+                                        <div class="pd-detail__inline">
+
+                                            <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
+
+                                                <a href="signin.html">Email me When the price drops</a>
+
+                                                <span class="pd-detail__click-count">(20)</span></span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <ul class="pd-social-list">
@@ -651,11 +676,11 @@
                             <span class="s-option__text">1 item (s) in your cart</span>
                             <div class="s-option__link-box">
 
-                                <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">CONTINUE SHOPPING</a>
+                                <a class="s-option__link btn--e-white-brand-shadow"  data-dismiss="modal">CONTINUE SHOPPING</a>
 
-                                <a class="s-option__link btn--e-white-brand-shadow" href="cart.html">VIEW CART</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
 
-                                <a class="s-option__link btn--e-brand-shadow" href="checkout.html">PROCEED TO CHECKOUT</a></div>
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' cart.id %}">PROCEED TO CHECKOUT</a></div>
                         </div>
                     </div>
                 </div>
@@ -665,8 +690,14 @@
 </div>
 <!--====== End - Add to Cart Modal ======-->
 
+            
                                         {% endfor %}
+                                                                                
+  
                                     </div>
+                                    {% else %}
+<h1 style="text-align:center;">Sorry we didn't find what you want</h1>
+                                    {% endif %}
                                 </div>
                                 <div class="u-s-p-y-60">
 
@@ -675,13 +706,14 @@
                                         {% if products.has_provious %}
                                         <li>
 
-                                       <a class="fas fa-angle-left" href="?page={{ products.previous_page_number }}"></a></li>
+                                       <a class="fas fa-angle-left" href="?page={{ products.previous_page_number }}&{search}"></a></li>
                                        {% endif  %}
                                        {% for i in products.paginator.page_range %}
                                        {% if products.number == i %}
-                                       <li class="is-active"><a href="?page={{i}}">{{i}}</a></li>
+                                       
+                                       <li class="is-active"><a href="?page={{i}}&{{search}}">{{i}}</a></li>
                                        {% else %}
-                                       <li><a href="?page={{i}}">{{i}}</a></li>
+                                       <li><a href="?page={{i}}&{{search}}">{{i}}</a></li>
 
                                        {% endif %}
                                      {% endfor %}
@@ -689,11 +721,12 @@
                                        {% if products.has_next %}
                                    <li>
 
-                                       <a class="fas fa-angle-right" href="?page={{ products.next_page_number }}"></a></li>
+                                       <a class="fas fa-angle-right" href="?page={{ products.next_page_number }}&{{search}}"></a></li>
                                        {% endif %}
                                     </ul>
                                     <!--====== End - Pagination ======-->
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -702,7 +735,7 @@
             <!--====== End - Section 1 ======-->
 </div>
         <!--====== End - App Content ======-->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
  <script type="text/javascript">
 $('#my-color').click(function(){
 $('#color-form').submit()
@@ -720,160 +753,137 @@ $('#id_manufacturer').click(function(){
 $('#show').change(function(){
 $('#my-form').submit()
                         });
+ 
 $('#select').change(function(){
-    $('#my-form').submit()
-                });
-
-    $('#rate').click(function(){
-        $('#rate-form').submit();
+   $('#my-form').submit();
                 }
                 );
-
-
-                $(document).on('click',"#ajax-cart",function(){
-                    var _vm=$(this);
-                    var _index=_vm.attr('data-index');
-                    var _productId=$(".product-id-"+_index).val();
-                    // Ajax
-                    $.ajax({
-                    
-        
-                        url:"{% url 'home:cart_add' %}",
-                        data:{
-                            'id':_productId,
-                            
-                            },
-                        dataType:'json',
-                        beforeSend:function(){
-                            _vm.attr('disabled',true);
-                        },
-                        success:function(res){
-                            $("#cart-items").val('');
-                            // Append Element
-                            var _html=`
-                       
-                        <div  class="card-mini-product">
-                        <div class="mini-product">
-                            <div class="mini-product__image-wrapper">
-    
-                                <a class="mini-product__link" href="${res.product_url}">
-    
-                                    <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
-                            <div class="mini-product__info-wrapper">
-    
-                                <span class="mini-product__category">
-    
-                                    <a href="${res.product_category_url}">${res.product_category}</a></span>
-    
-                                <span class="mini-product__name">
-    
-                                    <a href="${res.product_url}">${res.product_name}</a></span>
-    
-                                <span class="mini-product__quantity">${res.product_quantity} x</span>
-    
-                                <span class="mini-product__price">${res.product_price}</span></div>
-                        </div>
-    
-                        <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
-                    </div>
-                    
-                        `;
-                           let html_2=`$ ${res.total}`
-                        $("#cart-items").append(_html);
-                            $("#cart-len-1").text(res.amounts);
-                            $("#cart-len-2").text(res.amounts);
-                            $("#cart-total").html(html_2);
-                            _vm.attr('disabled',false);
-                        }
-                    });
-                    // End
-            });
-            $(document).on('click',"#wishlist-add",function(){
-                    var _vm=$(this);
-                    var _index=_vm.attr('data-index');
-                    var _productId=$(".wishlist-add-"+_index).val();
-                    // Ajax
-                    $.ajax({
-                    
-        
-                        url:"{% url 'home:wishlist_add' %}",
-                        data:{
-                            'id':_productId,
-                            
-                            },
-                        dataType:'json',
-                        beforeSend:function(){
-                            _vm.attr('disabled',true);
-                        },
-                        success:function(res){
-                        let html_data2=`
-                        <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
-        
-                        <div id="wishlist" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>`;
-                   
-                        $(".red-heart-"+_productId).html(html_data2);
-                        _vm.attr('disabled',false);
-                                    }
-                                    });
-                                    // End
-                                });    
-            $(document).on('click',"#wishlist",function(){
-                var _vm=$(this);
-                var _index=_vm.attr('data-index');
-                var _productId=$(".wishlist-add-"+_index).val();
-                // Ajax
-                $.ajax({
-                
-        
-                    url:"{% url 'home:wishlist_remove' %}",
-                    data:{
-                        'id':_productId,         
-                        
-                        },
-                    dataType:'json',
-                    beforeSend:function(){
-                        _vm.attr('disabled',true);
-                    },
-                    success:function(res){
-                    let html_data2=`
-                    <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
-        
-                    <div  id="wishlist-add" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="${_productId}Add to Wishlist"></div>
-                    `;
-                
-                    $(".red-heart-"+_productId).html(html_data2);
-                    _vm.attr('disabled',false);
-                                }
-                                });
-                                // End
-                            });  
-$("#").change(function () {
-    const productId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-    $.ajax({                       // initialize an AJAX request
-        type: "POST",
-        url: '{% url "home:products" %}',
-        data: {
-            'product': productId,       // add the country id to the POST parameters
-            'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function (data) {   // `data` is from `get_topics_ajax` view function
-            
-            let html_data2=`
-                                    `
-            ;
-            data.forEach(function (data) {
-                html_data2 += `
-                
-            
-            
-                `
-            });
-            $("#test").html(html_data2);
-            
+$('#rate').click(function(){
+$('#rate-form').submit();
         }
+        );
+
+    $(document).on('click',"#ajax-cart",function(){
+            var _vm=$(this);
+            var _index=_vm.attr('data-index');
+            var _productId=$(".product-id-"+_index).val();
+           
+            // Ajax
+            $.ajax({
+            
+
+                url:"{% url 'home:cart_add' %}",
+                data:{
+                    'id':_productId,
+                    
+                    },
+                dataType:'json',
+                beforeSend:function(){
+                    _vm.attr('disabled',true);
+                },
+                success:function(res){
+                    $("#cart-items").val('');
+                        // Append Element
+                        var _html=`
+                   
+                    <div  class="card-mini-product">
+                    <div class="mini-product">
+                        <div class="mini-product__image-wrapper">
+
+                            <a class="mini-product__link" href="${res.product_url}">
+
+                                <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
+                        <div class="mini-product__info-wrapper">
+
+                            <span class="mini-product__category">
+
+                                <a href="${res.product_category_url}">${res.product_category}</a></span>
+
+                            <span class="mini-product__name">
+
+                                <a href="${res.product_url}">${res.product_name}</a></span>
+
+                            <span class="mini-product__quantity">${res.product_quantity} x</span>
+
+                            <span class="mini-product__price">${res.product_price}</span></div>
+                    </div>
+
+                    <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
+                </div>
+                
+                    `;
+                    let html_2=`$ ${res.total}`;
+                    $("#cart-items").append(_html);
+                    $("#cart-len-1").text(res.amounts);
+                    $("#cart-len-2").text(res.amounts);
+                    $("#cart-total").html(html_2);
+                    _vm.attr('disabled',false);
+                }
+                
+            });
+            // End
     });
-});
+    $(document).on('click',"#wishlist-add",function(){
+            var _vm=$(this);
+            var _index=_vm.attr('data-index');
+            var _productId=$(".wishlist-add-"+_index).val();
+            // Ajax
+            $.ajax({
+            
 
-            </script> 
+                url:"{% url 'home:wishlist_add' %}",
+                data:{
+                    'id':_productId,
+                    
+                    },
+                dataType:'json',
+                beforeSend:function(){
+                    _vm.attr('disabled',true);
+                },
+                success:function(res){
+                let html_data2=`
+                <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
 
+                <div id="wishlist" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>`;
+           
+                $(".red-heart-"+_productId).html(html_data2);
+                _vm.attr('disabled',false);
+                            }
+                            });
+                            // End
+                        });    
+    $(document).on('click',"#wishlist",function(){
+        var _vm=$(this);
+        var _index=_vm.attr('data-index');
+        var _productId=$(".wishlist-add-"+_index).val();
+        // Ajax
+        $.ajax({
+        
+
+            url:"{% url 'home:wishlist_remove' %}",
+            data:{
+                'id':_productId,         
+                
+                },
+            dataType:'json',
+            beforeSend:function(){
+                _vm.attr('disabled',true);
+            },
+            success:function(res){
+            let html_data2=`
+            <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
+
+            <div  id="wishlist-add" class="fas fa-heart" data-index="${_productId}" data-tooltip="tooltip" data-placement="top" title="${_productId}Add to Wishlist"></div>
+            `;
+        
+            $(".red-heart-"+_productId).html(html_data2);
+            _vm.attr('disabled',false);
+                        }
+                        });
+                        // End
+                    });  
+
+
+
+</script>
 {% endblock %}

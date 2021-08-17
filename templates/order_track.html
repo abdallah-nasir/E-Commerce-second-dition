@@ -116,7 +116,7 @@
                                             <h1 class="dash__h1 u-s-m-b-14">Track your Order</h1>
 
                                             <span class="dash__text u-s-m-b-30">To track your order please enter your Order ID in the box below and press the "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</span>
-                                            <form class="dash-track-order" method="POST">
+                                            <form id="order-form" class="dash-track-order" method="POST">
                                                 {% csrf_token %}
                                                 <div class="gl-inline">
                                                     <div class="u-s-m-b-30">
@@ -131,19 +131,26 @@
                                                         <input class="input-text input-text--primary-style" type="text" id="track-email" placeholder="Email you used during checkout" required></div> -->
                                                 </div>
 
-                                                <button  class="btn btn--e-brand-b-2" type="submit">TRACK</button>
+                                                <button  class="btn btn--e-brand-b-2" id="ajax-order" data-index= type="submit">TRACK</button>
+                                               {% if my_orders == False %}
+                                                <p>Sorry, invalid Track Number</p>
+
+                                                {% endif %}
                                             </form>
 <div id="my-div"></div>
 
                                         </div>
                                     </div>
-                                        {% if orders %}
+                                    <div id="order-here">
+
+                                    </div>
+                                        {% if my_orders %}
                                     <div id="custom-id" class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2 ">
                                             <h1 class="dash__h1 u-s-m-b-14">My Orders</h1>
 
                                             <span class="dash__text u-s-m-b-30">Here you can see all products that have been delivered.</span>
-                                            <form class="m-order u-s-m-b-30">
+                                            <!-- <form class="m-order u-s-m-b-30">
                                                 <div class="m-order__select-wrapper">
 
                                                     <label class="u-s-m-r-8" for="my-order-sort">Show:</label><select class="select-box select-box--primary-style" id="my-order-sort">
@@ -154,24 +161,24 @@
                                                         <option>Orders placed in 2018</option>
                                                         <option>All Orders</option>
                                                     </select></div>
-                                            </form>
+                                            </form> -->
                                             <div class="m-order__list">
-                                                {% for i in orders %}
+                                                
                                                 <div class="m-order__get">
                                                     <div class="manage-o__header u-s-m-b-30">
                                                         <div class="dash-l-r">
                                                             <div>
-                                                                <div class="manage-o__text-2 u-c-secondary">Order #{{i.track_number}}</div>
-                                                                <div class="manage-o__text u-c-silver">Placed on {{i.order_date}}</div>
+                                                                <div class="manage-o__text-2 u-c-secondary">Order #{{my_orders.track_number}}</div>
+                                                                <div class="manage-o__text u-c-silver">Placed on {{my_orders.order_date}}</div>
                                                             </div>
                                                             <div>
                                                                 <div class="dash__link dash__link--brand">
 
-                                                                    <a href="{% url 'home:manage_order' slug=i.user %}">MANAGE</a></div>
+                                                                    <a href="{% url 'home:manage_order' slug=my_orders.user %}">MANAGE</a></div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {% for b in i.cart.products.all %}
+                                                    {% for b in my_orders.cart.products.all %}
                                                     <div class="manage-o__description">
                                                         <div class="description__container">
 
@@ -183,7 +190,7 @@
                                                         <div class="description__info-wrap">
                                                             <div>
 
-                                                                <span class="manage-o__badge badge--{{i.statue}}">{{i.statue}}</span></div>
+                                                                <span class="manage-o__badge badge--{{my_orders.statue}}">{{my_orders.statue}}</span></div>
                                                             <div>
 
                                                                 <span class="manage-o__text-2 u-c-silver">Quantity:
@@ -198,7 +205,7 @@
                                                     </div>
                                                     {% endfor %}
                                                 </div>
-                                                {% endfor %}
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -221,32 +228,5 @@
         <!--====== End - App Content ======-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-<script type="text/javascript">
-$("#ajaxbutton").click(function () {
-    const productId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-    $.ajax({                       // initialize an AJAX request
-        type: "POST",
-        url: '{% url "home:order_track" slug=profile.user %}',
-        data: {
-            'product': productId,       // add the country id to the POST parameters
-            'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function (data) {   // `data` is from `get_topics_ajax` view function
-            
-            let html_data2=`
-                                    `
-            ;
-            data.forEach(function (data) {
-                html_data2 += `
-                ${data.track_number}
-            
-            
-                `
-            });
-            $("#my-div").html(html_data2);
-            
-        }
-    });
-    });
-</script>
+
 {% endblock %}

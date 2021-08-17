@@ -2,7 +2,14 @@ from django import forms
 from .models import *
 from bootstrap_datepicker_plus import DatePickerInput,TimePickerInput,DateTimePickerInput
 
+# class SignupForm(forms.Form):
+#     first_name = forms.CharField(max_length=30, label='Voornaam')
+#     last_name = forms.CharField(max_length=30, label='Achternaam')
 
+#     def signup(self, request, user):
+#         user.first_name = self.cleaned_data['first_name']
+#         user.last_name = self.cleaned_data['last_name']
+#         user.save()
 class ProductForm(forms.ModelForm):
     image = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
     class Meta:
@@ -89,3 +96,41 @@ class ManuForm(forms.ModelForm):
     class Meta:
         model=Branch
         fields="__all__"
+
+from allauth.account.forms import LoginForm,SignupForm
+GENDER=(    
+    ("Male","Male"),
+    ("Female","Female")
+)
+  
+class MyCustomSignupForm(SignupForm):
+    last_name=forms.CharField(max_length=10)
+   
+    def save(self, request):
+          
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super(MyCustomSignupForm, self).save(request)
+        first_name=request.POST.get("username")
+        last_name=self.cleaned_data.get("last_name")
+        user.first_name=first_name      
+        user.last_name=last_name
+        user.save()    
+       
+        phone=request.POST.get("phone")
+        gender=request.POST.get("gender")
+        year=request.POST.get("year")
+        month=request.POST.get("month")
+        day=request.POST.get("day")
+        birthday=f"{year}-{month}-{day}"
+        profile=Profile.objects.get(user_id=user.id)
+        profile.phone=phone
+        profile.gender=gender
+        profile.birthday=birthday
+        profile.save()
+        # if profile.phone == None or profile.gender == None or profile.birthday == None:
+        #     raise forms.ValidationError("invalid Data")
+        # Add your own processing here.
+
+        # You must return the original result.
+        return user

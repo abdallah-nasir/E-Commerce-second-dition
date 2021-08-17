@@ -800,11 +800,11 @@ $('#rate-form').submit();
                 </div>
                 
                     `;
-                       
+                    let html_2=`$ ${res.total}`;
                     $("#cart-items").append(_html);
                     $("#cart-len-1").text(res.amounts);
                     $("#cart-len-2").text(res.amounts);
-                    $("#cart-total").text(res.total);
+                    $("#cart-total").html(html_2);
                     _vm.attr('disabled',false);
                 }
                 

@@ -1,22 +1,53 @@
-{% extends "socialaccount/base.html" %}
-
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load i18n %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Sign Up" %}</h1>
 
-<p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
-{{site_name}}. As a final step, please complete the following form:{% endblocktrans %}</p>
+<div class="container">
+  <h1>{% trans "Sign Up" %}</h1>
+  <div class="row">
+    <div class="col">
+      <p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
+        {{site_name}}. As a final step, please complete the following form:{% endblocktrans %}</p>
+        
+        <form method="POST" class="l-f-o__form signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+          {% csrf_token %}
+    
+      <div class="u-s-m-b-30">
 
-<form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+          <label class="gl-label" for="login-email">E-MAIL *</label>
+
+          <input class="input-text input-text--primary-style" type="text" name="email" id="id_email" placeholder="Username / Email">
+        </div>
+        <div class="u-s-m-b-30">
+
+          <label class="gl-label" for="login-email">Username *</label>
+
+          <input class="input-text input-text--primary-style" type="text" name="username" id="id_username" placeholder="Username / Email">
+        </div>
+    
+          <div class="gl-inline ">
+          <div class="u-s-m-b-30">
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button  class="btn btn--e-transparent-brand-b-2" type="submit">{% trans "LOGIN" %} &raquo;</button>
+  
+            </div>
+
+      </div>
+    
+  </form>
+
+    </div>
+  </div>
+</div>
+   
+
+
+
 
 {% endblock %}

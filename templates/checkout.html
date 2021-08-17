@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
 
-<script src="https://www.paypal.com/sdk/js?client-id=AUVCElDtljJUDVWukP9yrdedNic0J1B1XY1MtNfPhqxQU47F1F1A7C6ixKabvUCRZCTpkFihHBaTPR-F&currency=USD" ></script>
+<script src="https://www.paypal.com/sdk/js?client-id=Ace7Ld83W3KguXWSs3uNjxUR39kUAxqA0WFqFE7tyOn9wEnPUDefnTNGtnh8gDdPuYDhWRem_adArGqP&currency=USD" ></script>
 
         <!--====== App Content ======-->
 <div class="app-content">
@@ -350,14 +349,14 @@
                                         <div class="o-summary__section u-s-m-b-30">
                                             <div class="o-summary__box">
                                                 <h1 class="checkout-f__h1">PAYMENT INFORMATION</h1>
-                                                <form method='POST' action="{%  url 'home:make_payment_option' %}" class="checkout-f__payment">
+                                                <form method='POST'  id="cash_form" action="{%  url 'home:make_payment_option' %}" class="checkout-f__payment">
                                                     {% csrf_token %}
                                                     <div class="u-s-m-b-10">
 
                                                         <!--====== Radio Box ======-->
                                                         <div class="radio-box">
 
-                                                            <input type="radio" id="cash-on-delivery" value="Cash on Delivery" name="payment">
+                                                            <input type="radio" id="cash-on-delivery" value="Cash on Delivery" name="payment" required>
                                                             <div class="radio-box__state radio-box__state--primary">
 
                                                                 <label class="radio-box__label" for="cash-on-delivery">Cash on Delivery</label></div>
@@ -366,37 +365,12 @@
 
                                                         <span class="gl-text u-s-m-t-6">Pay Upon Cash on delivery. (This service is only available for some countries)</span>
                                                     </div>
-                                                    <!-- <div class="u-s-m-b-10">
-
-                                                       
-                                                        <div class="radio-box">
-
-                                                            <input type="radio" id="direct-bank-transfer" name="payment">
-                                                            <div class="radio-box__state radio-box__state--primary">
-
-                                                                <label class="radio-box__label" for="direct-bank-transfer">Direct Bank Transfer</label></div>
-                                                        </div>
-                                                      
-
-                                                        <span class="gl-text u-s-m-t-6">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</span>
-                                                    </div> -->
-                                                    <!-- <div class="u-s-m-b-10">
-
-                                                        <div class="radio-box">
-
-                                                            <input type="radio" id="pay-with-check" name="payment">
-                                                            <div class="radio-box__state radio-box__state--primary">
-
-                                                                <label class="radio-box__label" for="pay-with-check">Pay With Check</label></div>
-                                                        </div>
-
-                                                        <span class="gl-text u-s-m-t-6">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span>
-                                                    </div> -->
+                                                    
                                                     <div class="u-s-m-b-10">
 
                                                         <div class="radio-box">
 
-                                                            <input type="radio" id="pay-with-card" value="Credit / Debit Card" name="payment">
+                                                            <input type="radio" id="pay-with-card" value="Credit / Debit Card" name="payment" required>
                                                             <div class="radio-box__state radio-box__state--primary">
 
                                                                 <label class="radio-box__label" for="pay-with-card">Pay With Credit / Debit Card</label></div>
@@ -409,7 +383,7 @@
                                                         <!--====== Radio Box ======-->
                                                         <div class="radio-box">
 
-                                                            <input type="radio" id="pay-pal" value="PayPal" name="payment">
+                                                            <input type="radio" id="pay-pal" value="PayPal" name="payment" required>
                                                             <div class="radio-box__state radio-box__state--primary">
 
                                                                 <label class="radio-box__label" for="pay-pal">Pay Pal</label></div>
@@ -433,10 +407,14 @@
                                                         <a class="gl-link">Terms of Service.</a>
                                                     </div>
                                                     <div>
-
+                                                            
                                                         <button class="btn btn--e-brand-b-2" type="submit">PLACE ORDER</button></div>
-                                                </form>
-                                        <div id="paypal-button-container"  ></div></div>
+                                                   
+                                                    </div>
+                                                    </form>
+                                                  
+                                        </div>
+                                           
 
                                             </div>
                                         </div>
@@ -625,6 +603,7 @@
         <!--====== End - Shipping Address Add Modal ======-->
         <!--====== End - Modal Section ======-->    
         <script type="text/javascript">
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
             // Render the PayPal button into #paypal-button-container
             paypal.Buttons({
@@ -653,7 +632,7 @@
        
                  // Call your server to finalize the transaction
                  onApprove: function(data, actions) {
-                     return fetch('/capture/' + data.orderID + '/{{order.id}}/', {
+                     return fetch('/capture/' + data.orderID +'/{{order.id}}/',{
                          method: 'post',
                          headers: {"X-CSRFToken": csrftoken}
                      }).then(function(res) {
@@ -694,9 +673,9 @@
             }).render('#paypal-button-container');
         </script>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-        <script type="text/javascript">       
+<script type="text/javascript">       
             $("#billing-country").change(function () {
                 const countryId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
                 $.ajax({                       // initialize an AJAX request
@@ -796,7 +775,7 @@
                     }
                 });
             });
-            
+      
                 </script>
 {% endblock %}
      

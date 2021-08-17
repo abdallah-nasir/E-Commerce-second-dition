@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',   
     'django_filters',
     "cities_light",
+    "ajax_select",
+    # "Pay_Mob",
     # "django_countries",
     'allauth',         
     'allauth.account',
@@ -74,17 +76,17 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request',   
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 "STORE.processors.global_context",
                 "STORE.processors.global_profile",
-                # "STORE.processors.global_newsletter",
+                "STORE.processors.global_PayMob",
                 "STORE.processors.global_wishlist",
-
+    
             ],
         }, 
-    },  
+    },     
 ]
 
 WSGI_APPLICATION = 'E_commerce.wsgi.application'
@@ -104,6 +106,14 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+# "Email Backend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'abdullahnasser6@gmail.com'
+EMAIL_HOST_PASSWORD ="bbvpxmxneyglgqzt"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL= False
+EMAIL_PORT = '587'
 #allauth  
 SITE_ID=1
 LOGIN_REDIRECT_URL ="home:home"
@@ -112,36 +122,64 @@ ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS =True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL=LOGIN_REDIRECT_URL
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL =True
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL =None
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =1
 ACCOUNT_EMAIL_CONFIRMATION_HMAC =True
 ACCOUNT_EMAIL_REQUIRED =True
 ACCOUNT_EMAIL_VERIFICATION ="mandatory"   
 ACCOUNT_EMAIL_SUBJECT_PREFIX ="Site"
-ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN =60
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN =120
 ACCOUNT_EMAIL_MAX_LENGTH=245
 ACCOUNT_MAX_EMAIL_ADDRESSES=1
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT =3
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT =120
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION =True
+ACCOUNT_LOGOUT_ON_GET =False
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE =True
 ACCOUNT_LOGIN_ON_PASSWORD_RESET =True
 ACCOUNT_LOGOUT_REDIRECT_URL ="home:home"
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE =True
+ACCOUNT_PRESERVE_USERNAME_CASING =False
 ACCOUNT_SESSION_REMEMBER =None
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE =True
 ACCOUNT_SIGNUP_REDIRECT_URL =LOGIN_REDIRECT_URL
-# ACCOUNT_USERNAME_BLACKLIST 
+# ACCOUNT_USERNAME_BLACKLIST (=[])
 ACCOUNT_UNIQUE_EMAIL =True
-ACCOUNT_USERNAME_MIN_LENGTH =1
+ACCOUNT_USERNAME_MIN_LENGTH =5
 ACCOUNT_USERNAME_REQUIRED =True
-SOCIALACCOUNT_AUTO_SIGNUP =False
+SOCIALACCOUNT_AUTO_SIGNUP =True
 SOCIALACCOUNT_EMAIL_VERIFICATION =ACCOUNT_EMAIL_VERIFICATION
+SOCIALACCOUNT_EMAIL_REQUIRED =ACCOUNT_EMAIL_REQUIRED
 SOCIALACCOUNT_QUERY_EMAIL =ACCOUNT_EMAIL_REQUIRED
-SOCIALACCOUNT_STORE_TOKENS =True
-# ACCOUNT_FORMS = {'login': 'shop.forms.MyCustomLoginForm'} 
+SOCIALACCOUNT_STORE_TOKENS =False
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id':"1026393978710-192vg587ftturb4mr1polgvm3s4ubvfa.apps.googleusercontent.com",
+            'secret':"Qsfxt18kpU_BfrAipW6TN0dK",
+            'key': ''
+        }
+    },
 
-      
+    'facebook': {
+    # For each OAuth based provider, either add a ``SocialApp``
+    # (``socialaccount`` app) containing the required client
+    # credentials, or list them here:
+    'APP': {
+        'client_id':"123",
+        'secret':"123",
+        'key': '',
+       
+    }
+}
+}
+ACCOUNT_FORMS = {
+    'signup': 'STORE.forms.MyCustomSignupForm',
+
+}
 AUTHENTICATION_BACKENDS = [
     # ............
     # Needed to login by username in Django admin, regardless of `allauth`

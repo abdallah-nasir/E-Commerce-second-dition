@@ -4,20 +4,239 @@ from .forms import *
 from .filters import *
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404  
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.core.mail import send_mail, EmailMessage
+from django.template.loader import render_to_string
+
 from django.conf import settings
 from cities_light.models import Country,Region
-
-# import login_required()
+from django.contrib.auth.decorators import login_required
+from accept.payment import * 
 # Create your views here.    
 from datetime import date   
 import time
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
+
+def search(request):
+    selected=0 # this is for sortings products 
+    paginate=0  #this is for paginat page number
+    free=request.POST.get("free")
+    price_1=request.POST.get("price_1")
+    price_2=request.POST.get("price_2")
+    rate=request.POST.get("rate")
+    paginat=request.POST.get("paginat")
+    select_filter=request.POST.get("select_filter")
+    category=Category.objects.all()
+    try:
+        qs=request.GET["qs"]
+        search=f"qs={qs}"
+        if request.user.is_authenticated:
+            repeat_user=Filter.objects.filter(user=request.user)   
+            if len(repeat_user) != 1:
+                for i in repeat_user[1:]:
+                    i.delete()           
+            # filters=Filter.objects.filter(user=request.user)
+            try:      
+                device=request.COOKIES["device"] 
+                filters=Filter.objects.filter(device=device)
+                if len(filters) != 1:
+                    for i in filters[1:]:
+                        i.delete()
+                if Filter.objects.filter(user=request.user).exists():
+                    filter_user=Filter.objects.get(user=request.user)
+                    filter_user.device=device
+                    filter_user.save()
+                if filters.exists():
+                    filter_user=Filter.objects.get(device=device)
+                    filter_user.user=request.user
+                    filter_user.save()
+                if len(Filter.objects.filter(user=request.user,device=device)) != 1:
+                    for i in Filter.objects.filter(user=request.user,device=device)[1:]:
+                        i.delete()
+                filter_user,creatde=Filter.objects.get_or_create(user=request.user,device=device)   
+                print("herereer")
+            except:
+                filter_user,creatde=Filter.objects.get_or_create(user=request.user)   
+                pass
+                
+            if free:
+                try:
+                    filter_user.shipping=True
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry,invalid value")
+                    pass
+
+            if price_1 and price_2:
+                try:
+                    filter_user.price_1=price_1
+                    filter_user.price_2=price_2
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+                
+            if rate:          
+                try:
+                    filter_user.rating=rate
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+            if select_filter:
+                try:
+                    filter_user.sort= select_filter
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+            
+            if paginat:
+                try:
+                    filter_user.show= paginat
+                    filter_user.save() 
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+            if filter_user.category == None and filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
+                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")   
+                    selected=1      
+                if filter_user.sort == 2 or filter_user.sort == "2": 
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")
+                    selected=2  
+                
+                if filter_user.sort == 5 or filter_user.sort == "5":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")
+                    selected=5  
+                    
+                if filter_user.sort == 6 or filter_user.sort == "6":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price") 
+                    selected=6       
+            else:
+                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")   
+                    selected=1      
+                elif filter_user.sort == 2 or filter_user.sort == "2": 
+            
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")
+                    selected=2 
+                elif filter_user.sort == 5 or filter_user.sort == "5":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")
+                    selected=5  
+                elif filter_user.sort == 6 or filter_user.sort == "6":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price") 
+                    selected=6
+            # s=Cart.objects.get(user=request.user,ordered=True,delivered=False)
+
+        else:  
+            try:   
+                device=request.COOKIES["device"] 
+                repeat_anonymous=Filter.objects.filter(device=device)
+                if  len(repeat_anonymous) != 1:    
+                    for i in repeat_anonymous:   
+                        i.delete()
+                filter_user,created=Filter.objects.get_or_create(device=device)
+            except:           
+                pass        
+
+        
+            if free:
+                try:
+                    filter_user.shipping=True
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry,invalid value")
+                    pass
+
+
+            if price_1 and price_2:
+                try:
+                    filter_user.price_1=price_1
+                    filter_user.price_2=price_2
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+                
+            if rate:          
+                try:
+                    filter_user.rating=rate
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+        
+            if select_filter:
+                try:
+                    filter_user.sort= select_filter
+                    filter_user.save()
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+            
+            if paginat:
+                try:
+                    filter_user.show= paginat
+                    filter_user.save() 
+                except:
+                    messages.error(request,"sorry.invalid value")
+                    pass
+            if filter_user.category == None and filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
+                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1" :
+                
+                    selected=1
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")  
+                if filter_user.sort == 2 or filter_user.sort == "2":
+                    
+                    selected=2      
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")   
+                if filter_user.sort == 5 or filter_user.sort == "5":
+                    
+                    selected=5
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")  
+                if filter_user.sort == 6 or filter_user.sort == "6":
+                
+                    selected=6
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price")    
+            else:      
+                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")   
+                    selected=1         
+                elif filter_user.sort == 2 or filter_user.sort == "2": 
+            
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")
+                    selected=2   
+                elif filter_user.sort == 5 or filter_user.sort == "5":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")
+                    selected=5  
+                elif filter_user.sort == 6 or filter_user.sort == "6":
+                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price") 
+                    selected=6
+        try:
+            paginator = Paginator(product, filter_user.show) # Show requested products per page.    
+            paginated=int(filter_user.show)
+        except:
+            paginator = Paginator(product,8 ) # Show 8 products per page.  
+            paginated=8
+    except:
+        search=None
+        product=Product.objects.none()
+        filter_user={}
+        paginated={}
+    paginator = Paginator(product,1 )     
+    page_number = request.GET.get('page')    
+    page_obj = paginator.get_page(page_number)     
+    context={"category":category,"search":search,"my_filter":filter_user,"products":page_obj,"paginated":paginated,"selected":selected,"show":paginate}
+    return render(request,"search.html",context)
+
 def home(request):
+    if request.is_ajax():  
+        print("ajax")
     trend=Product.objects.order_by("-stars")[0:12]
     arrivals=Product.objects.order_by("-id")[0:8]
     category=Category.objects.all()   
@@ -29,7 +248,7 @@ def home(request):
     deal=Deals.objects.filter(expired=False) 
 
     context={"deals":deal,"paid":most_buy,"trend":trend,"arrivals":arrivals,"category":category}
-    return render(request,"home.html",context) 
+    return render(request,"home.html",context)   
 def products(request):
     selected=0 # this is for sortings products 
     paginate=0  #this is for paginat page number 
@@ -269,42 +488,60 @@ def this_product(request,id):
     comments=request.POST.get("comments")
     if comments:
         print(comments)
-        if comments == 1:    
+        if comments == "1":    
             details=Rate_Details.objects.filter(rate_id__in=reviews,product=product).order_by("-stars","-id")   #details for this rate
-        if comments == 2:
+            details_order=1
+        if comments == "2":
             details=Rate_Details.objects.filter(rate_id__in=reviews,product=product).order_by("stars","-id")   #details for this rate
+            details_order=2
     else:
         details=Rate_Details.objects.filter(rate_id__in=reviews,product=product).order_by("-stars","-id")   #details for this rate
-  
+        details_order=1
     if form.is_valid():            
+      if request.is_ajax():   
+        print("ajax")
         instance=form.save(commit=False)
         review=form.cleaned_data.get("review")
         stars=form.cleaned_data.get("stars")
         if not 1 <= float(stars) <= 5:
             messages.error(request,"value is not correct")
             return redirect(reverse("home:this_product",kwargs={"id":product.id}))
-        if request.user.is_authenticated:
+        if request.user.is_authenticated:   
             try:
                 this_rate=Rate.objects.get(user=request.user)
-                this_rate.product.add(product)
+                this_rate.product.add(product)  
                 this_rate.save()
                 my_rate=Rate_Details.objects.create(rate_id=this_rate.id,product=product,review=review,stars=stars)
                 product.stars +=float(stars)
-                product.save()
-                print("added")    
+                product.save()  
+                print("added")
+                # print(my_rate.count)  
+                date= f"{my_rate.date.strftime('%b')}, {my_rate.date.day}, {my_rate.date.year}, {my_rate.date.hour}:{my_rate.date.minute}"
+                # print(date)
+                data={"comment_user":my_rate.rate.user.username.title(),"comment_date":date, 
+                      "comment_stars":my_rate.stars,"comment_average":my_rate.product.average()["average"],
+                      'comment':my_rate.review,"comment_count":my_rate.ajax_len()}   
+                print(data)   
+                return JsonResponse(data)    
             except:
                 new_rate=Rate.objects.create(user=request.user)   
                 new_rate.product.add(product)
                 new_rate.save()    
                 my_rate=Rate_Details.objects.create(rate_id=new_rate.id,product=product,review=review,stars=stars)
-                product.stars +=float(stars)
+                product.stars +=float(stars)    
                 product.save()
-                print("created")    
+                print("created") 
+                date= f"{my_rate.date.strftime('%b')}, {my_rate.date.day}, {my_rate.date.year}, {my_rate.date.hour}:{my_rate.date.minute}"
+                data={"comment_user":my_rate.rate.user.username.title(),"comment_date":date, 
+                      "comment_stars":my_rate.stars,"comment_average":my_rate.product.average()["average"],
+                      'comment':my_rate.review,"comment_count":my_rate.ajax_len()}      
+                print(data)
+                return JsonResponse(data)
         else:
             messages.error(request,"you should login first")
             return redirect(reverse("account_login"))    
 
-    context={"product":product,"same":same,"form":form,"reviews":reviews,"details":details}
+    context={"details_order":details_order,"product":product,"same":same,"form":form,"reviews":reviews,"details":details}
     return render(request,"this_product.html",context)
 def cart(request):
     countries=Country.objects.all()
@@ -403,9 +640,6 @@ def add_to_cart(request):
                 i.save()
                 print("repeat cart")
         repeat_cart_device=Cart.objects.filter(device=device,ordered=True,delivered=False)
-        if len(repeat_cart_device)  != 1:
-            for i in repeat_cart:
-                i.delete()
 
         product_cart,created=Product_Cart.objects.get_or_create(products=product,user=request.user,delivered=False)
         product_cart.device=device
@@ -429,28 +663,29 @@ def add_to_cart(request):
             print(product_cart.products.image.first().image.url)
             data={"id":product_cart.id,"amounts":cart.order_product_length(),
                 "product_category":product_cart.products.category.name,"product_name":product_cart.products.name,
-                "product_price":product_cart.discount(),"product_quantity":product_cart.quantity,
+                "product_price":product_cart.product_price_individual(),"product_quantity":product_cart.quantity,
                 "product_image":product_cart.products.image.first().image.url,"product_url":product_cart.get_url(),
                 "product_category_url":product_cart.get_category_url(),"total":cart.before_discount(),
                 "product_remove":product_cart.get_cart_remove_url()} 
             print(data)   
             return JsonResponse(data)
     else:
-        device=request.COOKIES["device"]
-        repeat_product=Product_Cart.objects.filter(device=device,delivered=False)
-        repeat_cart=Cart.objects.filter(device=device,ordered=True,delivered=False)
-        if len(repeat_cart) != 1:
-            for i in repeat_cart:
-                for b in i.products.all():
-                    b.delete()
-                i.delete()
+        device=request.COOKIES["device"]   
+        try:
+            product_cart=Product_Cart.objects.get(products=product,device=device,delivered=False).last()
+        except:
+            product_cart=Product_Cart.objects.create(products=product,device=device,delivered=False)
 
-            # for i in    
-            
-        product_cart,created=Product_Cart.objects.get_or_create(products=product,device=device,delivered=False)
         print("prodcut_cart anonymous")
-        cart,created=Cart.objects.get_or_create(device=device,ordered=True,delivered=False)
-        if product_cart in cart.products.all():
+        try:
+            if len(Cart.objects.filter(device=device,ordered=True,delivered=False)) > 1:
+                cart=Cart.objects.filter(device=device,ordered=True,delivered=False).last()
+            else:
+                cart=Cart.objects.get(device=device,ordered=True,delivered=False) 
+        except:
+            cart=Cart.objects.create(device=device,ordered=True,delivered=False)
+
+        if product_cart in cart.products.all():     
             messages.error(request,"this item is in your cart")
         else:
             cart.products.add(product_cart)  
@@ -692,6 +927,7 @@ def make_new_address(request):
             return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
+
 def make_payment_option(request):
     profile=Profile.objects.get(user=request.user)
     payment=request.POST.get("payment")
@@ -703,14 +939,16 @@ def make_payment_option(request):
             if order.payments == None or order.address == None or order.cart == None:
                 print("none order")   
                 messages.error(request,"please complete your order information")
-                return redirect(reverse("home:order",kwargs={"id":order.cart.cart.id}))
+                return redirect(reverse("home:order",kwargs={"id":order.cart.id}))
+            else:
+                return (redirect(reverse("home:order_confirm",kwargs={"id":order.id})))
         else:
             print(payment)
             messages.error(request,"sorry, invalid payment option")
             return redirect(reverse("home:order",kwargs={"id":order.cart.cart.id}))
     except:
-       
         messages.error(request,"sorry,invalid payment option")
+        return redirect(reverse("home:order",kwargs={"id":order.id}))
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
@@ -719,9 +957,11 @@ def make_payment_option(request):
 from paypalcheckoutsdk.orders import OrdersCreateRequest
 from paypalcheckoutsdk.orders import OrdersCaptureRequest
 from paypalcheckoutsdk.core import SandboxEnvironment,PayPalHttpClient
-CLIENT_ID="AUVCElDtljJUDVWukP9yrdedNic0J1B1XY1MtNfPhqxQU47F1F1A7C6ixKabvUCRZCTpkFihHBaTPR-F"
-CLIENT_SECRET="ENepKuG3KheVNsthJjDS7B2amndWXWwaAQz3PJj8Ddi6O-QFQenD9frvveoUdGLrUdJUQ0DlzVap_b9Z"
-# @login_required()
+CLIENT_ID="AXRoqNBK6jhVc6UqCteZ69SvMvng9d0dglftwbI1VDUlmCpgwJ5EZPGUxmon1-ZaUzTiKHEWiIwxDTO8" #paypal
+CLIENT_SECRET="EISXMlwWduSB8zNUb0MuUUEtcmsnW4IZ865QnFdwwyskNZcajh3GPFqSLZd-mfcgXxuhO0ul-NF8sxOr" #paypl
+API_KEY="ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRFNE1ESTVMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuU0VhV0IwbjlMVklMeHVKd1NqTFVldDNWc0pqMDVMZjBOVUNuTmZROGZJOFdxREswb3FUOE1pYjBUeTY2MHlXZzRsUGNXU3dhTHZDc0x5RVd1LUtRaVE=" #PAYMOB
+
+@login_required()
 def create(request,id):
     if request.method =="POST":
         environment = SandboxEnvironment(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
@@ -731,7 +971,7 @@ def create(request,id):
         create_order = OrdersCreateRequest()
         #order            
         create_order.request_body (
-            
+
             {
                 "intent": "CAPTURE",
                 "purchase_units": [
@@ -745,7 +985,7 @@ def create(request,id):
                                     "value":  order.price
                                 }
                                 },
-                            },                               
+                            },                                  
 
 
                     }
@@ -758,11 +998,175 @@ def create(request,id):
         # print()
         response = client.execute(create_order)
         data = response.result.__dict__['_dict']      
+        print(data)
         return JsonResponse(data)
     else:
         return JsonResponse({'details': "invalide request"})
+        print("not herer")
+def capture(request,order_id,id):       
+    if request.method=="POST": 
+        capture_order = OrdersCaptureRequest(order_id)
+        environment = SandboxEnvironment(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
+        client = PayPalHttpClient(environment)
+        response = client.execute(capture_order)
+        data = response.result.__dict__['_dict']
+        try:
+            order=Order.objects.get(user=request.user,ordered=True,delivered=False,id=id)
+            
+            for i in order.cart.products.all():
+                i.delivered=True 
+                i.products.most_buy +=1
+                i.save()
+                i.products.save()
+            order.cart.delivered=True
+            order.cart.save()
+            order.delivered=True
+            order.track_number=data["id"]
+            order.save()
+            print("all done")
+        except:
+            pass
+    return redirect(reverse("home:home"))
+@login_required()
+def order_confirm(request,id):
+    try:
+        order=Order.objects.get(id=id,user=request.user,ordered=True,delivered=False)
+        if order.payments == "Cash on Delivery":
+            order_payment=1
+        elif order.payments == "PayPal":
+            order_payment=2
+        elif order.payments == "Credit / Debit Card":
+            order_payment=3
+        else:
+            return redirect(reverse('home:cart'))
+        payment=None 
+    except:
+        return redirect(reverse('home:home'))
+    if order.payments == "Credit / Debit Card":
+        accept = AcceptAPI(API_KEY) 
+        trans=accept.inquire_transaction(merchant_order_id=order.id,order_id=order.track_number)
+        try:
+            if trans["success"] == True:
+                order.track_number=trans["id"]
+                order.delivered=True
+                order.cart.delivered=True  
+                print("here")
+                for i in order.cart.products.all():
+                    i.delivered=True
+                    i.products.most_buy +=1
+                    i.products.save()
+                    i.save()
+                order.cart.save()    
+                order.save()
+                print(trans)       
+                return redirect(reverse("home:home"))
+        except:   
+            pass
+        auth_token = accept.retrieve_auth_token()    
+
+        try:   
+            NewOrderData = {   
+                "auth_token": auth_token, 
+                "delivery_needed": "false",
+                "amount_cents":  order.converter()*100,
+                "currency": "EGP",
+               "expiration": 3600, #this is for disable payment for this order for 3600 sec 
+            "merchant_order_id":order.id ,  # UNIQUE   
+            "integration_id":585334,  
+            "items": [ 
+        { 
+            "name":"any name",
+            "amount_cents": 10,
+            "description": "asdasd",
+            "quantity": "1"
+        },
+        ],
+    "shipping_data": {
+        "apartment": "803", 
+        "email": request.user.email, 
+        "floor": "42",   
+        "first_name":request.user.first_name.capitalize(), 
+        "street": "Ethan Land", 
+        "building": "8028", 
+        "phone_number": "+20(01064675906)", 
+        "postal_code": "01898", 
+        "extra_description": "8 Ram , 128 Giga",
+        "city": "Jaskolskiburgh", 
+        "country": "CR", 
+        "last_name": request.user.last_name.capitalize(), 
+        "state": "Utah"
+    },
+        "shipping_details": {
+            "notes" : " test",
+            "number_of_packages": 1,
+            "weight" : 1,
+            "weight_unit" : "Kilogram",
+            "length" : 1,
+            "width" :1,
+            "height" :1,
+            "contents" : "product of some sorts"
+        },
+        "lock_order_when_paid": "true"
+            } 
+            new_order = accept.order_registration(NewOrderData)
+            order.track_number=new_order["id"]
+            order.save()
+            payment = accept.payment_key_request(NewOrderData) 
+            print(payment)  
+            print("created")  
+        except:
+            OrderData = {    
+                "auth_token": auth_token, 
+                "delivery_needed": "false",
+                "amount_cents": order.converter()*100,
+                "currency": "EGP",
+              "expiration": 3600,
+            "order_id":order.track_number ,  # UNIQUE   
+            "integration_id":585334,  
+                        "items": [
+        {
+            "name":"any name",
+            "amount_cents":order.price * 100,
+            "description": "any disc",
+            "quantity": "1"
+        },
+        ],
+    "shipping_data": {
+        "apartment": "803", 
+        "email": request.user.email, 
+        "floor": "42",   
+        "first_name":  request.user.first_name.capitalize(), 
+        "street": "Ethan Land", 
+        "building": "8028", 
+        "phone_number": "+20(01064675906)", 
+        "postal_code": "01898", 
+        "extra_description": "8 Ram , 128 Giga",
+        "city": "Jaskolskiburgh", 
+        "country": "CR", 
+        "last_name": request.user.last_name.capitalize(), 
+        "state": "Utah"
+    },
+        "shipping_details": {
+            "notes" : " test",
+            "number_of_packages": 1,
+            "weight" : 1,
+            "weight_unit" : "Kilogram",
+            "length" : 1,
+            "width" :1,
+            "height" :1,
+            "contents" : "product of some sorts"
+        },   
+        "lock_order_when_paid": "true"
+            }
+            payment = accept.payment_key_request(OrderData)
+            print(payment) 
+            print("here")
+    context={"order_payment":order_payment,"order":order,"frame": 270151,"payment":payment}
+    return render(request,"order_confirm.html",context)
 
 
+    
+########
 def coupon(request):
     if request.user.is_authenticated:
         order=Order.objects.get(user=request.user,ordered=True,delivered=False)
@@ -800,7 +1204,7 @@ def order(request,id):
         if len(repeat_cart) != 1:
             for i in repeat_cart:     
                 i.delete()
-        cart=get_object_or_404(Cart,id=id) 
+        cart=get_object_or_404(Cart,user=request.user,ordered=True,delivered=False,id=id) 
         if cart.order_product_length() == 0:     
             messages.error(request,"you dont have products in your cart")
             return redirect(reverse("home:cart"))
@@ -886,6 +1290,7 @@ def order(request,id):
         return redirect(reverse("account_login"))
     context={"order":order,"countries":countries,"my_address":my_address,"all":all_address}
     return render(request,"checkout.html",context)
+
 def profile(request,slug):    
     if request.user.is_authenticated:
         profile=Profile.objects.get(user=request.user)
@@ -970,23 +1375,29 @@ def address(request,slug):
             region=request.POST.get("region")
             country=request.POST.get("country")
             city=request.POST.get("city")
+            print(country,region)
             try:
                 my_region=Region.objects.filter(country_id=country)           
                 cities=City.objects.filter(region_id=region)
                 response_content=cities.values()
                 if country:
+                
                     response_content=my_region.values()
                 elif region:
                     response_content=cities.values()
             except Exception:       
-                response_content=list({})        
+                response_content=list({})         
             return JsonResponse(list(response_content),safe=False)        
+        if len(info) >= 3:
+            len_info=True   
+        else:
+            len_info=False
     
     else:        
         messages.error(request,"please login First....")
         return redirect(reverse("account_login"))
 
-    context={"profile":profile,"countries":countries,"info":info,"canceled":canceled_order,"order":order}
+    context={"profile":profile,"len_info":len_info,"countries":countries,"info":info,"canceled":canceled_order,"order":order}
     return render(request,"address_book.html",context)
 def address_add(request,slug):    
     if request.user.is_authenticated:
@@ -1006,6 +1417,7 @@ def address_add(request,slug):
                 street=request.POST.get("street")
                 zip=request.POST.get("zip")
                 if request.is_ajax():
+                    
                     try:
                         my_region=Region.objects.filter(country_id=country)           
                         cities=City.objects.filter(region_id=region)
@@ -1047,26 +1459,26 @@ def address_edit(request,id):
     else:
         messages.error(request,"invalid data")
     return redirect(reverse("home:address",kwargs={"slug":request.user}))
+   
 
-
-def order_track(request,slug):
+def order_track(request,slug):    
     if request.user.is_authenticated:
-        orders=Order.objects.filter(user=request.user)
         profile=Profile.objects.get(user=request.user)
         order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
         canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
         track=request.POST.get("track")
-        my_order=Order.objects.filter(user=request.user,track_number=track) #user=request.user,ordered=True,delivered=True,
-        # if request.is_ajax():
-        #     print("ajax")
-        #     data=list(orders.values())  
-        #     return JsonResponse(data,safe=False)
-            # return   
+        if request.method == "POST":
+            try:
+                my_order=Order.objects.get(user=request.user,track_number=track) #user=request.user,ordered=True,delivered=True,
+            except:  
+                my_order=False     
+        else:
+            my_order={}
     else:        
         messages.error(request,"please login First....")
         return redirect(reverse("account_login"))
-
-    context={"profile":profile,"order":order,"canceled":canceled_order,"orders":my_order}
+  
+    context={"profile":profile,"order":order,"canceled":canceled_order,"my_orders":my_order}
 
     return render(request,"order_track.html",context)
 
@@ -1750,16 +2162,16 @@ def wishlist(request):
     if request.user.is_authenticated:
         try:
             device=request.COOKIES["device"]
-            wish=Wishlist.objects.get(user=request.user,device=device)
-            if len(wish.products.all()) == 0:
+            wishlist=Wishlist.objects.get(user=request.user,device=device)
+            if len(wishlist.products.all()) == 0:
                 return redirect(reverse("home:empty"))
         except:
             pass
     else:   
         try:    
             device=request.COOKIES["device"]
-            wish=Wishlist.objects.get(device=device)
-            if len(wish.products.all()) == 0:
+            wishlist=Wishlist.objects.get(device=device)
+            if len(wishlist.products.all()) == 0:
                 return redirect(reverse("home:empty"))
         except:
             pass  
@@ -1862,9 +2274,88 @@ def wishlist_list_remove(request):
     return redirect(reverse("home:empty"))
 
 def test(request):
-    user=User.objects.all()
-    context={"user":user}    
-    return render(request,"home.html",context)
+    order=Order.objects.get(user=request.user,delivered=False)
+    accept = AcceptAPI(API_KEY) 
+    auth_token = accept.retrieve_auth_token()    
+    try:   
+        NewOrderData = {   
+                "auth_token": auth_token, 
+                "delivery_needed": "false",
+                "amount_cents":  order.converter()*100,
+                "currency": "EGP",
+               "expiration": 3600, #this is for disable payment for this order for 3600 sec 
+            "merchant_order_id":order.id ,  # UNIQUE   
+            "integration_id":585334,  
+            "items": [ 
+        { 
+            "name":"any name",
+            "amount_cents": 10,
+            "description": "asdasd",
+            "quantity": "1"
+        },
+        ],
+    "shipping_data": {
+        "apartment": "803", 
+        "email": request.user.email, 
+        "floor": "42",   
+        "first_name":request.user.first_name.capitalize(), 
+        "street": "Ethan Land", 
+        "building": "8028", 
+        "phone_number": "+20(01064675906)", 
+        "postal_code": "01898", 
+        "extra_description": "8 Ram , 128 Giga",
+        "city": "Jaskolskiburgh", 
+        "country": "CR", 
+        "last_name": request.user.last_name.capitalize(), 
+        "state": "Utah"
+    },
+        "shipping_details": {
+            "notes" : " test",
+            "number_of_packages": 1,
+            "weight" : 1,
+            "weight_unit" : "Kilogram",
+            "length" : 1,
+            "width" :1,
+            "height" :1,
+            "contents" : "product of some sorts"
+        },
+            } 
+        new_order = accept.order_registration(NewOrderData)
+        order.track_number=new_order["id"]
+        order.save()
+        payment = accept.payment_key_request(NewOrderData) 
+        print(payment)  
+        print("created")  
+    except:
+        OrderData ={
+        "auth_token": auth_token,
+    "amount_cents": order.converter()*100, 
+    "expiration": 3600, 
+    "order_id":  order.track_number,
+    "billing_data": {
+        "apartment": "803", 
+        "email": request.user.email, 
+        "floor": "42", 
+        "first_name": request.user.first_name.capitalize(), 
+        "street": "Ethan Land", 
+        "building": "8028", 
+        "phone_number": "+86(8)9135210487", 
+        "shipping_method": "PKG", 
+        "postal_code": "01898", 
+        "city": "Jaskolskiburgh", 
+        "country": "CR", 
+        "last_name":request.user.last_name.capitalize(), 
+        "state": "Utah"
+    }, 
+    "currency": "EGP", 
+    "integration_id": 585334,
+    "lock_order_when_paid": "false",
+            }
+        payment = accept.payment_key_request(OrderData)
+        print(payment) 
+        print("here")
+    context={"order":order,"frame": 270151,"payment":payment}
+    return render(request,"test.html",context)
   
 def faq(request):
     questions=FAQ.objects.all()
@@ -2040,10 +2531,10 @@ def manu_delete(request,id):
     return redirect(reverse("home:manu"))
 
 
-def search(request):
-    qs = request.GET.get("q")
-    product=Product.objects.filter(Q(name__icontains=qs)| Q(category__name__icontains=qs)|Q(branch__child__icontains=qs)|Q(details__icontains=qs)).distinct()
-    paginator = Paginator(product,2)
-    page_num =  request.GET.get("page")
-    page_obj = paginator.get_page(page_num)       
-    return render(request,"search.html")
+# def search(request):
+#     qs = request.GET.get("q")
+#     product=Product.objects.filter(Q(name__icontains=qs)| Q(category__name__icontains=qs)|Q(branch__child__icontains=qs)|Q(details__icontains=qs)).distinct()
+#     paginator = Paginator(product,2)
+#     page_num =  request.GET.get("page")
+#     page_obj = paginator.get_page(page_num)       
+#     return render(request,"search.html")

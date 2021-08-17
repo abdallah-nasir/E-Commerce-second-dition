@@ -20,12 +20,12 @@ from django.conf.urls.static import static
 from django.conf.urls import (handler400, handler403, handler404, handler500
 )
 
-# from allauth.urls import
+# from allauth.urls import   
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-
-    path("",include("STORE.urls",namespace="home"))
+    path("",include("STORE.urls",namespace="home")),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

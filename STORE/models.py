@@ -11,13 +11,13 @@ from cities_light.models import Country,Region,City
 from django.shortcuts import render,redirect,reverse
 import requests
 # Create your models here.
-
+  
 
 GENDER=(
     ("Male","Male"),
     ("Female","Female")
-)
-    
+)        
+        
 @receiver(post_save, sender=User)
 def create_user_Customer(sender, instance, created, **kwargs):
     if created:
@@ -103,7 +103,7 @@ class Images(models.Model):
     # def save(self,*args, **kwargs):
     #     self.image = self.name
     #     super(Images,self).save(*args, **kwargs)
-    
+          
 
 
 class Product(models.Model):
@@ -156,7 +156,7 @@ class Product(models.Model):
         else:
             price=self.price            
         return price 
-     
+    
 class Rate(models.Model):      
    product=models.ManyToManyField(Product,blank=True)   
    user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
@@ -175,14 +175,16 @@ class Rate_Details(models.Model):
         return self.rate.user.username
     def average(self):          #this is to calculate average rate for every product   
         float_star=self.stars
-        star_float=False
-        if 1 < float_star < 2:
+        star_float=False  
+        if 1 < float(float_star) < 2:
             star_float=True
-        if 2 < float_star < 3:
+        if 2 < float(float_star) < 3:
             star_float=True
-        if 4 < float_star < 4:
+        if 4 < float(float_star) < 4:
             star_float=True               
         return star_float
+    def ajax_len(self):
+        return Rate_Details.objects.filter(product=self.product).count()
 class Filter(models.Model):
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     category=models.ForeignKey(Category,blank=True,null=True,on_delete=models.CASCADE)
@@ -237,8 +239,15 @@ class Product_Cart(models.Model):
             disc=(self.products.discount_percent/100) * self.products.price *self.quantity
             price= int(self.products.price) - disc
         else:
-            price=self.products.price            
+            price=self.products.price * self.quantity          
         return price   
+    def product_price_individual(self):
+        if self.products.discount_percent != 0:
+            disc=(self.products.discount_percent/100) * self.products.price *self.quantity
+            price= int(self.products.price) - disc
+        else:
+            price=self.products.price           
+        return price 
     def same_pro(self):
         pro= Product_Cart.objects.filter(user=self.user,ordered=True,delivered=False,products__name=self.products.name)
         # pro=Product.objects.filter(id__in=)
@@ -295,7 +304,7 @@ class Cart(models.Model):
             if my_order.address:
                 address=Address.objects.get(profile__user=self.user,primary=True)
                 shipping=Shipping.objects.get(country=address.country.name)
-                price -=shipping.amount
+                price +=shipping.amount
                 my_order.price =price
                 my_order.save()
         return price      
@@ -315,7 +324,7 @@ class Cart(models.Model):
         for i in self.products.all(): 
             price +=i.discount()
         if self.shipping:
-            price -= self.shipping.amount 
+            price += self.shipping.amount 
         return price 
 CHOICES=(   
     ("processing","processing"),
@@ -335,7 +344,7 @@ class Address(models.Model):
     region=models.ForeignKey(Region,null=True,on_delete=models.CASCADE)
     city=models.ForeignKey(City,on_delete=models.CASCADE)
     street=models.CharField(max_length=300)
-
+  
     zip=models.CharField(max_length=100)
     primary=models.BooleanField(default=False)
     def __str__(self):
@@ -345,7 +354,7 @@ class Coupon(models.Model):
     expire_date=models.DateField(auto_now_add=False)
     numbers=models.PositiveIntegerField(default=0)
     value=models.PositiveIntegerField(default=0,validators=[MaxValueValidator(100)])
-    def __str__(self):
+    def __str__(self): 
         return self.coupon
 class Order(models.Model):
     user=models.ForeignKey(User,blank=True,on_delete=models.SET_NULL,null=True)
@@ -355,7 +364,7 @@ class Order(models.Model):
     ordered=models.BooleanField(default=False)   
     delivered=models.BooleanField(default=True)
     order_date=models.DateTimeField(auto_now_add=True)
-    statue=models.CharField(choices=CHOICES,default=1,max_length=100)
+    statue=models.CharField(choices=CHOICES,default="processing",max_length=100)
     coupon=models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True,blank=True)
     notes=models.TextField(blank=True)
     address=models.ForeignKey(Address,on_delete=models.SET_NULL,null=True)
@@ -366,11 +375,13 @@ class Order(models.Model):
         user=str(self.id)   
         return user
     def converter(self):
-        converter=json.loads(convert('egp', 'usd', self.price)) #to transefer to JSON data
-        return converter["amount"]
-    # def order_count(self):    
-    #     orders=Order.objects.filter(use)
-
+        converter=json.loads(convert('usd', 'egp', self.price)) #to transefer to JSON data
+        price=int(float(converter["amount"]))
+        total=round(price)
+        return total  
+    def get_absolute_order(self):    
+        url=f"http://127.0.0.1:8000/order/user/{self.user}/"
+        return url
 class Wishlist(models.Model):     
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product,blank=True)

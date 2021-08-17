@@ -52,7 +52,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                     {% for i in wishlist.products.all %}
                                 <!--====== Wishlist Product ======-->
-                                <div class="w-r u-s-m-b-30">
+                                <div id="wishlist-item-{{i.id}}" class="w-r u-s-m-b-30">
                                     <div class="w-r__container">
                                         <div class="w-r__wrap-1">
                                             <div class="w-r__img-wrap">
@@ -73,12 +73,14 @@
                                                     <span class="w-r__discount">${{i.price}}</span></span></div>
                                         </div>
                                         <div class="w-r__wrap-2">
+                                            <input class="product-id-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                            <a class="w-r__link btn--e-brand-b-2" href="{% url 'home:cart_add' id=i.id %}" data-modal="modal" data-modal-id="#add-to-cart">ADD TO CART</a>
+                                            <a class="w-r__link btn--e-brand-b-2" id="ajax-add"  data-index="{{i.id}}"  data-modal="modal" data-modal-id="#add-to-cart">ADD TO CART</a>
 
                                             <a class="w-r__link btn--e-transparent-platinum-b-2" href="{%  url 'home:this_product' id=i.id  %}">VIEW</a>
+                                            <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                            <a class="w-r__link btn--e-transparent-platinum-b-2" href="{% url 'home:wishlist_remove' id=i.id %}">REMOVE</a></div>
+                                            <a id="wishlist"  data-index="{{i.id}}" class="w-r__link btn--e-transparent-platinum-b-2" >REMOVE</a></div>
                                     </div>
                                 </div>
                                 <!--====== End - Wishlist Product ======-->
@@ -107,4 +109,92 @@
             <!--====== End - Section 2 ======-->
         </div>
         <!--====== End - App Content ======-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">
+            $(document).on('click',"#ajax-add",function(){
+                var _vm=$(this);
+                var _index=_vm.attr('data-index');
+                var _productId=$(".product-id-"+_index).val();
+                // Ajax
+                $.ajax({
+                
+        
+                    url:"{% url 'home:cart_add' %}",
+                    data:{
+                        'id':_productId,
+                        
+                        },
+                    dataType:'json',
+                    beforeSend:function(){
+                        _vm.attr('disabled',true);
+                    },
+                    success:function(res){
+                       $("#cart-items").val('');
+                                // Append Element
+                                var _html=`
+                           
+                            <div  class="card-mini-product">
+                            <div class="mini-product">
+                                <div class="mini-product__image-wrapper">
+        
+                                    <a class="mini-product__link" href="${res.product_url}">
+        
+                                        <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
+                                <div class="mini-product__info-wrapper">
+        
+                                    <span class="mini-product__category">
+        
+                                        <a href="${res.product_category_url}">${res.product_category}</a></span>
+        
+                                    <span class="mini-product__name">
+        
+                                        <a href="${res.product_url}">${res.product_name}</a></span>
+        
+                                    <span class="mini-product__quantity">${res.product_quantity} x</span>
+        
+                                    <span class="mini-product__price">${res.product_price}</span></div>
+                            </div>
+        
+                            <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
+                        </div>
+                        
+                            `;
+                            let html_2=`$ ${res.total}`;
+                        $("#cart-items").append(_html);
+                        $("#cart-len-1").text(res.amounts);
+                        $("#cart-len-2").text(res.amounts);
+                        $("#cart-total").html(html_2);
+                        _vm.attr('disabled',false);
+                    }
+                });
+                // End
+        });
+        $(document).on('click',"#wishlist",function(){
+            var _vm=$(this);
+            var _index=_vm.attr('data-index');
+            var _productId=$(".wishlist-add-"+_index).val();
+            // Ajax
+            $.ajax({
+            
+        
+                url:"{% url 'home:wishlist_remove' %}",
+                data:{
+                    'id':_productId,         
+                    
+                    },
+                dataType:'json',
+                beforeSend:function(){
+                    _vm.attr('disabled',true);
+                },
+                success:function(res){
+                    $("#wishlist-item-"+_productId).remove();
+                    // Append Element
+                   
+            _vm.attr('disabled',false);
+                            }
+                            });
+                            // End
+                        }); 
+        </script>
 {% endblock %}

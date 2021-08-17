@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style type="text/css">
+#len_info{
+    background-color:#eebeae;
+    border-color:#fff;
+    color:#fff;
+}
+</style>
 
         <!--====== App Content ======-->
 <div class="app-content">
@@ -157,10 +164,16 @@
                                         </div>
                                     </div>
                                     <div>
+                                            {% if len_info %}
+                                        <a id="len_info" class="dash__custom-link btn--e-brand-b-2" >
 
-                                        <a class="dash__custom-link btn--e-brand-b-2" href="{% url 'home:address_add' slug=profile.user %}"><i class="fas fa-plus u-s-m-r-8"></i>
+                                            <span>3 Address only</span></a>
+                                        {% else %}
+                                        <a class="dash__custom-link btn--e-brand-b-2" href="{% url 'home:address_add' slug=profile.user %}" ><i class="fas fa-plus u-s-m-r-8"></i>
 
-                                            <span>Add New Address</span></a></div>
+                                            <span>Add New Address</span></a>
+                                        {% endif %}
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -276,7 +289,7 @@
                 const countryId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
                 $.ajax({                       // initialize an AJAX request
                     type: "POST",
-                    url: '{% url "home:address_add" slug=profile.user %}',
+                    url: '{% url "home:address" slug=profile.user %}',
                     data: {
                         'country': countryId,       // add the country id to the POST parameters
                         'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
@@ -302,7 +315,7 @@
                 const regionId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
                 $.ajax({                       // initialize an AJAX request
                     type: "POST",
-                    url: '{% url "home:address_add" slug=profile.user %}',
+                    url: '{% url "home:address" slug=profile.user %}',
                     data: {
                         'region': regionId,       // add the country id to the POST parameters
                         'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
