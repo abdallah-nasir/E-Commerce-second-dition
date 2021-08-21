@@ -43,7 +43,9 @@ color:#ff4500;
             <div class="u-s-p-y-90">
                 <div class="container">
                     <div class="row">
+                        {% if products %}
                         <div class="col-lg-3 col-md-12">
+                           
                             <div class="shop-w-master">
                                 
                                 <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
@@ -71,17 +73,17 @@ color:#ff4500;
                                                           {% for b in i.same_category %}
                                                             <li class="has-list">
 
-                                                                <a href="{% url 'home:category_filter' slug=i.name %}">{{b.child}}</a>
+                                                                <a href="{% url 'home:branch_filter' slug=b.child %}">{{b.child}}</a>
 
                                                                 <span class="js-shop-category-span fas fa-plus u-s-m-l-6"></span>
                                                                 <ul>
-                                                                    {% for c in i.my_products|slice:"0:6" %}
+                                                                  {% for c in i.my_products|slice:"0:6" %}
                                                                     <li>
 
                                                                         <a href="{% url 'home:this_product' id=c.id %}">{{c.name}}</a></li>
                                                                         {% endfor %}
                                                                     <li class="has-list">
-                                                                            <a href="{% url 'home:category_filter' slug=i.name %}">show more</a>
+                                                                            <a href="{% url 'home:branch_filter' slug=i.name %}">show more</a>
                                                                         </li>
                                                                 </ul>
                                                             </li>
@@ -173,7 +175,7 @@ color:#ff4500;
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                                             </div>
-                                            <form id="shipping-form" method="POST">
+                                            <form id="shipping-form" method="POST" >
                                                 {% csrf_token %}
                                                  <div class="shop-w__wrap collapse show" id="s-shipping">
                                                 <ul class="shop-w__list gl-scroll">
@@ -182,7 +184,7 @@ color:#ff4500;
                                                         <!--====== Check Box ======-->
                                                         <div class="check-box">
 
-                                                            <input type="checkbox" name="free" value="free" id="free-shipping">
+                                                            <input type="checkbox" name="shipping" value="free" id="free-shipping">
                                                             <div class="check-box__state check-box__state--primary">
 
                                                                 <label class="check-box__label" for="free-shipping">Free Shipping</label></div>
@@ -224,100 +226,13 @@ color:#ff4500;
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="u-s-m-b-30">
-                                        <div class="shop-w shop-w--style">
-                                            <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">MANUFACTURER</h1>
-
-                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-manufacturer" data-toggle="collapse"></span>
-                                            </div>
-                                            <div class="shop-w__wrap collapse show" id="s-manufacturer">
-                                                <form id="mani-form" method="POST">
-                                                    {% csrf_token %}
-                                                <ul id="id_manufacturer" class="shop-w__list-2" >
-                                                        {% for i in mani %}
-                                                        <li >
-                                                            <div  class="list__content" >
-    
-                                                                <input  name="manu" value="{{i.id}}"   type="checkbox" >
-    
-                                                             <span >{{i.name|title}}</span>
-                                                               
-                                                            </div>
-    
-                                                            <span class="shop-w__total-text">({{i.my_products.count}})</span>
-                                                        </li>
-                                                       {% endfor %}
-                                                    </ul>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="u-s-m-b-30">
-                                        <div class="shop-w shop-w--style">
-                                            <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">COLOR</h1>
-
-                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-color" data-toggle="collapse"></span>
-                                            </div>
-                                            <form id="color-form" method="POST">
-                                                        {% csrf_token %}
-                                            <div class="shop-w__wrap collapse show" id="s-color">
-                                                <ul  id="my-color" class="shop-w__list gl-scroll">
-                                                    {% for i in color %}
-                                                    <li >
-                                                        <div   class="color__check">
-
-                                                            <input type="checkbox" name="color" value={{i.id}} id="jet">
-
-                                                            <label class="color__check-label" for="jet" style="background-color: {{i.name}}"></label></div>
-
-                                                        <span class="shop-w__total-text">({{i.my_products.count}})</span>
-                                                    </li>
-                                                   {% endfor %}
-                                                </ul>
-                                            </div>
-                                            </form>
-                                        </div>
-                                    </div> -->
-                         <!-- <div class="u-s-m-b-30"> 
-                        <div class="shop-w shop-w--style">
-                                            <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">SIZE</h1>
-
-                                                <span class="fas fa-minus collapsed shop-w__toggle" data-target="#s-size" data-toggle="collapse"></span>
-                                            </div>
-                                            <form  id="size-form" method="POST">
-                                                {% csrf_token %}
-                                                 <div class="shop-w__wrap collapse" id="s-size">
-                                                <ul id="size-id" class="shop-w__list gl-scroll">
-                                                    {% for i in size %}
-                                                    <li  >
-
-                                                        
-                                                        <div  class="check-box">
-
-                                                            <input type="checkbox"  name="size" value={{i.id}} >
-                                                            <div class="check-box__state check-box__state--primary">
-
-                                                                <label class="check-box__label" for="xs">{{i.name|upper}}</label></div>
-                                                        </div>
-                                                      
-
-                                                        <span class="shop-w__total-text">({{i.my_products.count}})</span>
-                                                    </li>
-                                                   {% endfor %}
-                                                </ul>
-                                            </div>
-                                            </form>
-
-                                           
-                                        </div>
-                                    </div> -->
+                              
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="col-lg-9 col-md-12">
+                        {%endif%}
+                        <div {% if products %} class="col-lg-9 col-md-12"{% else %} class="col-lg-12 col-md-12" {% endif %} >
                             <div class="shop-p">
                            
                                 <div class="shop-p__toolbar u-s-m-b-30">
@@ -329,27 +244,35 @@ color:#ff4500;
 
                                             <span>Your Filter:</span>
                                                        <br>
-                                                      {% if my_filter.rating %}                                                                                                         
-                                                      Rate: <div class="gl-tag btn--e-brand-shadow">
-                                                    {% with ''|center:my_filter.star_loop.loop as range %}
-                                                        {% for _ in range %}
-                                                        <i class="fas fa-star"> </i>
-                                                     
-                                                        {% endfor %}
-                                                        {%endwith%} <a id="link" href="{% url 'home:rate_delete' %}">
-                                                                        <i class="fas fa-times"></i>
-                                                                    </div>  </a>
-                                                        {% endif %}
-                                            {% if my_filter.shipping %}
-                                             FREE SHIPING: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:ship_delete' %}">{{my_filter.shipping}}  <i class="fas fa-times"></i></a>
+                                                       {% if manu %}
+                                                       Manufacturer: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:manu_session_delete' %}">{{manu}}  <i class="fas fa-times"></i></a>
+                                                     {% endif %}
+                                                {% if size %}
+                                                   Size: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:size_session_delete' %}">{{size}}  <i class="fas fa-times"></i></a>
+                                                 {% endif %}
+                                                       {% if rating %}                                                                                                         
+                                                       Rate: <div class="gl-tag btn--e-brand-shadow">
+                                                     {% with ''|center:loop as range %}
+                                                         {% for _ in range %}
+                                                         <i class="fas fa-star"> </i>
+                                                      
+                                                         {% endfor %}
+                                                         {%endwith%} 
+                                                         <a id="link" href="{% url 'home:rating_session_delete' %}">
+                                                                         <i class="fas fa-times"></i>
+                                                                     </div>  </a>
+                                                         {% endif %}
+                                            {% if shipping %}
+                                             FREE SHIPING: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:shipping_delete' %}">Free <i class="fas fa-times"></i></a>
                                            {% endif %}
-                                           {% if my_filter.price_1 %}
-                                           PRICE RANGE: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:price_delete' %}">{{my_filter.price_1}} : {{my_filter.price_2}}  <i class="fas fa-times"></i></a>
+                                           {% if price_1 %}
+                                           PRICE RANGE: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:price_session_delete' %}">{{price_1}} : {{price_2}}  <i class="fas fa-times"></i></a>
                                           {% endif %}
                            
                                         </div>
                                        
                                     </div>
+                                    {% if products %}
                                     <div class="shop-p__tool-style">
                                         <div class="tool-style__group u-s-m-b-8">
 
@@ -378,11 +301,13 @@ color:#ff4500;
 
                                             </div>
                                         </form>
-                                    </div>                      
+                                    </div>
+                                    {% endif %}                      
                                 </div>
                                 
                               
                                 <div class="shop-p__collection">
+                                    {% if products %}
                                     <div  id="test"class="row is-grid-active">
                                         {% for i in products %}
                                        
@@ -592,7 +517,7 @@ color:#ff4500;
                                         </ul>
                                     </div>
                                     <div class="u-s-m-b-15">
-                                        <form class="pd-detail__form" method="POST" action="{% url 'home:quantity_add' id=i.id %}">
+                                        <form class="pd-detail__form" method="POST" action="{% url 'home:quick_add' id=i.id %}">
                                            {% csrf_token %}
                                             <div class="pd-detail-inline-2">
                                                 <div class="u-s-m-b-15">
@@ -602,7 +527,7 @@ color:#ff4500;
 
                                                         <span class="input-counter__minus fas fa-minus"></span>
 
-                                                        <input name="quantity" class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000">
+                                                        <input name="quantity" class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="10">
 
                                                         <span class="input-counter__plus fas fa-plus"></span></div>
                                                     <!--====== End - Input Counter ======-->
@@ -688,6 +613,9 @@ color:#ff4500;
                                                                                 
   
                                     </div>
+                                    {% else %}
+<h1 style="text-align:center;">Sorry we didn't find what you want</h1>
+                                    {% endif %}
                                 </div>
                                 <div class="u-s-p-y-60">
 
@@ -696,13 +624,14 @@ color:#ff4500;
                                         {% if products.has_provious %}
                                         <li>
 
-                                       <a class="fas fa-angle-left" href="?page={{ products.previous_page_number }}"></a></li>
+                                       <a class="fas fa-angle-left" href="?page={{ products.previous_page_number }}&{search}"></a></li>
                                        {% endif  %}
                                        {% for i in products.paginator.page_range %}
                                        {% if products.number == i %}
-                                       <li class="is-active"><a href="?page={{i}}">{{i}}</a></li>
+                                       
+                                       <li class="is-active"><a href="?page={{i}}&{{search}}">{{i}}</a></li>
                                        {% else %}
-                                       <li><a href="?page={{i}}">{{i}}</a></li>
+                                       <li><a href="?page={{i}}&{{search}}">{{i}}</a></li>
 
                                        {% endif %}
                                      {% endfor %}
@@ -710,11 +639,12 @@ color:#ff4500;
                                        {% if products.has_next %}
                                    <li>
 
-                                       <a class="fas fa-angle-right" href="?page={{ products.next_page_number }}"></a></li>
+                                       <a class="fas fa-angle-right" href="?page={{ products.next_page_number }}&{{search}}"></a></li>
                                        {% endif %}
                                     </ul>
                                     <!--====== End - Pagination ======-->
                                 </div>
+
                             </div>
                         </div>
                     </div>

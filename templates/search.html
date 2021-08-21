@@ -175,7 +175,7 @@ color:#ff4500;
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                                             </div>
-                                            <form id="shipping-form" method="POST">
+                                            <form id="shipping-form" method="POST" >
                                                 {% csrf_token %}
                                                  <div class="shop-w__wrap collapse show" id="s-shipping">
                                                 <ul class="shop-w__list gl-scroll">
@@ -184,7 +184,7 @@ color:#ff4500;
                                                         <!--====== Check Box ======-->
                                                         <div class="check-box">
 
-                                                            <input type="checkbox" name="free" value="free" id="free-shipping">
+                                                            <input type="checkbox" name="shipping" value="free" id="free-shipping">
                                                             <div class="check-box__state check-box__state--primary">
 
                                                                 <label class="check-box__label" for="free-shipping">Free Shipping</label></div>
@@ -333,22 +333,23 @@ color:#ff4500;
 
                                             <span>Your Filter:</span>
                                                        <br>
-                                                      {% if my_filter.rating %}                                                                                                         
-                                                      Rate: <div class="gl-tag btn--e-brand-shadow">
-                                                    {% with ''|center:my_filter.star_loop.loop as range %}
-                                                        {% for _ in range %}
-                                                        <i class="fas fa-star"> </i>
-                                                     
-                                                        {% endfor %}
-                                                        {%endwith%} <a id="link" href="{% url 'home:rate_delete' %}">
-                                                                        <i class="fas fa-times"></i>
-                                                                    </div>  </a>
-                                                        {% endif %}
-                                            {% if my_filter.shipping %}
-                                             FREE SHIPING: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:ship_delete' %}">{{my_filter.shipping}}  <i class="fas fa-times"></i></a>
+                                                       {% if rate %}                                                                                                         
+                                                       Rate: <div class="gl-tag btn--e-brand-shadow">
+                                                     {% with ''|center:loop as range %}
+                                                         {% for _ in range %}
+                                                         <i class="fas fa-star"> </i>
+                                                      
+                                                         {% endfor %}
+                                                         {%endwith%} 
+                                                         <a id="link" href="{% url 'home:rating_session_delete' %}">
+                                                                         <i class="fas fa-times"></i>
+                                                                     </div>  </a>
+                                                         {% endif %}
+                                            {% if shipping %}
+                                             FREE SHIPING: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:shipping_delete' %}">Free <i class="fas fa-times"></i></a>
                                            {% endif %}
-                                           {% if my_filter.price_1 %}
-                                           PRICE RANGE: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:price_delete' %}">{{my_filter.price_1}} : {{my_filter.price_2}}  <i class="fas fa-times"></i></a>
+                                           {% if price_1 %}
+                                           PRICE RANGE: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:price_session_delete' %}">{{price_1}} : {{price_2}}  <i class="fas fa-times"></i></a>
                                           {% endif %}
                            
                                         </div>
@@ -609,7 +610,7 @@ color:#ff4500;
 
                                                         <span class="input-counter__minus fas fa-minus"></span>
 
-                                                        <input name="quantity" class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000">
+                                                        <input name="quantity" class="input-counter__text input-counter--text-primary-style" type="text"  data-min="1" data-max="10">
 
                                                         <span class="input-counter__plus fas fa-plus"></span></div>
                                                     <!--====== End - Input Counter ======-->

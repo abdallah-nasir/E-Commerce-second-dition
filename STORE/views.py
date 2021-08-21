@@ -20,219 +20,144 @@ from datetime import date
 import time
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
-
+from itertools import chain
 def search(request):
-    selected=0 # this is for sortings products 
+    selected=0 # this is for sortings products   
     paginate=0  #this is for paginat page number
-    free=request.POST.get("free")
+    free=request.POST.get("shipping")
     price_1=request.POST.get("price_1")
     price_2=request.POST.get("price_2")
     rate=request.POST.get("rate")
     paginat=request.POST.get("paginat")
     select_filter=request.POST.get("select_filter")
     category=Category.objects.all()
+    if request.method == "POST": 
+        if free:
+            request.session["shipping"] = True
+        if price_1:
+            request.session["price_1"] = price_1
+        if price_2:
+            request.session["price_2"] = price_2
+        if rate:
+            request.session["rate"] = rate
+        if paginat:
+            request.session["paginat"] = paginat
+        if select_filter:
+            request.session["select_filter"] = select_filter
     try:
-        qs=request.GET["qs"]
-        search=f"qs={qs}"
-        if request.user.is_authenticated:
-            repeat_user=Filter.objects.filter(user=request.user)   
-            if len(repeat_user) != 1:
-                for i in repeat_user[1:]:
-                    i.delete()           
-            # filters=Filter.objects.filter(user=request.user)
-            try:      
-                device=request.COOKIES["device"] 
-                filters=Filter.objects.filter(device=device)
-                if len(filters) != 1:
-                    for i in filters[1:]:
-                        i.delete()
-                if Filter.objects.filter(user=request.user).exists():
-                    filter_user=Filter.objects.get(user=request.user)
-                    filter_user.device=device
-                    filter_user.save()
-                if filters.exists():
-                    filter_user=Filter.objects.get(device=device)
-                    filter_user.user=request.user
-                    filter_user.save()
-                if len(Filter.objects.filter(user=request.user,device=device)) != 1:
-                    for i in Filter.objects.filter(user=request.user,device=device)[1:]:
-                        i.delete()
-                filter_user,creatde=Filter.objects.get_or_create(user=request.user,device=device)   
-                print("herereer")
-            except:
-                filter_user,creatde=Filter.objects.get_or_create(user=request.user)   
-                pass
-                
-            if free:
-                try:
-                    filter_user.shipping=True
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry,invalid value")
-                    pass
-
-            if price_1 and price_2:
-                try:
-                    filter_user.price_1=price_1
-                    filter_user.price_2=price_2
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-                
-            if rate:          
-                try:
-                    filter_user.rating=rate
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-            if select_filter:
-                try:
-                    filter_user.sort= select_filter
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-            
-            if paginat:
-                try:
-                    filter_user.show= paginat
-                    filter_user.save() 
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-            if filter_user.category == None and filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")   
-                    selected=1      
-                if filter_user.sort == 2 or filter_user.sort == "2": 
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")
-                    selected=2  
-                
-                if filter_user.sort == 5 or filter_user.sort == "5":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")
-                    selected=5  
-                    
-                if filter_user.sort == 6 or filter_user.sort == "6":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price") 
-                    selected=6       
-            else:
-                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")   
-                    selected=1      
-                elif filter_user.sort == 2 or filter_user.sort == "2": 
-            
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")
-                    selected=2 
-                elif filter_user.sort == 5 or filter_user.sort == "5":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")
-                    selected=5  
-                elif filter_user.sort == 6 or filter_user.sort == "6":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price") 
-                    selected=6
-            # s=Cart.objects.get(user=request.user,ordered=True,delivered=False)
-
-        else:  
-            try:   
-                device=request.COOKIES["device"] 
-                repeat_anonymous=Filter.objects.filter(device=device)
-                if  len(repeat_anonymous) != 1:    
-                    for i in repeat_anonymous:   
-                        i.delete()
-                filter_user,created=Filter.objects.get_or_create(device=device)
-            except:           
-                pass        
-
-        
-            if free:
-                try:
-                    filter_user.shipping=True
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry,invalid value")
-                    pass
-
-
-            if price_1 and price_2:
-                try:
-                    filter_user.price_1=price_1
-                    filter_user.price_2=price_2
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-                
-            if rate:          
-                try:
-                    filter_user.rating=rate
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-        
-            if select_filter:
-                try:
-                    filter_user.sort= select_filter
-                    filter_user.save()
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-            
-            if paginat:
-                try:
-                    filter_user.show= paginat
-                    filter_user.save() 
-                except:
-                    messages.error(request,"sorry.invalid value")
-                    pass
-            if filter_user.category == None and filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1" :
-                
-                    selected=1
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")  
-                if filter_user.sort == 2 or filter_user.sort == "2":
-                    
-                    selected=2      
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")   
-                if filter_user.sort == 5 or filter_user.sort == "5":
-                    
-                    selected=5
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")  
-                if filter_user.sort == 6 or filter_user.sort == "6":
-                
-                    selected=6
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price")    
-            else:      
-                if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-id")   
-                    selected=1         
-                elif filter_user.sort == 2 or filter_user.sort == "2": 
-            
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("id")
-                    selected=2   
-                elif filter_user.sort == 5 or filter_user.sort == "5":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("price")
-                    selected=5  
-                elif filter_user.sort == 6 or filter_user.sort == "6":
-                    product=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct().order_by("-price") 
-                    selected=6
-        try:
-            paginator = Paginator(product, filter_user.show) # Show requested products per page.    
-            paginated=int(filter_user.show)
-        except:
-            paginator = Paginator(product,8 ) # Show 8 products per page.  
-            paginated=8
+        if request.session["shipping"] == True:
+            shipping=True
+        else:
+            shipping=None
     except:
+        shipping=None
+    try:
+        if request.session["price_1"] != None:
+            price_1=request.session.get("price_1")
+        else:
+            price_1=None
+    except:
+        price_1=None
+    try:
+        if request.session["price_2"] != None:
+            price_2=request.session.get("price_2")
+        else:
+            price_2=None
+    except:
+        price_2=None
+    try:
+        if request.session["rate"] != None:
+            rating=request.session.get("rate")
+            for i in range(int(rating)):
+                loop =i
+                loop +=1        
+        else:
+            rating=None
+            loop =False
+    except:
+        rating=None
+        loop =False
+    try:
+        if request.session["paginat"] != None:
+            paginat=request.session["paginat"]
+        else:
+            paginat=None
+    except:
+        paginat=None
+    try:
+        if request.session["select_filter"] != None:
+            select_filter=request.session["select_filter"]
+            print(select_filter)
+        else:
+            select_filter=None
+    except:
+        select_filter=None
+    try:           
+        qs=request.GET["qs"]
+        search=f"qs={qs}"  
+        q1=Product.objects.filter(Q(name__icontains=qs) |Q(details__icontains=qs) | Q(category__name__icontains=qs) | Q(branch__child__icontains=qs) | Q(manufacturer__name__icontains=qs) | Q(color__name__icontains=qs)).distinct()
+        filters={}
+        price_range=(price_1,price_2)   
+        # print(price_range)
+        try:
+            count=float(rating) + float(0.5)
+            stars_range=(int(rating),float(count))
+           
+        except:
+            stars_range=(0,0.5)
+           
+        lists={"stars__range":stars_range,"price__range":price_range,"free_shipping":shipping}
+        for i in lists:
+            b=lists[i]
+            if  b != None and b != (None,None) and b != (0.0,0.5):     
+                filters[i]=b
+        if select_filter == 0 or select_filter == 1 or select_filter == "1" or select_filter == None:
+            product=q1.filter(**filters).distinct().order_by('-id')
+            selected=1         
+        elif select_filter == 2 or select_filter == "2": 
+            product=q1.filter(**filters).distinct().order_by('id')
+            selected=2   
+        elif select_filter == 5 or select_filter == "5":
+            product=q1.filter(**filters).distinct().order_by('price')
+            selected=5     
+        elif select_filter == 6 or select_filter == "6":
+            product=q1.filter(**filters).distinct().order_by('-price')
+            selected=6
+       
+    except:  
         search=None
         product=Product.objects.none()
-        filter_user={}
-        paginated={}
-    paginator = Paginator(product,1 )     
-    page_number = request.GET.get('page')    
+        filter_user={}      
+        paginated={}  
+    try:
+        paginator = Paginator(product, int(paginat)) # Show requested products per page.    
+        paginated=int(paginat)
+    except:
+        paginator = Paginator(product,8 ) # Show 8 products per page.  
+        paginated=8
+   
+    page_number = request.GET.get('page')      
     page_obj = paginator.get_page(page_number)     
-    context={"category":category,"search":search,"my_filter":filter_user,"products":page_obj,"paginated":paginated,"selected":selected,"show":paginate}
+    context={"category":category,"paginated":paginated,"selected":selected,"shipping":shipping,"loop":loop,"price_1":price_1,"price_2":price_2,"rate":rating,"search":search,"products":page_obj}
     return render(request,"search.html",context)
+
+def shipping_session(request):
+    request.session["shipping"] = None
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+def manu_session(request):
+    request.session["manu"] = None
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+def size_session(request):
+    request.session["size"] = None
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+def price_session(request):
+    request.session["price_1"],request.session["price_2"] = None,None
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+def rating_session(request):
+    request.session["rate"] = None
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def home(request):
     if request.is_ajax():  
@@ -250,233 +175,148 @@ def home(request):
     context={"deals":deal,"paid":most_buy,"trend":trend,"arrivals":arrivals,"category":category}
     return render(request,"home.html",context)   
 def products(request):
-    selected=0 # this is for sortings products 
-    paginate=0  #this is for paginat page number 
-    free=request.POST.get("free")
-    # size=request.POST.get("size")
+    category=Category.objects.all()
+    selected=0 # this is for sortings products   
+    paginate=0  #this is for paginat page number
+    free=request.POST.get("shipping")
     price_1=request.POST.get("price_1")
     price_2=request.POST.get("price_2")
     rate=request.POST.get("rate")
-    category=Category.objects.all()
-    # color=request.POST.get("color")
-    # manu=request.POST.get("manu")  
     paginat=request.POST.get("paginat")
     select_filter=request.POST.get("select_filter")
-    # product=Product.objects.order_by("-id")   
-    if request.user.is_authenticated:
-        repeat_user=Filter.objects.filter(user=request.user)   
-        if len(repeat_user) != 1:
-            for i in repeat_user[1:]:
-                i.delete()           
-        # filters=Filter.objects.filter(user=request.user)
-        try:      
-            device=request.COOKIES["device"] 
-            filters=Filter.objects.filter(device=device)
-            if len(filters) != 1:
-                for i in filters[1:]:
-                    i.delete()
-            if Filter.objects.filter(user=request.user).exists():
-                filter_user=Filter.objects.get(user=request.user)
-                filter_user.device=device
-                filter_user.save()
-            if filters.exists():
-                filter_user=Filter.objects.get(device=device)
-                filter_user.user=request.user
-                filter_user.save()
-            if len(Filter.objects.filter(user=request.user,device=device)) != 1:
-                for i in Filter.objects.filter(user=request.user,device=device)[1:]:
-                    i.delete()
-            filter_user,creatde=Filter.objects.get_or_create(user=request.user,device=device)   
-            print("herereer")
-        except:
-            filter_user,creatde=Filter.objects.get_or_create(user=request.user)   
-            pass
-            
-              
-        if free:
-            try:
-                filter_user.shipping=True
-                filter_user.save()
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-
-        if price_1 and price_2:
-            try:
-                filter_user.price_1=price_1
-                filter_user.price_2=price_2
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-            
-        if rate:          
-            try:
-                filter_user.rating=rate
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if select_filter:
-            try:
-                filter_user.sort= select_filter
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        
-        if paginat:
-            try:
-                filter_user.show= paginat
-                filter_user.save() 
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if filter_user.category == None and filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.order_by("-id")   
-                selected=1      
-            if filter_user.sort == 2 or filter_user.sort == "2": 
-                product=Product.objects.order_by("id")
-                selected=2  
-            
-            if filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.order_by("price")
-                selected=5  
-                
-            if filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.order_by("-price") 
-                selected=6       
-        else:
-            filters={}
-            price_range=(filter_user.price_1,filter_user.price_2)
-            stars_range=(filter_user.rating,float(filter_user.rating) + float(0.5))
-            lists={"stars__range":stars_range,"price__range":price_range,"free_shipping":filter_user.shipping}
-            # lists={}
-   
-            for i in lists:
-                b=lists[i]
-                if  b != None and b != (None,None) and b != (0.0,0.5):     
-                    
-                    filters[i]=b
-               
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(**filters).order_by("-id")   
-                selected=1      
-            elif filter_user.sort == 2 or filter_user.sort == "2": 
-        
-                product=Product.objects.filter(**filters).order_by("id")
-                selected=2 
-            elif filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(**filters).order_by("price")
-                selected=5  
-            elif filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(**filters).order_by("-price") 
-                selected=6
-        # s=Cart.objects.get(user=request.user,ordered=True,delivered=False)
-
-    else:  
-        try:   
-            device=request.COOKIES["device"] 
-            repeat_anonymous=Filter.objects.filter(device=device)
-            if  len(repeat_anonymous) != 1:    
-                for i in repeat_anonymous:   
-                    i.delete()
-            filter_user,created=Filter.objects.get_or_create(device=device)
-        except:           
-            pass        
-
+    manu=request.POST.get("manu")
+    size=request.POST.get("size")
     
+
+    if request.method == "POST": 
         if free:
-            try:
-                filter_user.shipping=True
-                filter_user.save()
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-
-
-        if price_1 and price_2:
-            try:
-                filter_user.price_1=price_1
-                filter_user.price_2=price_2
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-            
-        if rate:          
-            try:
-                filter_user.rating=rate
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-    
-        if select_filter:
-            try:
-                filter_user.sort= select_filter
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        
+            request.session["shipping"] = True
+        if price_1:
+            request.session["price_1"] = price_1
+        if price_2:
+            request.session["price_2"] = price_2
+        if rate:
+            request.session["rate"] = rate
         if paginat:
-            try:
-                filter_user.show= paginat
-                filter_user.save() 
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if filter_user.category == None and filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1" :
-              
-                selected=1
-                product=Product.objects.order_by("-id")  
-            if filter_user.sort == 2 or filter_user.sort == "2":
-                
-                selected=2      
-                product=Product.objects.order_by("id")   
-            if filter_user.sort == 5 or filter_user.sort == "5":
-                 
-                selected=5
-                product=Product.objects.order_by("price")  
-            if filter_user.sort == 6 or filter_user.sort == "6":
-            
-                selected=6
-                product=Product.objects.order_by("-price")    
-        else:      
-            filters={}
-            price_range=(filter_user.price_1,filter_user.price_2)
-            stars_range=(filter_user.rating,float(filter_user.rating) + float(0.5))
-            lists={"stars__range":stars_range,"price__range":price_range,"free_shipping":filter_user.shipping}
-            for i in lists:
-                b=lists[i]
-                if  b != None and b != (None,None) and b != (0.0,0.5):     
-                    print(i,b)
-                    filters[i]=b
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(**filters).order_by("-id")   
-                selected=1         
-            elif filter_user.sort == 2 or filter_user.sort == "2": 
-        
-                product=Product.objects.filter(**filters).order_by("id")
-                selected=2   
-            elif filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(**filters).order_by("price")
-                selected=5  
-            elif filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(**filters).order_by("-price") 
-                selected=6
+            request.session["paginat"] = paginat
+        if select_filter:
+            request.session["select_filter"] = select_filter
+        if manu:
+            request.session["manu"] = manu
+        if size:
+            request.session["size"] = size
     try:
-        paginator = Paginator(product, filter_user.show) # Show requested products per page.    
-        paginated=int(filter_user.show)
+        if request.session["shipping"] == True:
+            shipping=True
+        else:
+            shipping=None
     except:
+        shipping=None
+    try:
+        if request.session["price_1"] != None:
+            price_1=request.session.get("price_1")
+        else:
+            price_1=None
+    except:
+        price_1=None
+    try:
+        if request.session["price_2"] != None:
+            price_2=request.session.get("price_2")
+        else:
+            price_2=None
+    except:
+        price_2=None
+    try:
+        if request.session["rate"] != None:
+            rating=request.session.get("rate")
+            for i in range(int(rating)):
+                loop =i
+                loop +=1        
+               
+        else:
+            rating=None
+            loop =False
+    except:
+        rating=None
+        loop =False
+    try:
+        if request.session["paginat"] != None:
+            paginat=request.session["paginat"]
+        else:
+            paginat=None
+    except:
+        paginat=None
+    try:
+        if request.session["select_filter"] != None:
+            select_filter=request.session["select_filter"]
+           
+        else:
+            select_filter=None
+    except:
+        select_filter=None
+
+    if shipping == None and price_2 == None and rating == None and manu == None :
+    
+        if select_filter == 0 or select_filter == 1 or select_filter == "1" or select_filter == None:
+            product=Product.objects.all().order_by("-id")   
+            selected=1      
+        if select_filter == 2 or select_filter == "2": 
+            product=Product.objects.all().order_by("id")
+            selected=2  
+         
+        if select_filter == 5 or select_filter == "5":
+            product=Product.objects.all().order_by("price")
+            selected=5  
+               
+        if select_filter == 6 or select_filter == "6":
+            product=Product.objects.all().order_by("-price") 
+            selected=6  
+   
+            
+    else:  
+        print("filterd")
+        filters={}
+        price_range=(price_1,price_2)   
+        try:
+            count=float(rating) + float(0.5)
+            stars_range=(int(rating),float(count))    
+        except:  
+            stars_range=(0,0.5)
+    
+        lists={"stars__range":stars_range,"price__range":price_range,"free_shipping":shipping}
+
+        for i in lists:
+            b=lists[i]
+            if  b != None and b != (None,None) and b != (0.0,0.5):     
+                filters[i]=b
+        if select_filter == 0 or select_filter == 1 or select_filter == "1" or select_filter == None:
+            product=Product.objects.filter(**filters).distinct().order_by('-id')
+            selected=1         
+        elif select_filter == 2 or select_filter == "2": 
+            product=Product.objects.filter(**filters).distinct().order_by('id')
+            selected=2   
+        elif select_filter == 5 or select_filter == "5":
+            product=Product.objects.filter(**filters).distinct().order_by('price')
+            selected=5     
+        elif select_filter == 6 or select_filter == "6":
+            product=Product.objects.filter(**filters).distinct().order_by('-price')
+            selected=6
+        
+   
+    try:
+        paginator = Paginator(product, int(paginat)) # Show requested products per page.    
+        paginated=int(paginat)
+      
+    except:  
         paginator = Paginator(product,8 ) # Show 8 products per page.  
         paginated=8
-    page_number = request.GET.get('page')    
-    page_obj = paginator.get_page(page_number)                        
-    context={"category":category,"my_filter":filter_user,"products":page_obj,"paginated":paginated,"selected":selected,"show":paginate}
+
+    page_number = request.GET.get('page')      
+    page_obj = paginator.get_page(page_number)                       
+    context={"products":page_obj,"category":category,"paginated":paginated,
+             "selected":selected,
+             "shipping":shipping,"price_1":price_1,"price_2":price_2,
+             "size":size,"rating":rating,"loop":loop,"show":paginate}
     return render(request,"products.html",context)
    
 def this_product(request,id):
@@ -773,20 +613,6 @@ def quantity_add(request,id):
         messages.error(request,"invalid values")
         return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     if request.user.is_authenticated:
-        repeat_product=Product_Cart.objects.filter(user=request.user,delivered=False)
-        for i in repeat_product:
-            if i.device != device:
-                i.device=device
-                i.save()
-                print("reapeat product")
-
-        repeat_cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
-        for i in repeat_cart:
-            if i.device != device:
-                i.device=device
-                i.save()
-                print("repeat cart")
-
         cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
         if cart.exists():
             if len(cart) != 1:
@@ -884,6 +710,36 @@ def quantity_add(request,id):
             print("cart created")  
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
           
+def quick_add(request,id):
+    quantity=request.POST.get("quantity")
+    if request.user.is_authenticated:
+        try:
+            device=request.COOKIES["device"]
+            product,created=Product_Cart.objects.get_or_create(user=request.user,products_id=id,ordered=True,delivered=False)
+            product.quantity +=int(quantity)
+            product.device=device
+            product.save()
+            cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
+            cart.products.add(product)
+            cart.device=device
+            cart.save()
+        except:
+            messages.error(request,"invalid data")
+    else:
+        try:
+            device=request.COOKIES["device"]
+            product,created=Product_Cart.objects.get_or_create(device=device,products_id=id,ordered=True,delivered=False)
+            product.quantity +=int(quantity)
+            product.device=device 
+            product.save()
+            cart=Cart.objects.filter(device=device,ordered=True,delivered=False).latest("modified_date")
+            cart.products.add(product)
+            cart.device=device
+            cart.save()
+        except:
+            messages.error(request,"invalid data")
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
 def make_primary(request):
     profile=Profile.objects.get(user=request.user)
     address=Address.objects.filter(profile=profile)
@@ -1037,131 +893,133 @@ def order_confirm(request,id):
             order_payment=2
         elif order.payments == "Credit / Debit Card":
             order_payment=3
+        elif order.converter() == None:
+            return redirect(reverse('home:cart'))
+
         else:
             return redirect(reverse('home:cart'))
         payment=None 
     except:
         return redirect(reverse('home:home'))
-    if order.payments == "Credit / Debit Card":
-        accept = AcceptAPI(API_KEY) 
+    try:
+        accept = AcceptAPI(API_KEY)
         trans=accept.inquire_transaction(merchant_order_id=order.id,order_id=order.track_number)
-        try:
-            if trans["success"] == True:
-                order.track_number=trans["id"]
-                order.delivered=True
-                order.cart.delivered=True  
-                print("here")
-                for i in order.cart.products.all():
-                    i.delivered=True
-                    i.products.most_buy +=1
-                    i.products.save()
-                    i.save()
-                order.cart.save()    
-                order.save()
-                print(trans)       
-                return redirect(reverse("home:home"))
-        except:   
-            pass
-        auth_token = accept.retrieve_auth_token()    
-
-        try:   
-            NewOrderData = {   
-                "auth_token": auth_token, 
-                "delivery_needed": "false",
-                "amount_cents":  order.converter()*100,
-                "currency": "EGP",
-               "expiration": 3600, #this is for disable payment for this order for 3600 sec 
-            "merchant_order_id":order.id ,  # UNIQUE   
-            "integration_id":585334,  
-            "items": [ 
-        { 
-            "name":"any name",
-            "amount_cents": 10,
-            "description": "asdasd",
-            "quantity": "1"
-        },
-        ],
-    "shipping_data": {
-        "apartment": "803", 
-        "email": request.user.email, 
-        "floor": "42",   
-        "first_name":request.user.first_name.capitalize(), 
-        "street": "Ethan Land", 
-        "building": "8028", 
-        "phone_number": "+20(01064675906)", 
-        "postal_code": "01898", 
-        "extra_description": "8 Ram , 128 Giga",
-        "city": "Jaskolskiburgh", 
-        "country": "CR", 
-        "last_name": request.user.last_name.capitalize(), 
-        "state": "Utah"
-    },
-        "shipping_details": {
-            "notes" : " test",
-            "number_of_packages": 1,
-            "weight" : 1,
-            "weight_unit" : "Kilogram",
-            "length" : 1,
-            "width" :1,
-            "height" :1,
-            "contents" : "product of some sorts"
-        },
-        "lock_order_when_paid": "true"
-            } 
-            new_order = accept.order_registration(NewOrderData)
-            order.track_number=new_order["id"]
-            order.save()
-            payment = accept.payment_key_request(NewOrderData) 
-            print(payment)  
-            print("created")  
-        except:
-            OrderData = {    
-                "auth_token": auth_token, 
-                "delivery_needed": "false",
-                "amount_cents": order.converter()*100,
-                "currency": "EGP",
-              "expiration": 3600,
-            "order_id":order.track_number ,  # UNIQUE   
-            "integration_id":585334,  
-                        "items": [
-        {
-            "name":"any name",
-            "amount_cents":order.price * 100,
-            "description": "any disc",
-            "quantity": "1"
-        },
-        ],
-    "shipping_data": {
-        "apartment": "803", 
-        "email": request.user.email, 
-        "floor": "42",   
-        "first_name":  request.user.first_name.capitalize(), 
-        "street": "Ethan Land", 
-        "building": "8028", 
-        "phone_number": "+20(01064675906)", 
-        "postal_code": "01898", 
-        "extra_description": "8 Ram , 128 Giga",
-        "city": "Jaskolskiburgh", 
-        "country": "CR", 
-        "last_name": request.user.last_name.capitalize(), 
-        "state": "Utah"
-    },
-        "shipping_details": {
-            "notes" : " test",
-            "number_of_packages": 1,
-            "weight" : 1,
-            "weight_unit" : "Kilogram",
-            "length" : 1,
-            "width" :1,
-            "height" :1,
-            "contents" : "product of some sorts"
-        },   
-        "lock_order_when_paid": "true"
-            }
-            payment = accept.payment_key_request(OrderData)
-            print(payment) 
+        if trans["success"] == True:
+            order.track_number=trans["id"]
+            order.delivered=True
+            order.cart.delivered=True  
             print("here")
-    context={"order_payment":order_payment,"order":order,"frame": 270151,"payment":payment}
+            for i in order.cart.products.all():
+                i.delivered=True
+                i.products.most_buy +=1
+                i.products.save()
+                i.save()
+            order.cart.save()
+            order.save()
+            print(trans)
+            return redirect(reverse("home:home"))
+    except:    
+        pass
+    if order.payments == "Credit / Debit Card":
+        convert=order.converter()
+        url_1="https://accept.paymob.com/api/auth/tokens"
+        data_1={"api_key": API_KEY}
+        r_1=requests.post(url_1,json=data_1)
+        token=r_1.json().get("token")
+        print(token)
+        data_2={
+  "auth_token": token,
+  "delivery_needed": "false",
+  "amount_cents": order.egy_currency*100,
+  "currency": "EGP",
+  "merchant_order_id": order.id + 19,
+  "items": [
+    {
+        "name": "ASC1515",
+        "amount_cents": "500000",
+        "description": "Smart Watch",
+        "quantity": "1"
+    },
+    {  
+        "name": "ERT6565",
+        "amount_cents": "200000",
+        "description": "Power Bank",
+        "quantity": "1"
+    }
+    ],
+  "shipping_data": {
+    "apartment": "803", 
+    "email": "claudette09@exa.com", 
+    "floor": "42", 
+    "first_name": "Clifford", 
+    "street": "Ethan Land", 
+    "building": "8028", 
+    "phone_number": "+86(8)9135210487", 
+    "postal_code": "01898", 
+     "extra_description": "8 Ram , 128 Giga",
+    "city": "Jaskolskiburgh", 
+    "country": "CR", 
+    "last_name": "Nicolas", 
+    "state": "Utah"
+  },
+    "shipping_details": {
+        "notes" : " test",
+        "number_of_packages": 1,
+        "weight" : 1,
+        "weight_unit" : "Kilogram",
+        "length" : 1,
+        "width" :1,
+        "height" :1,
+        "contents" : "product of some sorts"
+    }
+}
+        url_2="https://accept.paymob.com/api/ecommerce/orders"
+        r_2=requests.post(url_2,json=data_2)
+        my_id=r_2.json().get("id")
+        try:
+            order.track_number=my_id
+            order.save()
+     
+
+        except:
+            pass
+
+        if my_id == None:
+            print("none")
+            r_2=requests.get(url_2,json=data_2)
+            my_id=r_2.json().get("results")[0]["id"]  
+        print(my_id)
+        if order.delivered ==True:
+            return redirect(reverse("home:home"))    
+        data_3={   
+  "auth_token":token, 
+  "amount_cents": order.egy_currency*100, 
+  "expiration": 3600, 
+  "order_id": my_id,   
+  "billing_data": {
+    "apartment": "803", 
+    "email": "claudette09@exa.com", 
+    "floor": "42", 
+    "first_name": "Clifford", 
+    "street": "Ethan Land", 
+    "building": "8028", 
+    "phone_number": "+86(8)9135210487", 
+    "shipping_method": "PKG", 
+    "postal_code": "01898",   
+    "city": "Jaskolskiburgh", 
+    "country": "CR", 
+    "last_name": "Nicolas", 
+    "state": "Utah"
+  }, 
+  "currency": "EGP", 
+  "integration_id": 585334,
+  "lock_order_when_paid": "false"
+}
+        url_3="https://accept.paymob.com/api/acceptance/payment_keys"
+        r_3=requests.post(url_3,json=data_3)
+        payment_token=(r_3.json().get("token"))
+        print(payment_token)  
+    context={"order_payment":order_payment,"order":order,"frame": 270151,"payment":payment_token}
     return render(request,"order_confirm.html",context)
 
 
@@ -1600,562 +1458,329 @@ def category_filter_delete(request):
 def category(request,slug):
     category=get_object_or_404(Category,name=slug)
     manufacturer=Manufacturer.objects.filter(category=category)
-    selected=0 # this is for sortings products 
-    paginate=0  #this is for paginat page number 
-    free=request.POST.get("free")
-    size=request.POST.get("size")
+    sizes=Size.objects.all()
+    selected=0 # this is for sortings products   
+    paginate=0  #this is for paginat page number
+    free=request.POST.get("shipping")
     price_1=request.POST.get("price_1")
     price_2=request.POST.get("price_2")
     rate=request.POST.get("rate")
-    color=request.POST.get("color")
-    manu=request.POST.get("manu")  
     paginat=request.POST.get("paginat")
     select_filter=request.POST.get("select_filter")
-    # product=Product.objects.order_by("-id")   
-    if request.user.is_authenticated:
-        repeat_user=Filter.objects.filter(user=request.user)   
-        if len(repeat_user) != 1:
-            for i in repeat_user[1:]:
-                i.delete()           
-        # filters=Filter.objects.filter(user=request.user)
-        try:      
-            device=request.COOKIES["device"] 
-            filters=Filter.objects.filter(device=device)
-            if len(filters) != 1:
-                for i in filters[1:]:
-                    i.delete()
-            if Filter.objects.filter(user=request.user).exists():
-                filter_user=Filter.objects.get(user=request.user)
-                filter_user.device=device
-                filter_user.save()
-            if filters.exists():
-                filter_user=Filter.objects.get(device=device)
-                filter_user.user=request.user
-                filter_user.save()
-            if len(Filter.objects.filter(user=request.user,device=device)) != 1:
-                for i in Filter.objects.filter(user=request.user,device=device)[1:]:
-                    i.delete()
-            filter_user,creatde=Filter.objects.get_or_create(user=request.user,device=device)   
-        except:
-            filter_user,creatde=Filter.objects.get_or_create(user=request.user)   
-            pass
-              
-        if free:
-            try:
-                filter_user.shipping=True
-                filter_user.save()
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-        if size:
-            try:
-                filter_user.size_id=size
-                filter_user.save()    
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-
-        if price_1 and price_2:
-            try:
-                filter_user.price_1=price_1
-                filter_user.price_2=price_2
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-            
-        if rate:          
-            try:
-                filter_user.rating=rate
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if color:                        
-            try:
-                filter_user.color_id=color 
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if manu:              
-            try:
-                filter_user.manufacturer_id=manu      
-                filter_user.save()
-                # print(int(manu))
-
-            except:   
-                messages.error(request,"sorry.invalid value")
-                pass
-        if select_filter:
-            try:
-                filter_user.sort= select_filter
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        
-        if paginat:
-            try:
-                filter_user.show= paginat
-                filter_user.save() 
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(category=category).order_by("-id")   
-                selected=1      
-            if filter_user.sort == 2 or filter_user.sort == "2": 
-                product=Product.objects.filter(category=category).order_by("id")
-                selected=2  
-            
-            if filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(category=category).order_by("price")
-                selected=5  
-                
-            if filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(category=category).order_by("-price") 
-                selected=6       
-        else:
-            filters={}
-            price_range=(filter_user.price_1,filter_user.price_2)   
-            stars_range=(filter_user.rating,float(filter_user.rating) + float(0.5))
-            lists={"stars__range":stars_range,"color__name":filter_user.color,"size__name":filter_user.size,"manufacturer__name":filter_user.manufacturer,"category":category,"price__range":price_range,"free_shipping":filter_user.shipping}
-            # print("Ph")
-   
-            for i in lists:
-                b=lists[i]
-                if  b != None and b != (None,None) and b != (0.0,0.5):     
-                    
-                    filters[i]=b
-               
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(**filters).order_by("-id")   
-                selected=1      
-            elif filter_user.sort == 2 or filter_user.sort == "2": 
-        
-                product=Product.objects.filter(**filters).order_by("id")
-                selected=2 
-            elif filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(**filters).order_by("price")
-                selected=5  
-            elif filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(**filters).order_by("-price") 
-                selected=6
-        # s=Cart.objects.get(user=request.user,ordered=True,delivered=False)
-
-    else:  
-        try:   
-            device=request.COOKIES["device"] 
-        except:     
-            device=[]       
-            pass        
-        repeat_anonymous=Filter.objects.filter(device=device)
-        if  len(repeat_anonymous) != 1:    
-            for i in repeat_anonymous:   
-                i.delete()
+    manu=request.POST.get("manu")
+    size=request.POST.get("size")
     
-        # same=Product_Cart.objects.filter(device=device,ordered=True,delivered=False) 
-        filter_user,created=Filter.objects.get_or_create(device=device)
 
+    if request.method == "POST": 
         if free:
-            try:
-                filter_user.shipping=True
-                filter_user.save()
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-        if size:
-            try:
-                filter_user.size_id=size
-                filter_user.save()    
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-
-        if price_1 and price_2:
-            try:
-                filter_user.price_1=price_1
-                filter_user.price_2=price_2
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-            
-        if rate:          
-            try:
-                filter_user.rating=rate
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if color:                        
-            try:
-                filter_user.color_id=color 
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass     
-        if manu:    
-            try:
-                filter_user.manufacturer_id=manu      
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if select_filter:
-            try:
-                filter_user.sort= select_filter  
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        
+            request.session["shipping"] = True
+        if price_1:
+            request.session["price_1"] = price_1
+        if price_2:
+            request.session["price_2"] = price_2
+        if rate:
+            request.session["rate"] = rate
         if paginat:
-            try:
-                filter_user.show= paginat
-                filter_user.save() 
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if  filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1" :
-              
-                selected=1
-                product=Product.objects.filter(category=category).order_by("-id")  
-            if filter_user.sort == 2 or filter_user.sort == "2":
-                
-                selected=2      
-                product=Product.objects.filter(category=category).order_by("id")   
-            if filter_user.sort == 5 or filter_user.sort == "5":
-                 
-                selected=5
-                product=Product.objects.filter(category=category).order_by("price")  
-            if filter_user.sort == 6 or filter_user.sort == "6":
-            
-                selected=6
-                product=Product.objects.filter(category=category).order_by("-price")    
-        else:      
-            filters={}
-            price_range=(filter_user.price_1,filter_user.price_2)
-            stars_range=(filter_user.rating,float(filter_user.rating) + float(0.5))
-            lists={"stars__range":stars_range,"color__name":filter_user.color,"size__name":filter_user.size,"manufacturer__name":filter_user.manufacturer,"category":category,"price__range":price_range,"free_shipping":filter_user.shipping}
-            for i in lists:
-                b=lists[i]
-                if  b != None and b != (None,None) and b != (0.0,0.5):     
-                    print(i,b)
-                    filters[i]=b 
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(**filters).order_by("-id")   
-                selected=1         
-            elif filter_user.sort == 2 or filter_user.sort == "2": 
-        
-                product=Product.objects.filter(**filters).order_by("id")
-                selected=2   
-            elif filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(**filters).order_by("price")
-                selected=5  
-            elif filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(**filters).order_by("-price") 
-                selected=6
+            request.session["paginat"] = paginat
+        if select_filter:
+            request.session["select_filter"] = select_filter
+        if manu:
+            request.session["manu"] = manu
+        if size:
+            request.session["size"] = size
     try:
-        paginator = Paginator(product, filter_user.show) # Show requested products per page.    
-        paginated=int(filter_user.show)
+        if request.session["shipping"] == True:
+            shipping=True
+        else:
+            shipping=None
     except:
+        shipping=None
+    try:
+        if request.session["price_1"] != None:
+            price_1=request.session.get("price_1")
+        else:
+            price_1=None
+    except:
+        price_1=None
+    try:
+        if request.session["price_2"] != None:
+            price_2=request.session.get("price_2")
+        else:
+            price_2=None
+    except:
+        price_2=None
+    try:
+        if request.session["rate"] != None:
+            rating=request.session.get("rate")
+            for i in range(int(rating)):
+                loop =i
+                loop +=1        
+               
+        else:
+            rating=None
+            loop =False
+    except:
+        rating=None
+        loop =False
+    try:
+        if request.session["paginat"] != None:
+            paginat=request.session["paginat"]
+        else:
+            paginat=None
+    except:
+        paginat=None
+    try:
+        if request.session["select_filter"] != None:
+            select_filter=request.session["select_filter"]
+           
+        else:
+            select_filter=None
+    except:
+        select_filter=None
+    try:
+        if request.session["manu"] != None:
+            manu=request.session["manu"]
+           
+        else:
+            manu=None
+    except:
+        manu=None
+    try:
+        if request.session["size"] != None:
+            size=request.session["size"]
+           
+        else:
+            size=None
+    except:
+        size=None
+    if shipping == None and price_2 == None and rating == None and manu == None :
+    
+        if select_filter == 0 or select_filter == 1 or select_filter == "1" or select_filter == None:
+            product=Product.objects.filter(category=category).order_by("-id")   
+            selected=1      
+        if select_filter == 2 or select_filter == "2": 
+            product=Product.objects.filter(category=category).order_by("id")
+            selected=2  
+         
+        if select_filter == 5 or select_filter == "5":
+            product=Product.objects.filter(category=category).order_by("price")
+            selected=5  
+               
+        if select_filter == 6 or select_filter == "6":
+            product=Product.objects.filter(category=category).order_by("-price") 
+            selected=6  
+   
+            
+    else:  
+        print("filterd")
+        filters={}
+        price_range=(price_1,price_2)   
+        try:
+            count=float(rating) + float(0.5)
+            stars_range=(int(rating),float(count))    
+        except:  
+            stars_range=(0,0.5)
+    
+        lists={"stars__range":stars_range,"manufacturer__name":manu,"size__name":size,"price__range":price_range,"category":category,"free_shipping":shipping}
+
+        for i in lists:
+            b=lists[i]
+            if  b != None and b != (None,None) and b != (0.0,0.5):     
+                filters[i]=b
+        if select_filter == 0 or select_filter == 1 or select_filter == "1" or select_filter == None:
+            product=Product.objects.filter(**filters).distinct().order_by('-id')
+            selected=1         
+        elif select_filter == 2 or select_filter == "2": 
+            product=Product.objects.filter(**filters).distinct().order_by('id')
+            selected=2   
+        elif select_filter == 5 or select_filter == "5":
+            product=Product.objects.filter(**filters).distinct().order_by('price')
+            selected=5     
+        elif select_filter == 6 or select_filter == "6":
+            product=Product.objects.filter(**filters).distinct().order_by('-price')
+            selected=6
+        
+   
+    try:
+        paginator = Paginator(product, int(paginat)) # Show requested products per page.    
+        paginated=int(paginat)
+      
+    except:  
         paginator = Paginator(product,8 ) # Show 8 products per page.  
         paginated=8
-    page_number = request.GET.get('page')    
-    page_obj = paginator.get_page(page_number)                        
-    context={"my_filter":filter_user,"products":page_obj,"category":category,"paginated":paginated,"selected":selected,"mani":manufacturer,"show":paginate}
+
+    page_number = request.GET.get('page')      
+    page_obj = paginator.get_page(page_number)                       
+    context={"products":page_obj,"category":category,"paginated":paginated,
+             "selected":selected,"mani":manufacturer,"manu":manu,
+             "shipping":shipping,"price_1":price_1,"price_2":price_2,
+             "size":size,"sizes":sizes,"rating":rating,"loop":loop,"show":paginate}
     return render(request,"category.html",context)
         
 def branch(request,slug):
     branch=get_object_or_404(Branch,child=slug)
     category=get_object_or_404(Category,name=branch.name)
-
-    manufacturer=Manufacturer.objects.filter(category=branch.name)      
-    selected=0 # this is for sortings products 
-    paginate=0  #this is for paginat page number 
-    free=request.POST.get("free")
-    size=request.POST.get("size")
+    manufacturer=Manufacturer.objects.filter(category=category)
+    sizes=Size.objects.all()
+    selected=0 # this is for sortings products   
+    paginate=0  #this is for paginat page number
+    free=request.POST.get("shipping")
     price_1=request.POST.get("price_1")
     price_2=request.POST.get("price_2")
     rate=request.POST.get("rate")
-    color=request.POST.get("color")
-    manu=request.POST.get("manu")  
     paginat=request.POST.get("paginat")
     select_filter=request.POST.get("select_filter")
-    # product=Product.objects.order_by("-id")   
-    if request.user.is_authenticated:
-        repeat_user=Filter.objects.filter(user=request.user)   
-        if len(repeat_user) != 1:
-            for i in repeat_user[1:]:
-                i.delete()    
-
-        product_cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
-       
-        filter_user,creatde=Filter.objects.get_or_create(user=request.user)
-        # cart,created=Cart.pbjects
-        # print(carts)   
-        try:      
-            device=request.COOKIES["device"]
-            filter_user.device=device
-            filter_user.save()
-           
-            if len(Filter.objects.filter(device=device)) != 1:
-                for i in Filter.objects.filter(device=device):
-                    i.delete()
-            for i in Filter.objects.filter(user=None,device=device):
-                i.user=request.user
-                i.save()
-            for i in product_cart:
-                if i.device != device:
-                    i.device =device   
-                    i.save()           
-                    print("product_cart saved")
-            for i in Product_Cart.objects.filter(user=None,device=device,delivered=False,ordered=True):
-                i.user=request.user
-                i.save()
-            for i in Cart.objects.filter(user=None,device=device,delivered=False,ordered=True):
-                i.user=request.user
-                i.save()  
-            for i in Cart.objects.filter(user=request.user,ordered=True,delivered=False):
-                if i.device != device:
-                    i.device=device       
-                    i.save()
-        except:
-            pass
-              
-              
-        if free:
-            try:
-                filter_user.shipping=True
-                filter_user.save()
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-        if size:
-            try:
-                filter_user.size_id=size
-                filter_user.save()    
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-
-        if price_1 and price_2:
-            try:
-                filter_user.price_1=price_1
-                filter_user.price_2=price_2
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-            
-        if rate:          
-            try:
-                filter_user.rating=rate
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if color:                        
-            try:
-                filter_user.color_id=color 
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if manu:              
-            try:
-                filter_user.manufacturer_id=manu      
-                filter_user.save()
-                # print(int(manu))
-
-            except:   
-                messages.error(request,"sorry.invalid value")
-                pass
-        if select_filter:
-            try:
-                filter_user.sort= select_filter
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        
-        if paginat:
-            try:
-                filter_user.show= paginat
-                filter_user.save() 
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(branch=branch).order_by("-id")   
-                selected=1      
-            if filter_user.sort == 2 or filter_user.sort == "2": 
-                product=Product.objects.filter(branch=branch).order_by("id")
-                selected=2  
-            
-            if filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(branch=branch).order_by("price")
-                selected=5  
-                
-            if filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(branch=branch).order_by("-price") 
-                selected=6       
-        else:
-            filters={}
-            price_range=(filter_user.price_1,filter_user.price_2)   
-            stars_range=(filter_user.rating,float(filter_user.rating) + float(0.5))
-            lists={"stars__range":stars_range,"color__name":filter_user.color,"size__name":filter_user.size,"manufacturer__name":filter_user.manufacturer,"branch":branch,"price__range":price_range,"free_shipping":filter_user.shipping}
-            # print("Ph")
-   
-            for i in lists:
-                b=lists[i]
-                if  b != None and b != (None,None) and b != (0.0,0.5):     
-                    
-                    filters[i]=b
-               
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(**filters).order_by("-id")   
-                selected=1      
-            elif filter_user.sort == 2 or filter_user.sort == "2": 
-        
-                product=Product.objects.filter(**filters).order_by("id")
-                selected=2 
-            elif filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(**filters).order_by("price")
-                selected=5  
-            elif filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(**filters).order_by("-price") 
-                selected=6
-        # s=Cart.objects.get(user=request.user,ordered=True,delivered=False)
-
-    else:  
-        try:   
-            device=request.COOKIES["device"] 
-        except:     
-            device=[]       
-            pass        
-        repeat_anonymous=Filter.objects.filter(device=device)
-        if  len(repeat_anonymous) != 1:    
-            for i in repeat_anonymous:   
-                i.delete()
+    manu=request.POST.get("manu")
+    size=request.POST.get("size")
     
-        # same=Product_Cart.objects.filter(device=device,ordered=True,delivered=False) 
-        filter_user,created=Filter.objects.get_or_create(device=device)
 
+    if request.method == "POST": 
         if free:
-            try:
-                filter_user.shipping=True
-                filter_user.save()
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-        if size:
-            try:
-                filter_user.size_id=size
-                filter_user.save()    
-            except:
-                messages.error(request,"sorry,invalid value")
-                pass
-
-        if price_1 and price_2:
-            try:
-                filter_user.price_1=price_1
-                filter_user.price_2=price_2
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
             
-        if rate:          
-            try:
-                filter_user.rating=rate
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if color:                        
-            try:
-                filter_user.color_id=color 
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass     
-        if manu:    
-            try:
-                filter_user.manufacturer_id=manu      
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if select_filter:
-            try:
-                filter_user.sort= select_filter  
-                filter_user.save()
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        
+            request.session["shipping"] = True
+        if price_1:
+            request.session["price_1"] = price_1
+        if price_2:
+            request.session["price_2"] = price_2
+        if rate:
+            request.session["rate"] = rate
         if paginat:
-            try:
-                filter_user.show= paginat
-                filter_user.save() 
-            except:
-                messages.error(request,"sorry.invalid value")
-                pass
-        if  filter_user.color == None and filter_user.size == None and  filter_user.manufacturer == None and filter_user.rating == None and filter_user.price_1 == None and filter_user.shipping ==False :
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1" :
-              
-                selected=1
-                product=Product.objects.filter(branch=branch).order_by("-id")  
-            if filter_user.sort == 2 or filter_user.sort == "2":
-                
-                selected=2      
-                product=Product.objects.filter(branch=branch).order_by("id")   
-            if filter_user.sort == 5 or filter_user.sort == "5":
-                 
-                selected=5
-                product=Product.objects.filter(branch=branch).order_by("price")  
-            if filter_user.sort == 6 or filter_user.sort == "6":
-            
-                selected=6
-                product=Product.objects.filter(branch=branch).order_by("-price")    
-        else:      
-            filters={}
-            price_range=(filter_user.price_1,filter_user.price_2)
-            stars_range=(filter_user.rating,float(filter_user.rating) + float(0.5))
-            lists={"stars__range":stars_range,"color__name":filter_user.color,"size__name":filter_user.size,"manufacturer__name":filter_user.manufacturer,"branch":branch,"price__range":price_range,"free_shipping":filter_user.shipping}
-            for i in lists:
-                b=lists[i]
-                if  b != None and b != (None,None) and b != (0.0,0.5):     
-                    print(i,b)
-                    filters[i]=b 
-            if filter_user.sort == 0 or filter_user.sort == 1 or filter_user.sort == "1":
-                product=Product.objects.filter(**filters).order_by("-id")   
-                selected=1         
-            elif filter_user.sort == 2 or filter_user.sort == "2": 
-        
-                product=Product.objects.filter(**filters).order_by("id")
-                selected=2   
-            elif filter_user.sort == 5 or filter_user.sort == "5":
-                product=Product.objects.filter(**filters).order_by("price")
-                selected=5  
-            elif filter_user.sort == 6 or filter_user.sort == "6":
-                product=Product.objects.filter(**filters).order_by("-price") 
-                selected=6
+            request.session["paginat"] = paginat
+        if select_filter:
+            request.session["select_filter"] = select_filter
+            print(select_filter)
+        if manu:
+            request.session["manu"] = manu
+        if size:
+            request.session["size"] = size
     try:
-        paginator = Paginator(product, filter_user.show) # Show requested products per page.    
-        paginated=int(filter_user.show)
+        if request.session["shipping"] == True:
+            shipping=True
+        else:
+            shipping=None
     except:
+        shipping=None
+    try:
+        if request.session["price_1"] != None:
+            price_1=request.session.get("price_1")
+        else:
+            price_1=None
+    except:
+        price_1=None
+    try:
+        if request.session["price_2"] != None:
+            price_2=request.session.get("price_2")
+        else:
+            price_2=None
+    except:
+        price_2=None
+    try:
+        if request.session["rate"] != None:
+            rating=request.session.get("rate")
+            for i in range(int(rating)):
+                loop =i
+                loop +=1        
+               
+        else:
+            rating=None
+            loop =False
+    except:
+        rating=None
+        loop =False
+    try:
+        if request.session["paginat"] != None:
+            paginat=request.session["paginat"]
+        else:
+            paginat=None
+    except:
+        paginat=None
+    try:
+        if request.session["select_filter"] != None:
+            select_filter=request.session["select_filter"]
+           
+        else:
+            select_filter=None
+    except:
+        select_filter=None
+    try:
+        if request.session["manu"] != None:
+            manu=request.session["manu"]
+           
+        else:
+            manu=None
+    except:
+        manu=None
+    try:
+        if request.session["size"] != None:
+            size=request.session["size"]
+           
+        else:
+            size=None
+    except:
+        size=None
+    if shipping == None and price_2 == None and rating == None and manu == None :
+    
+        if select_filter == 0 or select_filter == 1 or select_filter == "1" or select_filter == None:
+            product=Product.objects.filter(branch=branch).order_by("-id")   
+            selected=1       
+        if select_filter == 2 or select_filter == "2": 
+            product=Product.objects.filter(branch=branch).order_by("id")
+            selected=2  
+         
+        if select_filter == 5 or select_filter == "5":
+            product=Product.objects.filter(branch=branch).order_by("price")
+            selected=5  
+               
+        if select_filter == 6 or select_filter == "6":
+            product=Product.objects.filter(branch=branch).order_by("-price") 
+            selected=6      
+        # else: 
+        #     product=Product.objects.filter(branch=branch)
+            
+    else:     
+        print("filterd")
+        filters={}
+        price_range=(price_1,price_2)   
+        try:
+            count=float(rating) + float(0.5)
+            stars_range=(int(rating),float(count))    
+        except:  
+            stars_range=(0,0.5)
+    
+        lists={"stars__range":stars_range,"manufacturer__name":manu,"size__name":size,"price__range":price_range,"branch":branch,"free_shipping":shipping}
+
+        for i in lists:
+            b=lists[i]
+            if  b != None and b != (None,None) and b != (0.0,0.5):     
+                filters[i]=b
+        if select_filter == 0 or select_filter == 1 or select_filter == "1":
+            product=Product.objects.filter(**filters).distinct().order_by('-id')
+            selected=1         
+        elif select_filter == 2 or select_filter == "2": 
+            product=Product.objects.filter(**filters).distinct().order_by('id')
+            selected=2   
+        elif select_filter == 5 or select_filter == "5":
+            product=Product.objects.filter(**filters).distinct().order_by('price')
+            selected=5     
+        elif select_filter == 6 or select_filter == "6":
+            product=Product.objects.filter(**filters).distinct().order_by('-price')
+            selected=6
+        
+   
+    try:
+        paginator = Paginator(product, int(paginat)) # Show requested products per page.    
+        paginated=int(paginat)
+      
+    except:  
         paginator = Paginator(product,8 ) # Show 8 products per page.  
         paginated=8
-    page_number = request.GET.get('page')    
-    page_obj = paginator.get_page(page_number)                        
-    context={"my_filter":filter_user,"products":page_obj,"branch":branch,"category":category,"paginated":paginated,"selected":selected,"mani":manufacturer,"show":paginate}
+    print(rating)
+    page_number = request.GET.get('page')      
+    page_obj = paginator.get_page(page_number)                       
+    context={"products":page_obj,"branch":branch,"paginated":paginated,
+             "selected":selected,"mani":manufacturer,"manu":manu,
+             "shipping":shipping,"price_1":price_1,"price_2":price_2,
+             "size":size,"sizes":sizes,"rating":rating,"loop":loop,"show":paginate}
     return render(request,"branch.html",context)
                        
 def wishlist(request):
@@ -2272,89 +1897,102 @@ def wishlist_list_remove(request):
         list.products.remove()
         messages.success(request,"Item Rmoved Successfully") 
     return redirect(reverse("home:empty"))
-
+from google_currency import convert  
 def test(request):
-    order=Order.objects.get(user=request.user,delivered=False)
-    accept = AcceptAPI(API_KEY) 
-    auth_token = accept.retrieve_auth_token()    
-    try:   
-        NewOrderData = {   
-                "auth_token": auth_token, 
-                "delivery_needed": "false",
-                "amount_cents":  order.converter()*100,
-                "currency": "EGP",
-               "expiration": 3600, #this is for disable payment for this order for 3600 sec 
-            "merchant_order_id":order.id ,  # UNIQUE   
-            "integration_id":585334,  
-            "items": [ 
-        { 
-            "name":"any name",
-            "amount_cents": 10,
-            "description": "asdasd",
-            "quantity": "1"
-        },
-        ],
-    "shipping_data": {
-        "apartment": "803", 
-        "email": request.user.email, 
-        "floor": "42",   
-        "first_name":request.user.first_name.capitalize(), 
-        "street": "Ethan Land", 
-        "building": "8028", 
-        "phone_number": "+20(01064675906)", 
-        "postal_code": "01898", 
-        "extra_description": "8 Ram , 128 Giga",
-        "city": "Jaskolskiburgh", 
-        "country": "CR", 
-        "last_name": request.user.last_name.capitalize(), 
-        "state": "Utah"
+    order=Order.objects.get(user=request.user,ordered=True,delivered=False)
+    # money=order.converter()
+    url_1="https://accept.paymob.com/api/auth/tokens"
+    data_1={
+    "api_key": "ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRFNE1ESTVMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuU0VhV0IwbjlMVklMeHVKd1NqTFVldDNWc0pqMDVMZjBOVUNuTmZROGZJOFdxREswb3FUOE1pYjBUeTY2MHlXZzRsUGNXU3dhTHZDc0x5RVd1LUtRaVE="
+}
+    r_1=requests.post(url_1,json=data_1)
+    token=r_1.json().get("token")
+    print(token)
+    data_2={
+  "auth_token": token,
+  "delivery_needed": "false",
+  "amount_cents": "100",
+  "currency": "EGP",
+  "merchant_order_id": 37,
+  "items": [
+    {
+        "name": "ASC1515",
+        "amount_cents": "500000",
+        "description": "Smart Watch",
+        "quantity": "1"
     },
-        "shipping_details": {
-            "notes" : " test",
-            "number_of_packages": 1,
-            "weight" : 1,
-            "weight_unit" : "Kilogram",
-            "length" : 1,
-            "width" :1,
-            "height" :1,
-            "contents" : "product of some sorts"
-        },
-            } 
-        new_order = accept.order_registration(NewOrderData)
-        order.track_number=new_order["id"]
-        order.save()
-        payment = accept.payment_key_request(NewOrderData) 
-        print(payment)  
-        print("created")  
-    except:
-        OrderData ={
-        "auth_token": auth_token,
-    "amount_cents": order.converter()*100, 
-    "expiration": 3600, 
-    "order_id":  order.track_number,
-    "billing_data": {
-        "apartment": "803", 
-        "email": request.user.email, 
-        "floor": "42", 
-        "first_name": request.user.first_name.capitalize(), 
-        "street": "Ethan Land", 
-        "building": "8028", 
-        "phone_number": "+86(8)9135210487", 
-        "shipping_method": "PKG", 
-        "postal_code": "01898", 
-        "city": "Jaskolskiburgh", 
-        "country": "CR", 
-        "last_name":request.user.last_name.capitalize(), 
-        "state": "Utah"
-    }, 
-    "currency": "EGP", 
-    "integration_id": 585334,
-    "lock_order_when_paid": "false",
-            }
-        payment = accept.payment_key_request(OrderData)
-        print(payment) 
-        print("here")
-    context={"order":order,"frame": 270151,"payment":payment}
+    { 
+        "name": "ERT6565",
+        "amount_cents": "200000",
+        "description": "Power Bank",
+        "quantity": "1"
+    }
+    ],
+  "shipping_data": {
+    "apartment": "803", 
+    "email": "claudette09@exa.com", 
+    "floor": "42", 
+    "first_name": "Clifford", 
+    "street": "Ethan Land", 
+    "building": "8028", 
+    "phone_number": "+86(8)9135210487", 
+    "postal_code": "01898", 
+     "extra_description": "8 Ram , 128 Giga",
+    "city": "Jaskolskiburgh", 
+    "country": "CR", 
+    "last_name": "Nicolas", 
+    "state": "Utah"
+  },
+    "shipping_details": {
+        "notes" : " test",
+        "number_of_packages": 1,
+        "weight" : 1,
+        "weight_unit" : "Kilogram",
+        "length" : 1,
+        "width" :1,
+        "height" :1,
+        "contents" : "product of some sorts"
+    }
+}
+    url_2="https://accept.paymob.com/api/ecommerce/orders"
+    r_2=requests.post(url_2,json=data_2)
+    my_id=r_2.json().get("id")
+    if my_id == None:
+        print("none")
+        r_2=requests.get(url_2,json=data_2)
+        my_id=r_2.json().get("results")[0]["id"]
+      
+    print(my_id)
+         
+    data_3={
+  "auth_token":token,
+  "amount_cents": "100", 
+  "expiration": 3600, 
+  "order_id": my_id,
+  "billing_data": {
+    "apartment": "803", 
+    "email": "claudette09@exa.com", 
+    "floor": "42", 
+    "first_name": "Clifford", 
+    "street": "Ethan Land", 
+    "building": "8028", 
+    "phone_number": "+86(8)9135210487", 
+    "shipping_method": "PKG", 
+    "postal_code": "01898", 
+    "city": "Jaskolskiburgh", 
+    "country": "CR", 
+    "last_name": "Nicolas", 
+    "state": "Utah"
+  }, 
+  "currency": "EGP", 
+  "integration_id": 585334,
+  "lock_order_when_paid": "false"
+}
+    url_3="https://accept.paymob.com/api/acceptance/payment_keys"
+    r_3=requests.post(url_3,json=data_3)
+    payment_token=(r_3.json().get("token"))
+    print(payment_token)
+    context={"order":order,"frame": 270151,"payment":payment_token}
     return render(request,"test.html",context)
   
 def faq(request):
@@ -2362,7 +2000,7 @@ def faq(request):
     context={"questions":questions}
     return render(request,"faq.html",context)
             
-def about(request):
+def about(request): 
     return render(request,"about.html")
 
 def contact(request):

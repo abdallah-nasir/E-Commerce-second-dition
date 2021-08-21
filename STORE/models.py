@@ -225,6 +225,7 @@ class Product_Cart(models.Model):
     price=models.PositiveIntegerField(default=0)
     ordered=models.BooleanField(default=False)
     delivered=models.BooleanField(default=False)
+    modified_date = models.DateTimeField(auto_now=True)
     device=models.CharField(blank=True,null=True,max_length=200)
     def __str__(self):
         
@@ -272,12 +273,14 @@ class Shipping(models.Model):
 class Cart(models.Model):
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product_Cart,blank=True)
+    modified_date = models.DateTimeField(auto_now=True)
     device=models.CharField(blank=True,null=True,max_length=200)
     price=models.FloatField(default=0)
     shipping=models.ForeignKey(Shipping,blank=True,null=True,on_delete=models.CASCADE)
     ordered=models.BooleanField(default=False)
     delivered=models.BooleanField(default=False)
-    
+    class Meta:
+        ordering=("-modified_date",)   
     def __str__(self):     
         try:
             name=self.user.username
@@ -360,6 +363,7 @@ class Order(models.Model):
     user=models.ForeignKey(User,blank=True,on_delete=models.SET_NULL,null=True)
     cart=models.ForeignKey(Cart,on_delete=models.SET_NULL,null=True)
     price=models.FloatField(default=0)
+    egy_currency=models.IntegerField(default=0)
     track_number=models.CharField(max_length=2000)
     ordered=models.BooleanField(default=False)   
     delivered=models.BooleanField(default=True)
@@ -374,14 +378,37 @@ class Order(models.Model):
     def __str__(self):         
         user=str(self.id)   
         return user
+    # def converter(self):
+    #     converter=json.loads(convert('usd', 'egp', self.price)) #to transefer to JSON data
+    #     price=int(float(converter["amount"]))
+    #     total=round(price)
+    #     return total   
     def converter(self):
-        converter=json.loads(convert('usd', 'egp', self.price)) #to transefer to JSON data
-        price=int(float(converter["amount"]))
-        total=round(price)
-        return total  
+        try:
+            api=requests.get("http://api.currencylayer.com/live?access_key=bbd4b1fcbe13b2bf0b8a008bc1daa606&currencies=EGP&format = 1")
+            price=api.json()
+            for i in price["quotes"]: 
+                pass
+            money=price["quotes"][i] * self.price
+            total=round(money)
+            self.egy_currency=total
+            self.save()
+           
+        except:
+            total=None
+        return total   
     def get_absolute_order(self):    
         url=f"http://127.0.0.1:8000/order/user/{self.user}/"
         return url
+    def order_total(self):
+        price=self.cart.total_price()
+        if self.coupon:
+            coupon=self.coupon.value
+            money=price - ((coupon / 100) * price) 
+            price =money
+            self.price =price
+            self.save()
+        return price
 class Wishlist(models.Model):     
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product,blank=True)

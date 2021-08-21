@@ -46,8 +46,17 @@ path("filter/manufacrurer",views.manu_filter_delete,name="manu_delete"),
 path("filter/rate",views.rate_filter_delete,name="rate_delete"),
 path("search/",views.search,name="search"),
 
+#sessions
+path("shiiping/delete",views.shipping_session,name="shipping_delete"),
+path("price/delete",views.price_session,name="price_session_delete"),
+path("rate/delete",views.rating_session,name="rating_session_delete"),
+path("manu/delete",views.manu_session,name="manu_session_delete"),
+path("size/delete",views.size_session,name="size_session_delete"),
+
+
 # Cart
 path("add-to-cart/",views.add_to_cart,name="cart_add"),
+path("quick-add/<str:id>/",views.quick_add,name="quick_add"),
 path("remove-from-cart/<str:id>/",views.remove_from_cart,name="cart_remove"),
 path("whislist-add/",views.wishlist_add,name="wishlist_add"),
 path("whislist-remove/",views.wishlist_remove,name="wishlist_remove"),
