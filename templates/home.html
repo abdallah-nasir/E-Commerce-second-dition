@@ -2171,7 +2171,7 @@ color:#ff4500;
                         // Append Element
                         var _html=`
                    
-                    <div  class="card-mini-product">
+                    <div id=temp-cart-${_productId.id}  class="card-mini-product">
                     <div class="mini-product">
                         <div class="mini-product__image-wrapper">
 
@@ -2193,8 +2193,9 @@ color:#ff4500;
                             <span class="mini-product__price">${res.product_price}</span></div>
                     </div>
 
-                    <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
-                </div>
+                    <input class="total-remove-cart-${res.id}" type="hidden" value="${res.id}">
+
+                    <a id="total-product-remove" value="${res.id}" data-index="${res.id}" class="mini-product__delete-link far fa-trash-alt" ></a>                </div>
                 
                     `;
                     let html_2=`$ ${res.total}`;
@@ -2267,6 +2268,42 @@ $(document).on('click',"#wishlist",function(){
                     });
                     // End
                 });  
+                $(document).on('click',"#total-product-remove",function(){
+                    var _vm=$(this);
+                    var _index=_vm.attr('data-index');
+                    var _productId=$(".total-remove-cart-"+_index).val();
+                    // Ajax
+                    $.ajax({
+                    
+                
+                        url:"{% url 'home:cart_remove' %}",
+                        data:{
+                            'id':_productId,         
+                            
+                            },
+                        dataType:'json',
+                        beforeSend:function(){
+                            _vm.attr('disabled',true);
+                        },
+                        success:function(res){
+                            $("#temp-cart-"+_productId.id).remove();
+                           let html_data1 = `
+                           ${res.amounts}
+                            `
+                             let html_data2 = `
+                           $ ${res.total}
+                            `
+                            $("#cart-len-1").html(html_data1);
+                            $("#cart-len-2").html(html_data1);
+                            $("#cart-total").html(html_data2);
+
+                            
+                    _vm.attr('disabled',false);
+                                    }
+                                    
+                                    });
+                                    // End
+                                }); 
 </script>   
 {% endblock %}
        

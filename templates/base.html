@@ -993,7 +993,7 @@
                                
                                     <li>
 
-                                        <a href="{% url 'home:about' %}">ABOUT {{cart.id}} </a></li>
+                                        <a href="{% url 'home:about' %}">ABOUT</a></li>
                                     <li>
 
                                         <a href="{% url 'home:contact' %}">CONTACT</a></li>
@@ -1055,7 +1055,7 @@
                                                
                                                 
                                                 <!--====== Card for mini cart ======-->
-                                                <div class="card-mini-product">
+                                                <div id="temp-cart-{{i.id}}" class="card-mini-product">
                                                     <div class="mini-product">
                                                         <div class="mini-product__image-wrapper">
 
@@ -1076,8 +1076,9 @@
 
                                                             <span class="mini-product__price">${{i.product_price_individual}}</span></div>
                                                     </div>
+                                                    <input class="total-remove-cart-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                    <a class="mini-product__delete-link far fa-trash-alt" href="{% url 'home:cart_remove' id=i.id  %}"></a>
+                                                    <a id="total-product-remove" value="{{i.id}}"   data-index="{{i.id}}" class="mini-product__delete-link far fa-trash-alt" ></a>
                                                 </div>
                                                 <!--====== End - Card for mini cart ======-->
                                              

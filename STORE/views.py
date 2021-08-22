@@ -302,7 +302,7 @@ def products(request):
             product=Product.objects.filter(**filters).distinct().order_by('-price')
             selected=6
         
-   
+      
     try:
         paginator = Paginator(product, int(paginat)) # Show requested products per page.    
         paginated=int(paginat)
@@ -582,26 +582,33 @@ def cart_quantity_remove(request):
     
 
    
-def remove_from_cart(request,id):
-    device=request.COOKIES["device"]
+def remove_from_cart(request):
+   
     try:  
-        product=get_object_or_404(Product_Cart,id=id)
+        id=request.GET["id"]
+        device=request.COOKIES["device"]
+        repeat_product=Product_Cart.objects.get(id=id)
+       
+       
+        if request.user.is_authenticated:
+            cart=Cart.objects.get(user=request.user)
+        else:
+            cart=Cart.objects.filter(device=device)
+            if len(cart) > 1:
+                cart=Cart.objects.filter(device=device).latest("modified_date")
+            else:
+                cart=Cart.objects.get(device=device)
+        repeat_product.delete()
+        print(id)   
+      
+        messages.success(request,"Item removed Successfully")
+    
+        data={"id":repeat_product.id,"amounts":cart.order_product_length(),
+              "total":cart.before_discount(),}
+        return JsonResponse(data)
     except:
         messages.error(request,"invalid data")
-        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-    if request.user.is_authenticated:
-        repeat_product=Product_Cart.objects.get(user=request.user,ordered=True,delivered=False,id=product.id)
-        repeat_product.delete()
-        print("delted")
-        messages.success(request,"Item removed Successfully")    
-      
-    else:
-        repeat_product=Product_Cart.objects.get(device=device,ordered=True,delivered=False,id=product.id)
-        repeat_product.delete()
-        print("delted")   
-        # repeat_cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
-        # repeat_cart.products.remove(product)
-        messages.success(request,"Item removed Successfully")        
+        
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def quantity_add(request,id):
@@ -1364,97 +1371,7 @@ def canceled_order(request,slug):
     context={"my_order":my_order,"order":order,"canceled":canceled_order}
     return render(request,'canceled_order.html',context)
 
-def rate_filter_delete(request):
-    if request.user.is_authenticated:     
-        filter=Filter.objects.get(user=request.user)   
-        filter.rating = 0
-        filter.save()
-    else:
-        device=request.COOKIES["device"]
-        filter=Filter.objects.get(device=device) 
-        filter.rating = 0
-        filter.save()
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-def color_filter_delete(request):
-    if request.user.is_authenticated:     
-        filter=Filter.objects.get(user=request.user)   
-        filter.color = None
-        filter.save()
-    else:
-        device=request.COOKIES["device"]
-        filter=Filter.objects.get(device=device) 
-        filter.color = None
-        filter.save()
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-def price_filter_delete(request):
-    if request.user.is_authenticated:
-        filter=Filter.objects.get(user=request.user)
-        filter.price_1 = None
-        filter.price_2 = None
-        filter.save()
-    else:
-        device=request.COOKIES["device"]
-        filter=Filter.objects.get(device=device) 
-        filter.price_1 = None
-        filter.price_2 = None
-        filter.save()
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-def size_filter_delete(request):
-    if request.user.is_authenticated:
-        filter=Filter.objects.get(user=request.user)
-        filter.size = None
-        filter.save()
-    else:
-        device=request.COOKIES["device"]
-        filter=Filter.objects.get(device=device) 
-        filter.size = None
-        filter.save()
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-def ship_filter_delete(request):
-    if request.user.is_authenticated:
-        filter=Filter.objects.get(user=request.user)    
-        filter.shipping = False
-        filter.save()
-    else:
-        device=request.COOKIES["device"]
-        filter=Filter.objects.get(device=device)    
-        filter.shipping = False
-        filter.save()    
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-def manu_filter_delete(request):
-    if request.user.is_authenticated:
-        filter=Filter.objects.get(user=request.user)    
-        filter.manufacturer = None
-        filter.save()
-    else:
-        device=request.COOKIES["device"]
-        filter=Filter.objects.get(device=device)   
-        filter.manufacturer = None
-        filter.save()
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-def category_filter_delete(request):
-    if request.user.is_authenticated:
-        filter=Filter.objects.get(user=request.user)    
-        filter.category = None
-        filter.color=None
-        filter.price_1 ,filter.price_2 = None,None
-        filter.size=None
-        filter.shipping=False
-        filter.rating=None
-        filter.manufacturer=None
-        filter.save()
-    else:
-        device=request.COOKIES["device"]
-        filter=Filter.objects.get(device=device)    
-        filter.category = None
-        filter.color=None
-        filter.price_1 ,filter.price_2 = None,None
-        filter.size=None
-        filter.shipping=False
-        filter.rating=None
-        filter.manufacturer=None
-        filter.save()
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
 def category(request,slug):
     category=get_object_or_404(Category,name=slug)
     manufacturer=Manufacturer.objects.filter(category=category)
@@ -1795,12 +1712,19 @@ def wishlist(request):
     else:   
         try:    
             device=request.COOKIES["device"]
-            wishlist=Wishlist.objects.get(device=device)
-            if len(wishlist.products.all()) == 0:
-                return redirect(reverse("home:empty"))
+            wishlist=Wishlist.objects.filter(device=device)
+            if len(wishlist) > 1:
+                wishlist=Wishlist.objects.filter(device=device).latest("modified_date")
+                if len(wishlist.products.all()) == 0:
+                    return redirect(reverse("home:empty"))
+            else:
+                wishlist=Wishlist.objects.get(device=device)
+                if len(wishlist.products.all()) == 0:
+                    return redirect(reverse("home:empty"))
         except:
+            return redirect(reverse("home:empty"))
             pass  
-              
+                
     context={'wishlist':wishlist}   
     return render(request,"wishlist.html",context)
 def wishlist_add(request):
@@ -1812,10 +1736,6 @@ def wishlist_add(request):
     product=get_object_or_404(Product,id=id)
     device=request.COOKIES["device"]
     if request.user.is_authenticated:
-        repeat_list=Wishlist.objects.filter(user=request.user)
-        if len(repeat_list) != 1:
-            for i in repeat_list:   
-                i.delete()
         list,created=Wishlist.objects.get_or_create(user=request.user)
         if product in list.products.all():
             messages.error(request,"Item already in your list") 
@@ -1826,21 +1746,28 @@ def wishlist_add(request):
             messages.success(request,"Item Added Successfully") 
             data={"id":list.id}
             return JsonResponse(data)
-    else:
+    else:  
         repeat_list=Wishlist.objects.filter(device=device)
-        if len(repeat_list) != 1:
-            for i in repeat_list:
-                i.delete()
-        list,created=Wishlist.objects.get_or_create(device=device)
-        if product in list.products.all():
-            messages.error(request,"Item already in your list") 
-        else:
-            list.products.add(product)
-            messages.success(request,"Item Added Successfully") 
-            data={"id":list.id}
-            return JsonResponse(data)
+        if len(repeat_list) > 1:
+            list=Wishlist.objects.filter(device=device).latest("modified_date")
+            if product in list.products.all():
+                messages.error(request,"Item already in your list") 
+            else:
+                list.products.add(product)
+                messages.success(request,"Item Added Successfully") 
+                data={"id":list.id}
+                return JsonResponse(data)
+        else:  
+            list=Wishlist.objects.get(device=device)
+            if product in list.products.all():
+                messages.error(request,"Item already in your list") 
+            else:
+                list.products.add(product)
+                messages.success(request,"Item Added Successfully") 
+                data={"id":list.id}
+                return JsonResponse(data)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
- 
+     
 def wishlist_remove(request):
     try:
         id=request.GET["id"]
@@ -1848,11 +1775,7 @@ def wishlist_remove(request):
         messages.error(request,"invalid data")
         return redirect(reverse("home:wishlist"))
     product=get_object_or_404(Product,id=id)
-    if request.user.is_authenticated:
-        repeat_list=Wishlist.objects.filter(user=request.user)
-        if len(repeat_list) != 1:
-            for i in repeat_list:
-                i.delete()
+    if request.user.is_authenticated:    
         list=Wishlist.objects.get(user=request.user)
         if product in list.products.all():
             list.products.remove(product)
@@ -1864,38 +1787,46 @@ def wishlist_remove(request):
     else:
         device=request.COOKIES["device"]
         repeat_list=Wishlist.objects.filter(device=device)
-        if len(repeat_list) != 1:
-            for i in repeat_list:
-                i.delete()
-        list=Wishlist.objects.get(device=device)
-        if product in list.products.all():
-            list.products.remove(product)
-            messages.success(request,"Item Rmoved Successfully") 
-            data={"id":list.id}
-            return JsonResponse(data)
+        if len(repeat_list) > 1:
+            list=Wishlist.objects.filter(device=device).latest("modified_date")
+            if product in list.products.all():
+                list.products.remove(product)
+                messages.success(request,"Item Rmoved Successfully") 
+                data={"id":list.id}
+                return JsonResponse(data)    
+            else:
+                messages.error(request,"you dont have this Item in your list") 
         else:
-            messages.error(request,"you dont have this Item in your list") 
-  
+            list=Wishlist.objects.get(device=device)
+            if product in list.products.all():
+                list.products.remove(product)
+                messages.success(request,"Item Rmoved Successfully") 
+                data={"id":list.id}
+                return JsonResponse(data)    
+            else:
+                messages.error(request,"you dont have this Item in your list") 
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-
+  
 def wishlist_list_remove(request):
     if request.user.is_authenticated:
-        repeat_list=Wishlist.objects.filter(user=request.user)
-        if len(repeat_list) != 1:
-            for i in repeat_list:
-                i.delete()
         list=Wishlist.objects.get(user=request.user)
         list.products.remove()
         messages.success(request,"Item Rmoved Successfully") 
     else:
         device=request.COOKIES["device"]
         repeat_list=Wishlist.objects.filter(device=device)
-        if len(repeat_list) != 1:
-            for i in repeat_list:
-                i.delete()
-        list=Wishlist.objects.get(device=device)
-        list.products.remove()
-        messages.success(request,"Item Rmoved Successfully") 
+        if len(repeat_list) > 1:
+            list=Wishlist.objects.filter(device=device).latest("modified_date")
+            list.products.remove()
+            messages.success(request,"Item Rmoved Successfully") 
+            data={"id":list.id}
+            return JsonResponse(data)    
+        else:  
+            list=Wishlist.objects.get(device=device)
+            list.products.remove()
+            messages.success(request,"Item Rmoved Successfully") 
+            data={"id":list.id}
+            return JsonResponse(data)    
     return redirect(reverse("home:empty"))
 from google_currency import convert  
 def test(request):

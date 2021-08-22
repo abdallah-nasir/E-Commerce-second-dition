@@ -79,12 +79,7 @@ def global_wishlist(request):
                i.delete()      
                
         try:
-            device=request.COOKIES["device"]
-            repeat_wish=Wishlist.objects.filter(device=device)
-            if len(repeat_wish) != 1:    
-                for i in repeat_wish[1:]:    
-                    i.delete()
-                  
+            device=request.COOKIES["device"]                  
             if Wishlist.objects.filter(user=request.user).exists():
                 wishlist=Wishlist.objects.get(user=request.user)
                 wishlist.device=device
@@ -98,25 +93,24 @@ def global_wishlist(request):
                 for i in lists[1:]:
                     i.delete()
             wishlist,created=Wishlist.objects.get_or_create(user=request.user,device=device)
-           
         except:
             wishlist,created=Wishlist.objects.get_or_create(user=request.user)
-
             pass
 
     else:      
         try:
             device=request.COOKIES["device"]
             wishlist=Wishlist.objects.filter(device=device)
-            if len(wishlist) != 1:
-                for i in wishlist[1:]:
-                    i.delete() 
-                  
-            wishlist,created=Wishlist.objects.get_or_create(device=device)
+            try:
+                if len(wishlist) > 1:
+                    wishlist=Wishlist.objects.filter(device=device).latest("modified_date")
+                else:
+                    wishlist=Wishlist.objects.get(device=device)
+            except:
+                wishlist,created=Wishlist.objects.get_or_create(device=device)
            
         except:
             wishlist={}
-          
             pass    
     context={'wishlist':wishlist}
     return context

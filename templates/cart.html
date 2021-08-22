@@ -72,7 +72,7 @@
                                         <tbody>
                                             {% for i in cart.products.all %}
                                             <!--====== Row ======-->
-                                            <tr>
+                                            <tr id="temp-cart-{{i.id}}">
                                                 <td>
                                                     <div class="table-p__box">
                                                         <div class="table-p__img-wrap">
@@ -120,7 +120,8 @@
 
                                                             <!-- <input class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"> -->
                                                             <input  type="hidden" class="product-id-{{i.id}}" value="{{i.id}}" />
-                                                            <div  id="add-to-cart" data-index="{{i.id}}"  value="{{i.id}}"  ><span class="input-counter__plus fas fa-plus"></span></div>
+                                                            <div  id="add-to-cart" data-index="{{i.id}}"  value="{{i.id}}"  ><span class="input-counter__plus fas fa-plus"></span>
+                                                            </div>
                                                          </div>
                                                         <!--====== End - Input Counter ======-->
                                                     
@@ -128,8 +129,11 @@
                                                 </td>
                                                 <td>
                                                     <div class="table-p__del-wrap">
+                                                        
+                                                        <input class="wishlist-remove-cart-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                        <a href="{% url 'home:cart_remove' id=i.id %}"  class="far fa-trash-alt table-p__delete-link "></div></a>
+                                                        <a id="wishlist-cart-remove"  data-index="{{i.id}}" class="far fa-trash-alt table-p__delete-link" ></a>
+                                                        </div>
                                                 </td>
                                             </tr>
                                             <!--====== End - Row ======-->
@@ -383,7 +387,32 @@ $(document).on('click',"#remove-from-cart",function(){
             // End
         });
 
- 
+    $(document).on('click',"#wishlist-cart-remove",function(){
+        var _vm=$(this);
+        var _index=_vm.attr('data-index');
+        var _productId=$(".wishlist-remove-cart-"+_index).val();
+        // Ajax
+        $.ajax({
+        
+    
+            url:"{% url 'home:cart_remove' %}",
+            data:{
+                'id':_productId,         
+                
+                },
+            dataType:'json',
+            beforeSend:function(){
+                _vm.attr('disabled',true);
+            },
+            success:function(res){
+                $("#temp-cart-"+_productId).remove();
+                // Append Element
+                
+        _vm.attr('disabled',false);
+                        }
+                        });
+                        // End
+                    }); 
             </script>
 {% endblock %}
 

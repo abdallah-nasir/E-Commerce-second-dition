@@ -412,6 +412,8 @@ class Order(models.Model):
 class Wishlist(models.Model):     
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product,blank=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
     device=models.CharField(max_length=200)
 
     def __str__(self):

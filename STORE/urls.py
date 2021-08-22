@@ -31,22 +31,14 @@ path("order/user/<str:slug>/",views.manage_order,name="manage_order"),
 path("canceled/order/<str:slug>/",views.canceled_order,name="canceled_order"),         
 path("FAQ/",views.faq,name="faq"),         
 path("about/",views.about,name="about"),            
-path("contact/",views.contact,name="contact"),            
+path("contact/",views.contact,name="contact"),  
+path("search/",views.search,name="search"),
+          
 
 ## news
 path("news/",views.news,name="news"),            
-
-## filter_delete    
-path("filter/color",views.color_filter_delete,name="color_delete"),
-path("filter/price",views.price_filter_delete,name="price_delete"),
-path("filter/ship",views.ship_filter_delete,name="ship_delete"),
-path("filter/size",views.size_filter_delete,name="size_delete"),
-path("filter/category",views.category_filter_delete,name="category_delete"),
-path("filter/manufacrurer",views.manu_filter_delete,name="manu_delete"),
-path("filter/rate",views.rate_filter_delete,name="rate_delete"),
-path("search/",views.search,name="search"),
-
-#sessions
+  
+#sessions_delete
 path("shiiping/delete",views.shipping_session,name="shipping_delete"),
 path("price/delete",views.price_session,name="price_session_delete"),
 path("rate/delete",views.rating_session,name="rating_session_delete"),
@@ -57,7 +49,7 @@ path("size/delete",views.size_session,name="size_session_delete"),
 # Cart
 path("add-to-cart/",views.add_to_cart,name="cart_add"),
 path("quick-add/<str:id>/",views.quick_add,name="quick_add"),
-path("remove-from-cart/<str:id>/",views.remove_from_cart,name="cart_remove"),
+path("remove-from-cart/",views.remove_from_cart,name="cart_remove"),
 path("whislist-add/",views.wishlist_add,name="wishlist_add"),
 path("whislist-remove/",views.wishlist_remove,name="wishlist_remove"),
 path("quantity/add/<str:id>/",views.quantity_add,name="quantity_add"),
