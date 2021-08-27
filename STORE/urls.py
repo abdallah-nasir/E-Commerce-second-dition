@@ -33,7 +33,8 @@ path("FAQ/",views.faq,name="faq"),
 path("about/",views.about,name="about"),            
 path("contact/",views.contact,name="contact"),  
 path("search/",views.search,name="search"),
-          
+path("blogs/",views.blogs,name="blogs"),
+
 
 ## news
 path("news/",views.news,name="news"),            
@@ -71,6 +72,8 @@ path("create/<str:id>/",views.create,name="create"),
 path("capture/<str:order_id>/<str:id>/",views.capture,name="capture"),  
 #       Dashboard              
 path("dashboard/",views.dashboard,name="dashboard"),
+path("dashboard/orders/",views.dash_orders,name="dash_orders"),
+path("dashboard/orders/<str:id>/",views.dash_order_details,name="dash_order_details"),
 path("dashboard/products/add",views.add_products,name="products_add"),
 path("dashboard/products/modify/<str:id>/",views.modify_product,name="products_modify"),
 path("dashboard/products/delete_product/<str:id>/",views.delete_product,name="product_delete"),

@@ -662,7 +662,14 @@
 
                                 <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
 
-                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' cart.id %}">PROCEED TO CHECKOUT</a></div>
+                                {% if request.user.is_authenticated %}
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' cart.id %}">PROCEED TO CHECKOUT</a>
+                            </div>
+                                {% else %}
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">PROCEED TO CHECKOUT</a>
+                            </div>
+
+                                {% endif %}
                         </div>
                     </div>
                 </div>

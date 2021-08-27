@@ -2,6 +2,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<!-- CSS only -->
+<!-- JavaScript Bundle with Popper -->
+
         <!--====== App Content ======-->
         <div class="app-content">
 
@@ -38,7 +42,9 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="g-map">
-                                    <div id="map"></div>
+                                    <div id="map">
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +121,7 @@
                                     <div class="contact-area__heading">
                                         <h2>Get In Touch</h2>
                                     </div>
-                                    <form class="contact-f" method="POST" >
+                                    <form class="contact-f" id="contact-form" method="POST" >
                                         {% csrf_token %}
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6 u-h-100">
@@ -138,11 +144,15 @@
                                             <div class="col-lg-6 col-md-6 u-h-100">
                                                 <div class="u-s-m-b-30">
 
-                                                    <label for="c-message"></label><textarea class="text-area text-area--border-radius text-area--primary-style" name="message" id="c-message" placeholder="Compose a Message (Required)" required></textarea></div>
+                                                    <label for="c-message"></label><textarea class="text-area text-area--border-radius text-area--primary-style" name="message" id="c-message" placeholder="Compose a Message (Required)" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div id="message" class="col-lg-6 col-md-6 u-h-100">
+                           
                                             </div>
                                             <div class="col-lg-12">
 
-                                                <button class="btn btn--e-brand-b-2" type="submit">Send Message</button></div>
+                                                <button class="btn btn--e-brand-b-2" is="send" type="submit">Send Message</button></div>
                                         </div>
                                     </form>
                                 </div>
@@ -155,5 +165,74 @@
             <!--====== End - Section 4 ======-->
         </div>
         <!--====== End - App Content ======-->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDl1Qm4mijtUtNxatNRNBUChoiw0agcm8E&callback=initMap&libraries=places,geometry&channel=GMPSB_locatorplus_v4_cA" async defer></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">
+// In this example, we center the map, and add a marker, using a LatLng object
+// literal instead of a google.maps.LatLng object. LatLng object literals are
+// a convenient way to add a LatLng coordinate and, in most cases, can be used
+// in place of a google.maps.LatLng object.
+let map;
+
+function initMap() {
+  const mapOptions = {
+    zoom: 8,
+    center: { lat:27.09569985550897, lng: 33.82203544278415 },
+  };
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  const marker = new google.maps.Marker({
+    // The below line is equivalent to writing:
+    // position: new google.maps.LatLng(-34.397, 150.644)
+    position: { lat: 27.09569985550897, lng: 33.82203544278415 },
+    map: map,
+  });
+  // You can use a LatLng literal in place of a google.maps.LatLng object when
+  // creating the Marker object. Once the Marker object is instantiated, its
+  // position will be available as a google.maps.LatLng object. In this case,
+  // we retrieve the marker's position using the
+  // google.maps.LatLng.getPosition() method.
+  const infowindow = new google.maps.InfoWindow({
+    content: "<p>Marker Location:" + marker.getPosition() + "</p>",
+  });
+  google.maps.event.addListener(marker, "click", () => {
+    infowindow.open(map, marker);
+  });
+}
+
+$("#contact-form").submit(function(e){
+    // prevent from normal form behaviour
+        e.preventDefault();
+        // serialize the form data  
+        var serializedData = $(this).serialize();
+        //let target_element = $('#add-html-here');
+        $.ajax({
+            type : 'POST',
+            url :  "{% url 'home:contact' %}",
+            data : serializedData,
+            success : function(res){
+            //reset the form after successful submit
+                $("#contact-form")[0].reset();
+                  
+              let html_1=`  
+             <div class="u-s-m-b-30">
+
+                <label for="c-message"></label>
+                <p> Messgae Sent Successfully </p>
+            </div>`;
+                     
+             
+                $("#message").html(html_1);
+                
+          
+
+            },
+            error : function(response){
+                console.log(response)
+            }
+        });
+   });
+</script>
+<!-- JavaScript Bundle with Popper -->
 
 {% endblock %}

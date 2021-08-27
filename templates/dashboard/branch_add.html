@@ -1,54 +1,162 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<style type="text/css">
-.container{
-    margin-top: 10%;
-margin-left:20%;
-}
-</style>
-<div class="container">
-    <div class="row">
-     
-        <div class="col">
-            <form method="POST" enctype="multipart/form-data">
-{% csrf_token %}
-                {{form|crispy}}
-             {{form.media}}
-                <button class="btn btn-primary mt-2" type="submit">Submit</button>
-        </form>
-           
- 
-        </div>
-    </div>
-</div>
+<style type='text/css'>
+#prod-add{
+margin-top:10px;
+}        
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    </style>
 
-<script type="text/javascript">
-    
-    $("#id_category").change(function () {
-            const categoryId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-            $.ajax({                       // initialize an AJAX request
-                type: "POST",
-                url: '{% url "home:products_add" %}',
-                data: {
-                    'category': categoryId,       // add the country id to the POST parameters
-                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-                },
-                success: function (data) {   // `data` is from `get_topics_ajax` view function
+            <!--====== App Content ======-->
+            <div class="app-content">
+
+            <!--====== Section 1 ======-->
+            <div class="u-s-p-y-60">
+
+            <!--====== Section Content ======-->
+            <div class="section__content">
+            <div class="container">
+            <div class="breadcrumb">
+            <div class="breadcrumb__wrap">
+            <ul class="breadcrumb__list">
+            <li class="has-separator">
+
+            <a href="{% url 'home:dashboard' %}">Dashboard</a></li>
+            <li class="is-marked">
+
+            <a href="{% url 'home:branch_add'  %}">Add Branch</a></li>
+            </ul>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <!--====== End - Section 1 ======-->
+
+
+            <!--====== Section 2 ======-->
+            <div class="u-s-p-b-60">
+
+            <!--====== Section Content ======-->
+            <div class="section__content">
+            <div class="dash">
+            <div class="container">
+                <!-- product edit -->
+            <div class="row">
+                <div class="col-lg-3 col-md-12">
+
+                    <!--====== Dashboard Features ======-->
                    
-                    let html_data2="<option value=''>---------</option>";
-                    data.forEach(function (data) {
-                        html_data2 += `<option value='${data.id}'>${data.child}</option>`
-                    });
-                    $("#id_branch").html(html_data2);
-                  
-                }
-            });
-        });
-    
-    
+                    <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
+                        <div class="dash__pad-1">
 
-    </script>
-{% endblock %}
+                            <span class="dash__text u-s-m-b-16">Hello, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
+                            <ul class="dash__f-list">
+                                <li>
+
+                                    <a href="{% url 'home:products_add' %}">Add Products</a></li>
+                                <li>
+
+                                    <a href="{% url 'home:deals'  %}">Deals</a></li>
+                                <li>
+
+                                    <a href="{% url 'home:category'  %}">Category</a></li>
+                                <li>
+
+                                    <a href="{% url 'home:branch'  %}">Branch</a></li>
+                                <!-- <li>
+
+                                    <a href="{%url 'home:order_track' slug=profile.user %}">My Orders</a></li> -->
+                                 <!-- <li>
+
+                                    <a href="dash-payment-option.html">My Payment Options</a></li> -->
+                                <li> 
+
+                                    <a href="{% url 'home:manu' %}">Manufacturer</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="dash__box dash__box--bg-white dash__box--shadow dash__box--w">
+                        <div class="dash__pad-1">
+                            <ul class="dash__w-list">
+                                <li>
+                                    <div class="dash__w-wrap">
+
+                                        <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>
+
+                                        <span class="dash__w-text">{{order}}</span>
+
+                                        <span class="dash__w-name">Orders Placed</span></div>
+                                </li>
+                                <li>
+                                    <div class="dash__w-wrap">
+
+                                        <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>
+
+                                        <span class="dash__w-text">{{canceled}}</span>
+
+                                        <span class="dash__w-name">Cancel Orders</span></div>
+                                </li>
+                                <!-- <li>
+                                    <div class="dash__w-wrap">
+
+                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
+
+                                        <span class="dash__w-text">0</span>
+
+                                        <span class="dash__w-name">Wishlist</span></div>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!--====== End - Dashboard Features ======-->
+                </div>
+
+                                    <div class="col-lg-9 col-md-12">
+                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+                                    <div class="dash__pad-2">
+                                        <h1 class="dash__h1 u-s-m-b-14">Add Branch</h1>
+
+                                        <span class="dash__text u-s-m-b-30">Looks like you want to add Branch</span>
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <form class="dash-edit-p"  method='POST'>
+                                                    {% csrf_token %}
+                                                    
+                                                    
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+
+                                                        <label class="gl-label" for="gender">Category *</label>
+                                                        <select name="category" class="select-box select-box--primary-style u-w-100" id="gender" required>
+                                                            <option selected>Select</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="u-s-m-b-30">
+
+                                                        <label class="gl-label" for="reg-fname"> Name *</label>
+
+                                                        <input class="input-text input-text--primary-style" name="child" type="text" id="reg-fname"required>
+                                                    </div>
+                                                    </div>
+                                                   
+                                                    <button class="btn btn--e-brand-b-2" type="submit">SAVE</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    </div>
+                            </div>
+                      
+
+                                    </div>
+                                    </div>
+                                    <!--====== End - Section Content ======-->
+                                    </div>
+                                    <!--====== End - Section 2 ======-->
+                                    </div>
+            {% endblock %}

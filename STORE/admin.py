@@ -37,3 +37,8 @@ admin.site.register(NewsLetter)
 admin.site.register(Deals,DealAdmin)     
 admin.site.register(Coupon)
 admin.site.register(Shipping)
+admin.site.register(Blog_Comments)     
+admin.site.register(Blogs)
+admin.site.register(Blog_Images)
+admin.site.register(Blog_Category)
+

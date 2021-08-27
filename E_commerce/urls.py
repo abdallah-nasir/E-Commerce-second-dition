@@ -23,6 +23,7 @@ from django.conf.urls import (handler400, handler403, handler404, handler500
 # from allauth.urls import   
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('allauth.urls')),
     path("",include("STORE.urls",namespace="home")),
     

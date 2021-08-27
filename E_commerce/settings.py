@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'django_filters',
     "cities_light",
     "ajax_select",
+    'ckeditor',
+    'ckeditor_uploader',
+   
     # "Pay_Mob",
     # "django_countries",
     'allauth',         
@@ -90,6 +93,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'E_commerce.wsgi.application'
+
+
+
 
 #COUNTRIES
 # COUNTRIES_ONLY = ["SA","EG","AE"]
@@ -255,3 +261,11 @@ MEDIA_ROOT= BASE_DIR/"media"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CkEditor
+CKEDITOR_UPLOAD_PATH = "ckeditor/"
+CKEDITOR_IMAGE_BACKEND ="pillow"
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_RESTRICT_BY_USER =True
+CKEDITOR_BROWSE_SHOW_DIRS =False
+CKEDITOR_FORCE_JPEG_COMPRESSION =True

@@ -491,9 +491,13 @@ color:#ff4500;
 
                                 <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">CONTINUE SHOPPING</a>
 
-                                <a class="s-option__link btn--e-white-brand-shadow" href="cart.html">VIEW CART</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
+                                {% if request.user.is_authenticated %}
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">PROCEED TO CHECKOUT</a></div>
+                                {% else %}
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">PROCEED TO CHECKOUT</a></div>
 
-                                <a class="s-option__link btn--e-brand-shadow" href="checkout.html">PROCEED TO CHECKOUT</a></div>
+                                {% endif %}
                         </div>
                     </div>
                 </div>
@@ -562,7 +566,7 @@ color:#ff4500;
                                             <ul class="product-o__action-list">
                                                 <li>
 
-                                                    <a data-modal="modal" data-modal-id=".deal-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                    <a data-modal="modal" data-modal-id=".deal-{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
                                                 <li>
                                                     <input type="hidden" class="product-id-{{i.product.id}}"  value="{{i.product.id}}">
                                                 <a  value="{{i.product.id}}" data-index="{{i.product.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#deal-{{i.product.id}}"  data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a>
@@ -614,7 +618,7 @@ color:#ff4500;
 
                             
         <!--====== Quick Look Modal ======-->
-        <div class="modal fade deal-{{i.id}}" id="quick-look">
+        <div class="modal fade deal-{{i.product.id}}" id="quick-look">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal--shadow">
 
@@ -710,11 +714,11 @@ color:#ff4500;
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
                                             <div class="red-heart-{{i.id}}">
-                                                            
-                                                               
-                                                {% if  i.product in wishlist.products.all %}
+                                                    
+                                                       
+                                                {% if  i.product.id in wishlist.products.all %}
                                                 <input class="wishlist-add-{{i.product.id}}" type="hidden" value="{{i.product.id}}">
-
+        
                                                 <div id="wishlist" class="fas fa-heart" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
                                            
                                               {% else %}
@@ -801,7 +805,7 @@ color:#ff4500;
         </div>
         <!--====== End - Quick Look Modal ======-->
         <!--====== Add to Cart Modal ======-->
-<div class="modal fade" id="deal-{{i.id}}">
+<div class="modal fade" id="deal-{{i.product.id}}">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-radius modal-shadow">
 
@@ -833,10 +837,14 @@ color:#ff4500;
 
                                 <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">CONTINUE SHOPPING</a>
 
-                                <a class="s-option__link btn--e-white-brand-shadow" href="cart.html">VIEW CART</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
 
-                                <a class="s-option__link btn--e-brand-shadow" href="checkout.html">PROCEED TO CHECKOUT</a></div>
-                        </div>
+                                {% if request.user.is_authenticated %}
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">PROCEED TO CHECKOUT</a></div>
+                                {% else %}
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">PROCEED TO CHECKOUT</a></div>
+
+                                {% endif %}                        </div>
                     </div>
                 </div>
             </div>

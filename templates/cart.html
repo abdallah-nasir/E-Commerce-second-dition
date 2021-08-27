@@ -267,8 +267,12 @@
                                                     </table>
                                                 </div>
                                                 <div>
-                                                            
+                                                       {% if request.user.is_authenticated %}     
                                                     <a {% if cart.order_product_length == 0 %}  style="background-color:#fff; color:#fa4400;"  disabled {% endif %} class="btn btn--e-brand-b-2" href='{% url "home:order" id=cart.id %}' > PROCEED TO CHECKOUT</a>
+                                                    {% else %}
+                                                    <a {% if cart.order_product_length == 0 %}  style="background-color:#fff; color:#fa4400;"  disabled {% endif %} class="btn btn--e-brand-b-2" href='{% url "account_login" %}' > PROCEED TO CHECKOUT</a>
+
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>

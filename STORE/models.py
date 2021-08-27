@@ -10,6 +10,8 @@ from django_countries.fields import CountryField
 from cities_light.models import Country,Region,City
 from django.shortcuts import render,redirect,reverse
 import requests
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
   
 
@@ -218,7 +220,6 @@ class Filter(models.Model):
 class Product_Cart(models.Model):
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ForeignKey(Product,blank=True,null=True,on_delete=models.CASCADE)
-    # cart_id=models.PositiveIntegerField(blank=True,null=True)
     quantity=models.PositiveIntegerField(default=1)
     size=models.ForeignKey(Size,default=1,null=True,on_delete=models.SET_NULL)
     color=models.ForeignKey(Color,default=1,null=True,on_delete=models.SET_NULL)
@@ -303,7 +304,7 @@ class Cart(models.Model):
             price +=i.discount()
         order=Order.objects.filter(user=self.user,ordered=True,delivered=False)
         if order.exists():
-            my_order=Order.objects.get(user=self.user,ordered=True,delivered=False)
+            my_order=Order.objects.get(user=self.user,cart_id=self.id,ordered=True,delivered=False)
             if my_order.address:
                 address=Address.objects.get(profile__user=self.user,primary=True)
                 shipping=Shipping.objects.get(country=address.country.name)
@@ -409,6 +410,12 @@ class Order(models.Model):
             self.price =price
             self.save()
         return price
+    def shipping(self):
+        try:
+            ship =Shipping.objects.get(country=self.address.country.name)
+        except:
+            ship=None
+        return ship
 class Wishlist(models.Model):     
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product,blank=True)
@@ -464,3 +471,47 @@ class Deals(models.Model):
         return str(self.id)
 
 
+
+def blog_image_upload(instance, filename):
+    # imagename,extension=filename.split(".")
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return (f"blogs/{instance.blog}/{filename}")
+    # return 'user_{0}/{1}'.format(instance.name, filename)
+  
+class Blog_Category(models.Model):
+    name=models.CharField(max_length=100)
+    def __Str__(self):
+        return self.name
+    
+class Blog_Comments(models.Model): 
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    details=models.TextField()
+    date_created=models.DateTimeField(auto_now_add=True)
+    blog_num=models.PositiveIntegerField(default=0)
+    def __str__(self):
+        try:
+            num=Blogs.objects.get(id=self.blog_num)
+            return num.title
+        except:
+            return self.blog_num
+class Blog_Images(models.Model):
+    blog_num=models.PositiveIntegerField(default=0)
+    image=models.ImageField(null=True,upload_to=blog_image_upload)
+    
+    def __str__(self):
+        try:
+            num=Blogs.objects.get(id=self.blog_num)
+            return num.title
+        except:
+            return self.blog_num
+class Blogs(models.Model):
+    title=models.CharField(max_length=100)
+    details=RichTextUploadingField()
+    category=models.ForeignKey(Blog_Category,on_delete=models.SET_NULL,null=True)
+    image=models.ManyToManyField(Blog_Images,blank=True)
+    date=models.DateTimeField(auto_now_add=True)
+    hashtag=models.CharField(max_length=150)
+    comments=models.ManyToManyField(Blog_Comments,blank=True)
+
+    def __str__(self):
+        return self.title
