@@ -124,6 +124,8 @@ def global_wishlist(request):
     context={'wishlist':wishlist}
     return context
 def global_context(request):        
+    categories=Category.objects.all()
+    # branch=Branch.objecst.all()
     if request.user.is_authenticated:
 
         repeat_cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
@@ -188,7 +190,7 @@ def global_context(request):
             cart=[]     
             pass
             
-    context={"cart":cart}
+    context={"cart":cart,"all_categories":categories}
     return context           
 
     

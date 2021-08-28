@@ -36,7 +36,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
-
+   
 class Category(models.Model):
     name=models.CharField(max_length=100) 
    
@@ -118,7 +118,7 @@ class Product(models.Model):
     most_buy=models.PositiveIntegerField(default=0)
     category=models.ForeignKey(Category,default=1,null=True,on_delete=models.SET_NULL)
     branch=models.ForeignKey(Branch,default=1,null=True,on_delete=models.SET_NULL)
-    manufacturer=models.ForeignKey(Manufacturer,null=True,default=1,on_delete=models.SET_NULL)
+    manufacturer=models.ForeignKey(Manufacturer,null=True,blank=True,on_delete=models.SET_NULL)
     color=models.ManyToManyField(Color)
     size=models.ManyToManyField(Size)    
     stock=models.PositiveIntegerField()
@@ -271,7 +271,7 @@ class Shipping(models.Model):
     def __str__(self):
         return self.country
 
-class Cart(models.Model):
+class Cart(models.Model):                       
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ManyToManyField(Product_Cart,blank=True)
     modified_date = models.DateTimeField(auto_now=True)

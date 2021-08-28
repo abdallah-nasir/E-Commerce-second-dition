@@ -160,8 +160,6 @@ def rating_session(request):
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def home(request):
-    if request.is_ajax():  
-        print("ajax")
     trend=Product.objects.order_by("-stars")[0:12]
     arrivals=Product.objects.order_by("-id")[0:8]
     category=Category.objects.all()   
@@ -383,6 +381,7 @@ def this_product(request,id):
 
     context={"details_order":details_order,"product":product,"same":same,"form":form,"reviews":reviews,"details":details}
     return render(request,"this_product.html",context)
+
 def cart(request):
     countries=Country.objects.all()
     if request.is_ajax():
@@ -404,7 +403,7 @@ def cart(request):
     if request.user.is_authenticated:  
         try:     
             device=request.COOKIES["device"]
-            cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)  
+            cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False).latest("modified_date")
             cart.device = device
             cart.save()
             if len(cart.products.all()) == 0:
@@ -439,7 +438,7 @@ def empty(request):
     return render(request,"empty.html")   
 
   
-
+@login_required()
 def make_primary(request):
     profile=Profile.objects.get(user=request.user)
     address=Address.objects.filter(profile=profile)
@@ -456,14 +455,14 @@ def make_primary(request):
                 i.save()
                 order.address=i
                 order.save()
-                print("asdasdasd")
+                print("asdasdasd")   
         
     except:
         pass
   
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
    
-       
+@login_required() 
 def make_new_address(request):
     profile=Profile.objects.get(user=request.user)
     phone=request.POST.get("phone")
@@ -483,7 +482,7 @@ def make_new_address(request):
             return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-
+@login_required()
 def make_payment_option(request):
     profile=Profile.objects.get(user=request.user)
     payment=request.POST.get("payment")
@@ -559,6 +558,7 @@ def create(request,id):
     else:
         return JsonResponse({'details': "invalide request"})
         print("not herer")
+
 def capture(request,order_id,id):       
     if request.method=="POST": 
         capture_order = OrdersCaptureRequest(order_id)
@@ -770,6 +770,7 @@ def coupon(request):
     else:
         pass
     return redirect(reverse("home:order",kwargs={"id":order.cart.id}))
+
 @login_required()
 def order(request,id):
     countries=Country.objects.all()
@@ -868,165 +869,152 @@ def order(request,id):
     context={"order":order,"countries":countries,"my_address":my_address,"all":all_address}
     return render(request,"checkout.html",context)
 
+@login_required()
 def profile(request,slug):    
-    if request.user.is_authenticated:
-        profile=Profile.objects.get(user=request.user)
-        all_order=Order.objects.filter(user=request.user,ordered=True,delivered=True)
-        repeat_order=Order.objects.filter(user=request.user,ordered=True,delivered=False)
-        if len(repeat_order) != 1:
-            for i in repeat_order:
-                i.delete()
-        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
-        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-        try:
-            info=Address.objects.get(profile=profile,primary=True)
-        except:
-            info={}
- 
-    else:    
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
+    profile=Profile.objects.get(user=request.user)
+    all_order=Order.objects.filter(user=request.user,ordered=True,delivered=True)
+    repeat_order=Order.objects.filter(user=request.user,ordered=True,delivered=False)
+    if len(repeat_order) != 1:
+        for i in repeat_order:
+            i.delete()
+    order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+    canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+    try:
+        info=Address.objects.get(profile=profile,primary=True)
+    except:
+        info={}
+
 
     context={"profile":profile,"all":all_order,"order":order,"canceled":canceled_order,"info":info}
     return render(request,"profile.html",context)
 
+@login_required()
 def profile_account(request,slug):   
-    if request.user.is_authenticated:
-        profile=Profile.objects.get(user=request.user)
-        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
-        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-    else:
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
+    profile=Profile.objects.get(user=request.user)
+    order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+    canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+
 
     context={"profile":profile,"order":order,"canceled":canceled_order}
     return render(request,"profile_account.html",context)
-
+@login_required()
 def profile_edit(request,slug):   
-    if request.user.is_authenticated:
-        profile=Profile.objects.get(user=request.user)
-        form=ProfileForm(request.POST or None,instance=profile)
-        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
-        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-        month=request.POST.get("birthday_month")
-        year=request.POST.get("birthday_year")
-        day=request.POST.get("birthday_day")     
-        first_name=request.POST.get("first_name")
-        last_name=request.POST.get("last_name")
-        gender=request.POST.get("gender")
-        phone=request.POST.get("phone")
-        
-        date=f"{year}-{month}-{day}"
-        if request.method == 'POST':   
-            try:                   
-                if gender != "Male" and gender != "Female":
-                    print(gender)  
-                    messages.error(request,"sorry,invalid data")
-                    return redirect(reverse("home:profile_edit",kwargs={"slug":profile.user}))
-                profile.birthday=date  
-                profile.user.first_name=first_name
-                profile.user.last_name=last_name
-                profile.gender=gender
-                profile.phone=phone
-                profile.save()
-                print("done")
-            except:
+    profile=Profile.objects.get(user=request.user)
+    form=ProfileForm(request.POST or None,instance=profile)
+    order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+    canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+    month=request.POST.get("birthday_month")
+    year=request.POST.get("birthday_year")
+    day=request.POST.get("birthday_day")     
+    first_name=request.POST.get("first_name")
+    last_name=request.POST.get("last_name")
+    gender=request.POST.get("gender")
+    phone=request.POST.get("phone")
+    
+    date=f"{year}-{month}-{day}"
+    if request.method == 'POST':   
+        try:                   
+            if gender != "Male" and gender != "Female":
+                print(gender)  
                 messages.error(request,"sorry,invalid data")
                 return redirect(reverse("home:profile_edit",kwargs={"slug":profile.user}))
-    else:
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
+            profile.birthday=date  
+            profile.user.first_name=first_name
+            profile.user.last_name=last_name
+            profile.gender=gender
+            profile.phone=phone
+            profile.save()
+            print("done")
+        except:
+            messages.error(request,"sorry,invalid data")
+            return redirect(reverse("home:profile_edit",kwargs={"slug":profile.user}))
+
 
     context={"profile":profile,"order":order,"canceled":canceled_order,"form":form}
     return render(request,"profile_edit.html",context)
 
- 
+@login_required()
 def address(request,slug):
-    if request.user.is_authenticated:
-        countries=Country.objects.all()
-        profile=Profile.objects.get(user=request.user)
-        info=Address.objects.filter(profile=profile)
-        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
-        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-        if request.is_ajax():
-            region=request.POST.get("region")
-            country=request.POST.get("country")
-            city=request.POST.get("city")
-            print(country,region)
-            try:
-                my_region=Region.objects.filter(country_id=country)           
-                cities=City.objects.filter(region_id=region)
+
+    countries=Country.objects.all()
+    profile=Profile.objects.get(user=request.user)
+    info=Address.objects.filter(profile=profile)
+    order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+    canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+    if request.is_ajax():
+        region=request.POST.get("region")
+        country=request.POST.get("country")
+        city=request.POST.get("city")
+        print(country,region)
+        try:
+            my_region=Region.objects.filter(country_id=country)           
+            cities=City.objects.filter(region_id=region)
+            response_content=cities.values()
+            if country:
+            
+                response_content=my_region.values()
+            elif region:
                 response_content=cities.values()
-                if country:
-                
-                    response_content=my_region.values()
-                elif region:
-                    response_content=cities.values()
-            except Exception:       
-                response_content=list({})         
-            return JsonResponse(list(response_content),safe=False)        
-        if len(info) >= 3:
-            len_info=True   
-        else:
-            len_info=False
-    
-    else:        
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
+        except Exception:       
+            response_content=list({})         
+        return JsonResponse(list(response_content),safe=False)        
+    if len(info) >= 3:
+        len_info=True   
+    else:
+        len_info=False
 
     context={"profile":profile,"len_info":len_info,"countries":countries,"info":info,"canceled":canceled_order,"order":order}
     return render(request,"address_book.html",context)
+
+@login_required()
 def address_add(request,slug):    
-    if request.user.is_authenticated:
-        countries=Country.objects.all()
-        profile=Profile.objects.get(user=request.user)
-        info=Address.objects.filter(profile=profile)
-        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
-        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-        if len(info) >= 3:
-                return redirect(reverse("home:address",kwargs={"slug":profile.user}))
-        else:
-            if request.method == 'POST':
-                country=request.POST.get("country")
-                city=request.POST.get("city")
-                region=request.POST.get("region")
-                phone=request.POST.get("phone")
-                street=request.POST.get("street")
-                zip=request.POST.get("zip")
-                if request.is_ajax():
-                    
-                    try:
-                        my_region=Region.objects.filter(country_id=country)           
-                        cities=City.objects.filter(region_id=region)
-                        response_content=cities.values()
-                        if country:
-                            response_content=my_region.values()
-                        elif region:
-                            response_content=cities.values()
-                    except Exception:       
-                        response_content=list({})        
-                    return JsonResponse(list(response_content),safe=False)        
-      
+    countries=Country.objects.all()
+    profile=Profile.objects.get(user=request.user)
+    info=Address.objects.filter(profile=profile)
+    order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+    canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+    if len(info) >= 3:
+            return redirect(reverse("home:address",kwargs={"slug":profile.user}))
+    else:
+        if request.method == 'POST':
+            country=request.POST.get("country")
+            city=request.POST.get("city")
+            region=request.POST.get("region")
+            phone=request.POST.get("phone")
+            street=request.POST.get("street")
+            zip=request.POST.get("zip")
+            if request.is_ajax():
+                
                 try:
-                    print(country,region,city)
-                    address=Address.objects.create(profile=profile,phone=phone,street=street,country_id=country,region_id=region,city_id=city,zip=zip)
-                    if len(Address.objects.filter(profile=profile)) ==1:
-                        address.primary=True
-                        address.save()
-                    messages.success(request,"Address Added successfully")
-                    return redirect(reverse("home:address",kwargs={"slug":profile.user}))
-                except:
-                    messages.error(request,"invalid data")   
-                    return redirect(reverse("home:address_add",kwargs={"slug":profile.user}))
+                    my_region=Region.objects.filter(country_id=country)           
+                    cities=City.objects.filter(region_id=region)
+                    response_content=cities.values()
+                    if country:
+                        response_content=my_region.values()
+                    elif region:
+                        response_content=cities.values()
+                except Exception:       
+                    response_content=list({})        
+                return JsonResponse(list(response_content),safe=False)        
+    
+            try:
+                print(country,region,city)
+                address=Address.objects.create(profile=profile,phone=phone,street=street,country_id=country,region_id=region,city_id=city,zip=zip)
+                if len(Address.objects.filter(profile=profile)) ==1:
+                    address.primary=True
+                    address.save()
+                messages.success(request,"Address Added successfully")
+                return redirect(reverse("home:address",kwargs={"slug":profile.user}))
+            except:
+                messages.error(request,"invalid data")   
+                return redirect(reverse("home:address_add",kwargs={"slug":profile.user}))
 
  
-    else:         
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
 
     context={"profile":profile,"countries":countries,"canceled":canceled_order,"order":order,"info":info}
     return render(request,"address_add.html",context)
 
+@login_required()
 def address_edit(request,id):
     address=Address.objects.get(profile__user=request.user,id=id)
     form=AddressEdit(request.POST or None,instance=address)
@@ -1037,52 +1025,44 @@ def address_edit(request,id):
         messages.error(request,"invalid data")
     return redirect(reverse("home:address",kwargs={"slug":request.user}))
    
-
+@login_required()
 def order_track(request,slug):    
-    if request.user.is_authenticated:
-        profile=Profile.objects.get(user=request.user)
-        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
-        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-        track=request.POST.get("track")
-        if request.method == "POST":
-            try:
-                my_order=Order.objects.get(user=request.user,track_number=track) #user=request.user,ordered=True,delivered=True,
-            except:  
-                my_order=False     
-        else:
-            my_order={}
-    else:        
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
+    profile=Profile.objects.get(user=request.user)
+    order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+    canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+    track=request.POST.get("track")
+    if request.method == "POST":
+        try:
+            my_order=Order.objects.get(user=request.user,track_number=track) #user=request.user,ordered=True,delivered=True,
+        except:  
+            my_order=False     
+    else:
+        my_order={}
+
   
     context={"profile":profile,"order":order,"canceled":canceled_order,"my_orders":my_order}
 
     return render(request,"order_track.html",context)
 
+@login_required()
 def manage_order(request,slug):
-    if request.user.is_authenticated:
-        profile,created=Profile.objects.get_or_create(user=request.user)
-        try:
-            my_order=Order.objects.get(user=request.user,ordered=True,delivered=True) #user=request.user,ordered=True,delivered=True,
-        except:
-            return redirect(reverse("home:empty"))    
-    else:     
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
+    profile,created=Profile.objects.get_or_create(user=request.user)
+    try:
+        my_order=Order.objects.get(user=request.user,ordered=True,delivered=True) #user=request.user,ordered=True,delivered=True,
+    except:
+        return redirect(reverse("home:empty"))    
+
     context={"order":my_order}
     return render(request,'manage_order.html',context)
+@login_required()
 def canceled_order(request,slug):
-    if request.user.is_authenticated:
-        profile=Profile.objects.get(user=request.user)
-        my_order=Order.objects.filter(user=request.user,ordered=True,delivered=True,statue="canceled") #user=request.user,ordered=True,delivered=True,
-        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
-        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
-    else:     
-        messages.error(request,"please login First....")
-        return redirect(reverse("account_login"))
+    profile=Profile.objects.get(user=request.user)
+    my_order=Order.objects.filter(user=request.user,ordered=True,delivered=True,statue="canceled") #user=request.user,ordered=True,delivered=True,
+    order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+    canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+
     context={"my_order":my_order,"order":order,"canceled":canceled_order}
     return render(request,'canceled_order.html',context)
-
 
 def category(request,slug):
     category=get_object_or_404(Category,name=slug)
@@ -1209,7 +1189,7 @@ def category(request,slug):
             stars_range=(int(rating),float(count))    
         except:  
             stars_range=(0,0.5)
-    
+        print(stars_range)
         lists={"stars__range":stars_range,"manufacturer__name":manu,"size__name":size,"price__range":price_range,"category":category,"free_shipping":shipping}
 
         for i in lists:
@@ -1415,7 +1395,7 @@ def branch(request,slug):
 def wishlist(request):
     if request.user.is_authenticated:
         try:
-            wishlist=Wishlist.objects.get(user=request.user)
+            wishlist=Wishlist.objects.filter(user=request.user).latest("modified_date")
             if len(wishlist.products.all()) == 0:
                 return redirect(reverse("home:empty"))
         except:
@@ -1437,6 +1417,7 @@ def wishlist(request):
                 
     context={'wishlist':wishlist}   
     return render(request,"wishlist.html",context)
+
 def wishlist_add(request):
     try:
         id=request.GET["id"]
@@ -1492,7 +1473,7 @@ def wishlist_remove(request):
         return redirect(reverse("home:wishlist"))
     product=get_object_or_404(Product,id=id)
     if request.user.is_authenticated:    
-        list=Wishlist.objects.get(user=request.user)
+        list=Wishlist.objects.filter(user=request.user).latest("modified_date")
         if product in list.products.all():
             list.products.remove(product)
             messages.success(request,"Item Rmoved Successfully") 
@@ -1514,7 +1495,7 @@ def wishlist_remove(request):
                 messages.error(request,"you dont have this Item in your list") 
         else:                                       
             try:
-                list=Wishlist.objects.get(device=device)
+                list=Wishlist.objects.filter(device=device).latest("modified_date")
                 if product in list.products.all():
                     list.products.remove(product)
                     messages.success(request,"Item Rmoved Successfully") 
@@ -1529,7 +1510,7 @@ def wishlist_remove(request):
   
 def wishlist_list_remove(request):
     if request.user.is_authenticated:
-        list=Wishlist.objects.get(user=request.user)
+        list=Wishlist.objects.filter(user=request.user).latest("modified_date")
         list.products.remove()
         messages.success(request,"Item Rmoved Successfully") 
     else:
@@ -1543,7 +1524,7 @@ def wishlist_list_remove(request):
             return JsonResponse(data)    
         else:  
             try:
-                list=Wishlist.objects.get(device=device)
+                list=Wishlist.objects.filter(device=device).latest("modified_date")
                 list.products.remove()
                 messages.success(request,"Item Rmoved Successfully") 
                 data={"id":list.id}
@@ -1554,20 +1535,12 @@ def wishlist_list_remove(request):
 
 def cart_clear(request):
     if request.user.is_authenticated:
-        repeat_cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False)
-        if len(repeat_cart) != 1:
-            for i in repeat_cart:
-                i.delete()
-        cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
+        cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False).latest("modified_date")
         for i in cart.products.all():    
             i.delete()
     else:
         device=request.COOKIES["device"]
-        repeat_cart=Cart.objects.filter(device=device,ordered=True,delivered=False)
-        if len(repeat_cart) != 1:
-            for i in repeat_cart:
-                i.delete()
-        cart=Cart.objects.get(device=device,ordered=True,delivered=False)
+        cart=Cart.objects.filter(device=device,ordered=True,delivered=False).latest("modified_date")
         for i in cart.products.all():    
             i.delete()
     return redirect(reverse("home:cart"))
@@ -1608,16 +1581,18 @@ def add_to_cart(request):
         else:
             cart.products.add(product_cart)   
             cart.device=device
-            product_cart.ordered=True        
-            product_cart.save()    
+            product_cart.ordered=True           
+            product_cart.save()      
             cart.save()
             print("cart authenticated")            
             messages.success(request,"Item Added Successfully")    
-            print(product_cart.products.image.first().image.url)
+            for i in product_cart.products.image.all():
+                image_url=i.image
+            print(image_url)    
             data={"id":product_cart.id,"amounts":cart.order_product_length(),
                 "product_category":product_cart.products.category.name,"product_name":product_cart.products.name,
                 "product_price":product_cart.product_price_individual(),"product_quantity":product_cart.quantity,
-                "product_image":product_cart.products.image.first().image.url,"product_url":product_cart.get_url(),
+                "product_image":json.dumps(image_url),"product_url":product_cart.get_url(),
                 "product_category_url":product_cart.get_category_url(),"total":cart.before_discount(),
                 "product_remove":product_cart.get_cart_remove_url()} 
             print(data)   
@@ -1646,11 +1621,12 @@ def add_to_cart(request):
             product_cart.save()    
             cart.save()
             print("cart anonymous")         
+            print(product_cart.products.image.first().url)
             messages.success(request,"Item Added Successfully") 
             data={"id":product_cart.id,"amounts":cart.order_product_length(),
                 "product_category":product_cart.products.category.name,"product_name":product_cart.products.name,
                 "product_price":product_cart.product_price_individual(),"product_quantity":product_cart.quantity,
-                "product_image":product_cart.products.image.first().image.url,"product_url":product_cart.get_url(),
+                "product_image":product_cart.products.image.first(),"product_url":product_cart.get_url(),
                 "product_category_url":product_cart.get_category_url(),"total":cart.before_discount(),
                 "product_remove":product_cart.get_cart_remove_url()} 
             print(data)   
@@ -1706,26 +1682,32 @@ def remove_from_cart(request):
     try:  
         id=request.GET["id"]
         device=request.COOKIES["device"]
-        repeat_product=Product_Cart.objects.get(id=id)
-       
-       
+        product=None
         if request.user.is_authenticated:
-            cart=Cart.objects.get(user=request.user)
+            cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False).latest("modified_date")
+            print(cart)
         else:
             cart=Cart.objects.filter(device=device)
             if len(cart) > 1:
                 cart=Cart.objects.filter(device=device).latest("modified_date")
             else:
                 cart=Cart.objects.get(device=device)
-        repeat_product.delete()
-        print(id)   
+        for i in cart.products.all():
+            print(i)
+            if i.id == int(id):
+                product=i.id
+                i.delete()
+              
+    
       
         messages.success(request,"Item removed Successfully")
     
-        data={"id":repeat_product.id,"amounts":cart.order_product_length(),
+        data={"id":product,"amounts":cart.order_product_length(),
               "total":cart.before_discount(),}
+        print(data)   
         return JsonResponse(data)
     except:
+        print("except")
         messages.error(request,"invalid data")
         
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
@@ -1845,7 +1827,7 @@ def quick_add(request,id):
             product.quantity +=int(quantity)
             product.device=device
             product.save()
-            cart=Cart.objects.get(user=request.user,ordered=True,delivered=False)
+            cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False).latest("modified_date")
             cart.products.add(product)
             cart.device=device
             cart.save()
@@ -1865,14 +1847,58 @@ def quick_add(request,id):
         except:
             messages.error(request,"invalid data")
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
- 
+
+from bs4 import BeautifulSoup as bss4  
+import csv    
 def test(request):     
-    order=Order.objects.get(user=request.user,ordered=True,delivered=False)
-    context={"order":order}    
-    msg_html = render_to_string("test.html",context)
-    msg = EmailMessage(subject="order confirm", body=msg_html, from_email=settings.EMAIL_HOST_USER, to=[order.user.email])
-    msg.content_subtype = "html"  # Main content is now text/html
-    msg.send()
+    url=requests.get("https://deals.souq.com/eg-en/computers/c/13414")
+    details_url=requests.get("https://egypt.souq.com/eg-en/lenovo-yoga-9-14itl5-laptop-intel-core-i7-1185g7-14-inch-uhd-1tb-ssd-16-gb-ram-integrated-intel-iris-xe-graphics-windows-shadow-black-14968700075/u/")
+    souq=bss4(url.text,"lxml")
+    products=souq.findAll("div",{"class":"column column-block block-grid-large"})
+    details=bss4(details_url.text,"lxml")
+    pro__details=details.findAll("div",{"class":"item-details-mini clearfix"})
+    for i in Images.objects.all():
+        i.save()
+    # print(pro__details)    
+    # with open("details.csv","w",newline="") as file:
+        # writer =csv.writer(file)     
+        # writer.writerow(["name","price","image","url"])
+        # print(details)    
+        # for product in products:
+        #     name=product.find("h6","title").text
+        #     price=product.find("h5","price").text
+        #     image=product.find("img","img-size-medium")["data-src"]
+        #     url=product.find("a","img-link imgShowQuickView")["href"]
+            # print(price)           
+            # writer.writerow([name,price,image,url])          
+
+    # with open('laptops.csv') as csv_file:
+    #     csv_reader = csv.reader(csv_file)
+    #     for row in csv_reader: 
+    #         product=Product.objects.create(name=row[0],price=int(row[1]),details="any details",stock=100)
+    #         images=Images.objects.create(image__url=row[2])
+    #         product.image.add(images)
+    #         product.save()  
+   
+    #         print(details_url)
+     
+    category_url=requests.get("https://fakestoreapi.com/products/categories")
+    product_url=requests.get('https://fakestoreapi.com/products')
+    products=product_url.json()
+    categories=category_url.json()
+   
+    for i in products:
+        for c in Category.objects.all():
+            if c.name == i["category"]:
+                cat=c
+        for b in Branch.objects.all():
+            if b.child == i["category"]: 
+                child=b
+        product= Product.objects.create(name=i["title"],price=i["price"],branch=b,stock=100,category=cat,details=i["description"])
+        images=Images.objects.create(image=i["image"],product_num=product.id)
+        product.image.add(images)
+        product.save()     
+    context={}       
     return render(request,"test.html",context)
   
 def faq(request):

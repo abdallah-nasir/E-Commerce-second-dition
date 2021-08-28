@@ -773,31 +773,31 @@ $('#select').change(function(){
                             $("#cart-items").val('');
                             // Append Element
                             var _html=`
-                       
-                        <div  class="card-mini-product">
-                        <div class="mini-product">
-                            <div class="mini-product__image-wrapper">
-    
-                                <a class="mini-product__link" href="${res.product_url}">
-    
-                                    <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
-                            <div class="mini-product__info-wrapper">
-    
-                                <span class="mini-product__category">
-    
-                                    <a href="${res.product_category_url}">${res.product_category}</a></span>
-    
-                                <span class="mini-product__name">
-    
-                                    <a href="${res.product_url}">${res.product_name}</a></span>
-    
-                                <span class="mini-product__quantity">${res.product_quantity} x</span>
-    
-                                <span class="mini-product__price">${res.product_price}</span></div>
-                        </div>
-    
-                        <a class="mini-product__delete-link far fa-trash-alt" href="${res.product_remove}"></a>
-                    </div>
+                            <div id='temp-cart-${res.id}'  class="card-mini-product">
+                                <div class="mini-product">
+                                    <div class="mini-product__image-wrapper">
+            
+                                        <a class="mini-product__link" href="${res.product_url}">
+            
+                                            <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
+                                    <div class="mini-product__info-wrapper">
+            
+                                        <span class="mini-product__category">
+            
+                                            <a href="${res.product_category_url}">${res.product_category}</a></span>
+            
+                                        <span class="mini-product__name">
+            
+                                            <a href="${res.product_url}">${res.product_name}</a></span>
+            
+                                        <span class="mini-product__quantity">${res.product_quantity} x</span>
+            
+                                        <span class="mini-product__price">${res.product_price}</span></div>
+                                </div>
+            
+                                <input class="total-remove-cart-${res.id}" type="hidden" value="${res.id}">
+            
+                                <a id="total-product-remove" value="${res.id}" data-index="${res.id}" class="mini-product__delete-link far fa-trash-alt" ></a>                </div>
                     
                         `;
                            let html_2=`$ ${res.total}`
