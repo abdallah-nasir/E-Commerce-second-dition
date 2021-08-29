@@ -13,7 +13,7 @@ import requests
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
-  
+from django.conf import settings
 
 GENDER=(
     ("Male","Male"),
@@ -257,13 +257,23 @@ class Product_Cart(models.Model):
         return pro 
 
     def get_url(self): 
-        url=f"http://127.0.0.1:8000/product/{self.products.id}/"
+        if settings.DEBUG:
+            url=f"https://ludus-ecommerce.herokuapp.com/product/{self.products.id}/"
+        else:
+            url=f"http://127.0.0.1:8000/product/{self.products.id}/"
         return url   
     def get_category_url(self):
-        url=f"http://127.0.0.1:8000/category/{self.products.category.name}/"
+        if settings.DEBUG:
+            url=f"https://ludus-ecommerce.herokuapp.com/category/{self.products.category.name}/"
+        else:
+            url=f"http://127.0.0.1:8000/category/{self.products.category.name}/"
+
         return url   
     def get_cart_remove_url(self):  
-        url=f"http://127.0.0.1:8000/remove-from-cart/{self.id}/"
+        if settings.DEBUG:
+            url=f"https://ludus-ecommerce.herokuapp.com/remove-from-cart/{self.id}/"
+        else:
+            url=f"http://127.0.0.1:8000/remove-from-cart/{self.id}/"
         return url   
 class Shipping(models.Model):
     country=models.CharField(max_length=50,blank=True,null=True)
@@ -399,7 +409,10 @@ class Order(models.Model):
             total=None
         return total   
     def get_absolute_order(self):    
-        url=f"http://127.0.0.1:8000/order/user/{self.user}/"
+        if settings.DEBUG:
+            url=f"https://ludus-ecommerce.herokuapp.com/order/user/{self.user}/"
+        else:
+            url=f"http://127.0.0.1:8000/order/user/{self.user}/"
         return url
     def order_total(self):
         price=self.cart.total_price()

@@ -34,7 +34,8 @@ path("about/",views.about,name="about"),
 path("contact/",views.contact,name="contact"),  
 path("search/",views.search,name="search"),
 path("blogs/",views.blogs,name="blogs"),
-
+path("sucess/",views.success,name="success"),
+     
 
 ## news
 path("news/",views.news,name="news"),            

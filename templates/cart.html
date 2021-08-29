@@ -72,12 +72,12 @@
                                         <tbody>
                                             {% for i in cart.products.all %}
                                             <!--====== Row ======-->
-                                            <tr id="temp-cart-{{i.id}}">
+                                            <tr id="my-temp-cart-{{i.id}}">
                                                 <td>
                                                     <div class="table-p__box">
                                                         <div class="table-p__img-wrap">
 
-                                                            <img class="u-img-fluid" src="{{i.products.image.first.image.url}}" alt="{{i.products.name}}"></div>
+                                                            <img class="u-img-fluid" src="{{i.products.image.first.image}}" alt="{{i.products.name}}"></div>
                                                         <div class="table-p__info">
 
                                                             <span class="table-p__name">
@@ -132,10 +132,12 @@
                                                         
                                                         <input class="wishlist-remove-cart-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                        <a id="wishlist-cart-remove"  data-index="{{i.id}}" class="far fa-trash-alt table-p__delete-link" ></a>
+                                                        <a id="wishlist-cart-remove" value="{{i.id}}"  data-index="{{i.id}}" class="far fa-trash-alt table-p__delete-link" ></a>
                                                         </div>
                                                 </td>
+                                                <br>
                                             </tr>
+                                           
                                             <!--====== End - Row ======-->
 
                                             {% endfor %}
@@ -359,8 +361,19 @@ $(document).on('click',"#add-to-cart",function(){
                     _vm.attr('disabled',true);
                 },
                 success:function(res){
-                    $(".cart-list-"+res.id).text(res.quantity);
+                    let html=`${res.quantity} X `
+                    $("#mini-quantity-"+res.id).html(html);
+                    let html_2=`$${res.price}`
+                    $("#mini-price-"+res.id).html(html_2);
+                    let html_3=`${res.quantity}`
+                    $(".cart-list-"+res.id).html(html_3);
+                    let html_data2 = `
+               $ ${res.total}
+                `
+                    $("#cart-total").html(html_data2);
                     _vm.attr('disabled',false);
+
+                    
                 }
             });
             // End
@@ -384,7 +397,16 @@ $(document).on('click',"#remove-from-cart",function(){
                     _vm.attr('disabled',true);
                 },
                 success:function(res){
-                    $(".cart-list-"+res.id).text(res.quantity);
+                    let html=`${res.quantity} X `
+                    $("#mini-quantity-"+res.id).html(html);
+                    let html_2=`$${res.price}`
+                    $("#mini-price-"+res.id).html(html_2);
+                    let html_3=`${res.quantity}`
+                    $(".cart-list-"+res.id).html(html_3);
+                    let html_data2 = `
+               $ ${res.total}
+                `
+                    $("#cart-total").html(html_data2);
                     _vm.attr('disabled',false);
                 }
             });
@@ -409,7 +431,17 @@ $(document).on('click',"#remove-from-cart",function(){
                 _vm.attr('disabled',true);
             },
             success:function(res){
-                $("#temp-cart-"+_productId).remove();
+                $("#temp-cart-"+res.id).remove();
+                $("#my-temp-cart-"+res.id).remove();
+                let html_data1 = `
+               ${res.amounts}
+                `
+                 let html_data2 = `
+               $ ${res.total}
+                `
+                $("#cart-len-1").html(html_data1);
+                $("#cart-len-2").html(html_data1);
+                $("#cart-total").html(html_data2);
                 // Append Element
                 
         _vm.attr('disabled',false);

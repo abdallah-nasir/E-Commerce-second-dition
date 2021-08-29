@@ -585,7 +585,7 @@ def capture(request,order_id,id):
             msg.send()
         except:
             pass
-    return redirect(reverse("home:home"))
+    return redirect(reverse("home:success"))
 @login_required()
 def order_confirm(request,id):
     try:
@@ -619,6 +619,7 @@ def order_confirm(request,id):
         msg = EmailMessage(subject="order confirm", body=msg_html, from_email=settings.EMAIL_HOST_USER, to=[order.user.email])
         msg.content_subtype = "html"  # Main content is now text/html
         msg.send()   
+        return redirect(reverse("home:success"))
     try:
         accept = AcceptAPI(API_KEY)
         trans=accept.inquire_transaction(merchant_order_id=order.id,order_id=order.track_number)
@@ -638,9 +639,10 @@ def order_confirm(request,id):
             msg = EmailMessage(subject="order confirm", body=msg_html, from_email=settings.EMAIL_HOST_USER, to=[order.user.email])
             msg.content_subtype = "html"  # Main content is now text/html
             msg.send()
-            return redirect(reverse("home:home"))
+            return redirect(reverse("home:success"))
     except:    
         pass
+    payment_token=None
     if order.payments == "Credit / Debit Card":
         convert=order.converter()
         url_1="https://accept.paymob.com/api/auth/tokens"
@@ -1641,6 +1643,7 @@ def add_to_cart(request):
 
 def cart_quantity_add(request):
     try:
+        device=request.COOKIES["device"]
         id=request.GET["id"]
         product_cart=Product_Cart.objects.get(id=id)
         print(id)
@@ -1651,30 +1654,39 @@ def cart_quantity_add(request):
     if product_cart.quantity >= 10:
         messages.error(request,"you have reached the maximum quantity")
         return redirect(reverse("home:cart"))
+    if request.user.is_authenticated:
+        cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False).latest("modified_date")
+    else:
+        cart=Cart.objects.filter(device=device,ordered=True,delivered=False).latest("modified_date")
     if request.is_ajax():
         print("ajax")
         product_cart.quantity +=1
         product_cart.save()
-        data={"id":product_cart.id,"quantity":product_cart.quantity}
+        data={"id":product_cart.id,"total":cart.before_discount(),"price":product_cart.product_price_individual(),"quantity":product_cart.quantity}
         # response_content=product_cart
         return JsonResponse(data)   
     return redirect(reverse("home:cart"))
     
 def cart_quantity_remove(request):
     try:
+        device=request.COOKIES["device"]
         id=request.GET["id"]
         product_cart=Product_Cart.objects.get(id=id)
-        print(id)
+        
     except:
         print("passed")
         messages.error(request,"invalid data")
         return redirect(reverse("home:cart"))
+    if request.user.is_authenticated:
+        cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False).latest("modified_date")
+    else:
+        cart=Cart.objects.filter(device=device,ordered=True,delivered=False).latest("modified_date")
     if request.is_ajax():
         product_cart.quantity -=1
         product_cart.save()
         if product_cart.quantity <= 0:
             product_cart.delete()
-        data={"id":product_cart.id,"quantity":product_cart.quantity}
+        data={"id":product_cart.id,"total":cart.before_discount(),"price":product_cart.product_price_individual(),"quantity":product_cart.quantity}
         return JsonResponse(data)   
 
     return redirect(reverse("home:cart"))
@@ -1852,7 +1864,6 @@ def quick_add(request,id):
             messages.error(request,"invalid data")
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-from bs4 import BeautifulSoup as bss4  
 import csv    
 def test(request):   
     # url=requests.get("https://deals.souq.com/eg-en/computers/c/13414")
@@ -1904,7 +1915,10 @@ def test(request):
     #     product.save()     
     context={}       
     return render(request,"test.html",context)
-  
+
+def success(request):
+    return render(request,"success.html")
+
 def faq(request):
     questions=FAQ.objects.all()
     context={"questions":questions}
@@ -1946,31 +1960,32 @@ def my_custom_page_not_found_view(request, exception, template_name="404.html"):
     response.status_code = 404
     return response
   
-    return response
+ 
 
 def my_custom_error_view(request, template_name="404.html"):
     response = render(request,template_name)
     response.status_code = 500
     return response
      
-    return response
 def my_custom_permission_denied_view(request, exception, template_name="404.html"):
     response = render(template_name)
     response.status_code = 403
     return response
 
-    return response
-
+   
 def my_custom_bad_request_view(request, exception, template_name="404.html"):
     response = render(template_name)
     response.status_code = 400
     return response
+from django.contrib.auth.decorators import user_passes_test
 
+@user_passes_test(lambda u: u.is_superuser)
 def dashboard(request):   
-    products=Product.objects.all()
+    products=Product.objects.all()  
     context={"products":products}
     return render(request,"dashboard/home.html",context)
-        
+
+@user_passes_test(lambda u: u.is_superuser)
 def add_products(request):
     form=ProductForm(request.POST or None,request.FILES or None)
     if form.is_valid():
@@ -2000,7 +2015,7 @@ def add_products(request):
 
     context={"form":form}
     return render(request,"dashboard/products_add.html",context)
-
+@user_passes_test(lambda u: u.is_superuser)
 def modify_product(request,id):
     product=get_object_or_404(Product,id=id)
     form=ProductForm(request.POST or None ,request.FILES or None,instance=product)
@@ -2008,16 +2023,17 @@ def modify_product(request,id):
         form.save()
     context={"form":form,'product':product}
     return render(request,"dashboard/product_modify.html",context)
-
+@user_passes_test(lambda u: u.is_superuser)
 def delete_product(request,id):
     product=get_object_or_404(Product,id=id)
     product.delete()
     return redirect(reverse("home:dashboard"))
-
+@user_passes_test(lambda u: u.is_superuser)
 def deals(request):
     deals=Deals.objects.all()
     context={"deals":deals}
     return render(request,"dashboard/deals.html",context)
+@user_passes_test(lambda u: u.is_superuser)
 def deals_add(request):
     if len(Deals.objects.filter(expired=False)) >= 2:
         messages.error(request,"maximum 2 Deals ")
@@ -2028,16 +2044,16 @@ def deals_add(request):
         return redirect(reverse("home:deals"))
     context={"form":form}
     return render(request,"dashboard/deals_add.html",context)
-
+@user_passes_test(lambda u: u.is_superuser)
 def deals_delete(request,id):
     deals=Deals.objects.get(id=id)
     deals.delete()
     return redirect(reverse("home:deals"))
-
+@user_passes_test(lambda u: u.is_superuser)
 def category_dash(request):
     category=Category.objects.all()
     return render(request,"dashboard/category.html",{"category":category})
-    
+@user_passes_test(lambda u: u.is_superuser)   
 def category_add(request):
     form =CategoryForm(request.POST or None)
     if form.is_valid():
@@ -2045,16 +2061,16 @@ def category_add(request):
         return redirect(reverse("home:category"))
     context={"form":form}
     return render(request,"dashboard/category_add.html",context)
-
+@user_passes_test(lambda u: u.is_superuser)
 def category_delete(request,id):
     category=Category.objects.get(id=id)
     category.delete()
     return redirect(reverse("home:category"))
-
+@user_passes_test(lambda u: u.is_superuser)
 def dashboard_branch(request):
     branch=Branch.objects.all()
     return render(request,"dashboard/branch.html",{"branch":branch})
-    
+@user_passes_test(lambda u: u.is_superuser)   
 def branch_add(request):
     form =BranchForm(request.POST or None)
     if form.is_valid():
@@ -2062,16 +2078,16 @@ def branch_add(request):
         return redirect(reverse("home:branch"))
     context={"form":form}
     return render(request,"dashboard/branch_add.html",context)
-
+@user_passes_test(lambda u: u.is_superuser)
 def branch_delete(request,id):
     branch=Branch.objects.get(id=id)
     branch.delete()       
     return redirect(reverse("home:branch"))
-
+@user_passes_test(lambda u: u.is_superuser)
 def manu(request):
     manu=Manufacturer.objects.all()
     return render(request,"dashboard/manu.html",{"manu":manu})
-    
+@user_passes_test(lambda u: u.is_superuser) 
 def manu_add(request):
     form =ManuForm(request.POST or None)
     if form.is_valid():
@@ -2079,12 +2095,12 @@ def manu_add(request):
         return redirect(reverse("home:manu"))
     context={"form":form}
     return render(request,"dashboard/manu_add.html",context)
-
+@user_passes_test(lambda u: u.is_superuser)
 def manu_delete(request,id):
     manu=Manufacturer.objects.get(id=id)
     manu.delete()       
     return redirect(reverse("home:manu"))
-
+@user_passes_test(lambda u: u.is_superuser)
 def dash_orders(request):
     orders=Order.objects.all().order_by("statue")
     canceled=Order.objects.filter(statue="canceled").count()
@@ -2102,7 +2118,7 @@ def dash_orders(request):
             orders=Order.objects.filter(statue="shipped")  
     context={"orders":orders,"canceled":canceled,"show":show}   
     return render(request,"dashboard/orders.html",context)
-   
+@user_passes_test(lambda u: u.is_superuser)  
 def dash_order_details(request,id):
     try:
         orders=Order.objects.get(id=id)

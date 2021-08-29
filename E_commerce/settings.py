@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import django_heroku
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,10 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^yvdhx^w5$jah)-p!vbbqy5vf9qco&ge)p0m^nr_p%$=4&6i56'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS =["127.0.0.1","localhost","ludus-ecommerce.herokuapp.com"]
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD =True
+SESSION_COOKIE_PATH = '/;HttpOnly'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+CSRF_COOKIE_SECURE = True 
+SECURE_REFERRER_POLICY = 'same-origin'
+SECURE_HSTS_INCLUDE_SUBDOMAINS =True
 
 # Application definition
 
@@ -67,6 +77,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware"
+
 ]
 
 ROOT_URLCONF = 'E_commerce.urls'
@@ -102,7 +114,7 @@ WSGI_APPLICATION = 'E_commerce.wsgi.application'
       
 #cities
 # CITIES_LIGHT_APP_NAME = 'STORE'
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ["aec","en"]
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ["en","fr"]
 CITIES_LIGHT_INCLUDE_COUNTRIES = ["EG","AE","SA"]
 CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
 
@@ -196,9 +208,7 @@ AUTHENTICATION_BACKENDS = [
     #      ...
 ]
 
-# payment keys
-CLIENT_ID="AUVCElDtljJUDVWukP9yrdedNic0J1B1XY1MtNfPhqxQU47F1F1A7C6ixKabvUCRZCTpkFihHBaTPR-F"
-CLIENT_SECRET="ENepKuG3KheVNsthJjDS7B2amndWXWwaAQz3PJj8Ddi6O-QFQenD9frvveoUdGLrUdJUQ0DlzVap_b9Z"
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -209,7 +219,16 @@ DATABASES = {
     }
 }
 
-
+DATABASES={
+    "default":{
+        "ENGINE":"django.db.backends.postgresql_psycopg2",
+        "NAME":"dfrp3v06pht08j",
+        "USER":"oabycrvegvgibt",
+        "PASSWORD":"f032565b0a946426e24644c60b91f8cc4be4ef2476cbc689c2cc2f2bae16ca35",
+        "HOST":"ec2-54-159-35-35.compute-1.amazonaws.com",
+        "PORT":"5432"
+    }     
+}
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -262,6 +281,13 @@ STATICFILES_DIRS=[
 MEDIA_URL="/media/"
 
 MEDIA_ROOT= BASE_DIR/"media"
+
+STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
+django_heroku.settings(locals())
+#for translation
+LOCALE_PATHS=(   
+    os.path.join(BASE_DIR,"locale/"),
+             )
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

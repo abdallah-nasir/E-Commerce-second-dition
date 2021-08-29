@@ -19,7 +19,7 @@ django-filter==2.4.0
 django-js-asset==1.2.2
 django-model-utils==4.1.1
 django-paypal==1.1.1
-django-paypal2==1.0.2
+
 google-currency==1.0.9
 idna==3.2
 oauthlib==3.1.1

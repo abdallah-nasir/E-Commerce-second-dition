@@ -357,10 +357,12 @@
 
                                             <a href="{% url 'home:faq' %}">FAQ</a>
                                         </li>
+                                        {% if request.user.is_superuser %}
                                            <li>
 
                                             <a href="{% url 'home:dashboard' %}">DASHBOARD</a>
                                         </li>
+                                        {% endif %}
 
                                 </ul>
                                 <!--====== End - List ======-->
@@ -428,9 +430,9 @@
 
                                                                 <a href="{% url 'home:this_product' id=i.products.id %}">{{i.products.name|title}}</a></span>
 
-                                                            <span class="mini-product__quantity">{{i.quantity}} x</span>
+                                                            <span id="mini-quantity-{{i.id}}" class="mini-product__quantity">{{i.quantity}} x</span>
 
-                                                            <span class="mini-product__price">${{i.product_price_individual}}</span></div>
+                                                            <span id="mini-price-{{i.id}}" class="mini-product__price">${{i.product_price_individual}}</span></div>
                                                     </div>
                                                     <input class="total-remove-cart-{{i.id}}" type="hidden" value="{{i.id}}">
 
@@ -721,7 +723,7 @@ ga('send', 'pageview')
             },
             success:function(res){
                 $("#temp-cart-"+_productId).remove();
-              
+                $("#my-temp-cart-"+_productId).remove();
                let html_data1 = `
                ${res.amounts}
                 `
