@@ -58,7 +58,17 @@
        }
        document.cookie ='device=' + device + ";domain=;path=/"
        </script>  
-    
+    <style type="text/css">
+        #dismis{
+            background-color:#fff;
+            color:#ff4500;
+        } 
+        #dismis:hover{
+            background-color:#ff4500;
+            color:#fff;
+        }
+    </style>
+
 </head>
 <body class="config">
     <div class="preloader is-active">
@@ -178,13 +188,9 @@
                                                         <a class="u-c-brand">ENGLISH</a></li>
                                                     <li>
 
-                                                        <a>ARABIC</a></li>
-                                                    <li>
-
-                                                        <a>FRANCAIS</a></li>
-                                                    <li>
-
-                                                        <a>ESPANOL</a></li>
+                                                        <a>ARABIC (Comming Soon)</a></li>
+                                                    
+                                                 
                                                 </ul>
                                                 <!--====== End - Dropdown ======-->
                                             </li>
@@ -192,7 +198,7 @@
 
                                                 <a>Currency<i class="fas fa-angle-down u-s-m-l-6"></i></a>
 
-                                                <!--====== Dropdown ======-->
+                                              
 
                                                 <span class="js-menu-toggle"></span>
                                                 <ul style="width:225px">
@@ -206,7 +212,7 @@
 
                                                         <a>€ - EURO</a></li>
                                                 </ul>
-                                                <!--====== End - Dropdown ======-->
+                                               
                                             </li>
                                         </ul>
                                         <!--====== End - Dropdown ======-->
@@ -290,7 +296,7 @@
                                                                 <li class="mega-list-title">
 
                                                                     <a href="shop-side-version-2.html">{{b.child.upper}}</a></li>
-                                                                    {% for c in b.my_products|slice:"0:6" %}
+                                                                    {% for c in i.my_products|slice:"0:6" %}
                                                                 <li>
 
                                                                     <a href="{% url 'home:this_product' id=c.id %}">{{c.name|title}}</a>
@@ -487,13 +493,13 @@
                         <span class="outer-footer__content-title">Contact Us</span>
                         <div class="outer-footer__text-wrap"><i class="fas fa-home"></i>
 
-                            <span>4247 Ashford Drive Virginia VA-20006 USA</span></div>
+                            <span>Hurghada , Egypt</span></div>
                         <div class="outer-footer__text-wrap"><i class="fas fa-phone-volume"></i>
 
-                            <span>(+0) 900 901 904</span></div>
+                            <span>(+0) 1064675906</span></div>
                         <div class="outer-footer__text-wrap"><i class="far fa-envelope"></i>
 
-                            <span>contact@domain.com</span></div>
+                            <span>abdallah.nasir@ymail.com</span></div>
                         <div class="outer-footer__social">
                             <ul>
                                 <li>
@@ -525,19 +531,26 @@
                                     <ul>
                                         <li>
 
-                                            <a href="cart.html">Cart</a></li>
+                                            <a href="{% url 'home:cart' %}">Cart</a></li>
+                                        
+                                        <li>
+                                            {% if request.user.is_authenticated %}
+                                <a href=" {% url 'home:profile' slug=profile.user %}">Account</a>
+                                            {% else %}
+                                            <a href=" {% url 'account_login'  %}">Account</a>
+
+                                            {% endif %}
+                                        
+                                        </li>
                                         <li>
 
-                                            <a href="dashboard.html">Account</a></li>
+                                            <a href="{% url 'home:products' %}">Manufacturer</a></li>
                                         <li>
 
-                                            <a href="shop-side-version-2.html">Manufacturer</a></li>
+                                            <a href="{% url 'home:products' %}">Finance</a></li>
                                         <li>
 
-                                            <a href="dash-payment-option.html">Finance</a></li>
-                                        <li>
-
-                                            <a href="shop-side-version-2.html">Shop</a></li>
+                                            <a href="{% url 'home:products' %}">Shop</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -550,19 +563,17 @@
                                     <ul>
                                         <li>
 
-                                            <a href="about.html">About us</a></li>
+                                            <a href="{% url 'home:about' %}">About us</a></li>
                                         <li>
 
-                                            <a href="contact.html">Contact Us</a></li>
+                                            <a href="{% url 'home:contact' %}">Contact Us</a></li>
                                         <li>
 
-                                            <a href="index.html">Sitemap</a></li>
+                                            <a href="{% url 'home:contact' %}">Sitemap</a></li>
+                                       
                                         <li>
 
-                                            <a href="dash-my-order.html">Delivery</a></li>
-                                        <li>
-
-                                            <a href="shop-side-version-2.html">Store</a></li>
+                                            <a href="{% url 'home:products' %}">Store</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -612,9 +623,9 @@
                     <div class="lower-footer__content">
                         <div class="lower-footer__copyright">
 
-                            <span>Copyright © 2018</span>
+                            <span>Copyright © 2021</span>
 
-                            <a href="index.html">Reshop</a>
+                            <a href="mailto:abdallah.nasir@ymail.com">Abdallah Nasir</a>
 
                             <span>All Right Reserved</span></div>
                         <div class="lower-footer__payment">

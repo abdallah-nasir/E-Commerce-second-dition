@@ -400,7 +400,7 @@ color:#ff4500;
             
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="{% url 'home:this_product' id=i.id %}">
                                                      
-                                                        <img class="aspect__img" src="{{i.image.first.image.url}}" alt=""></a>
+                                                        <img class="aspect__img" src="{{i.image.first.image}}" alt=""></a>
                                                        
                                                     <div class="product-m__quick-look">
             
@@ -495,7 +495,7 @@ color:#ff4500;
                                         <div id="js-product-detail-modal">
                                             <div>
 
-                                                <img class="u-img-fluid" src="{{i.image.first.image.url}}" alt=""></div>
+                                                <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
                                           
                                         </div>
                                     </div>
@@ -576,7 +576,7 @@ color:#ff4500;
 
                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                                <a href="signin.html">Email me When the price drops</a>
+                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
 
                                                 <span class="pd-detail__click-count">(20)</span></span></div>
                                     </div>
@@ -617,7 +617,10 @@ color:#ff4500;
                                                 </div>
                                                 <div class="u-s-m-b-15">
 
-                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button></div>
+                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
+                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">Close</button>
+
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -661,7 +664,7 @@ color:#ff4500;
                                 <span>Item is added successfully!</span></div>
                             <div class="success__img-wrap">
 
-                                <img class="u-img-fluid" src="{{i.image.first.image.url}}" alt=""></div>
+                                <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
                             <div class="success__info-wrap">
 
                                 <span class="success__name">{{i.name|title}}</span>

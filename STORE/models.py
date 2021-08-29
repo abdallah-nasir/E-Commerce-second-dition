@@ -44,7 +44,7 @@ class Category(models.Model):
         branch=Branch.objects.filter(name__name=self.name)   
         return branch
     def my_products(self):       
-        product=Product.objects.filter(branch__id=self.id)
+        product=Product.objects.filter(category__id=self.id)[0:6]
         return product
 
     def __str__(self):                                  

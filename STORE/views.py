@@ -163,7 +163,7 @@ def home(request):
     trend=Product.objects.order_by("-stars")[0:12]
     arrivals=Product.objects.order_by("-id")[0:8]
     category=Category.objects.all()   
-    most_buy=Product.objects.order_by("-most_buy")[0:3]
+    most_buy=Product.objects.order_by("-most_buy")[0:4]
     for i in Deals.objects.filter(expired=False):
         if i.expire_date.date() < date.today() or i.expire_date.date() == date.today():
             i.expired=True
@@ -320,7 +320,7 @@ def products(request):
 def this_product(request,id):
 
     product=get_object_or_404(Product,id=id)
-    same=Product.objects.filter(branch=product.branch,name__icontains=product.name).order_by("-id")[0:4]
+    same=Product.objects.filter(category=product.category).order_by("-id")[0:4]
     reviews=Rate.objects.filter(product__id=product.id) #specific rate for particular product
     form=RateForm(request.POST or None)
     comments=request.POST.get("comments")
@@ -1588,11 +1588,14 @@ def add_to_cart(request):
             messages.success(request,"Item Added Successfully")    
             for i in product_cart.products.image.all():
                 image_url=i.image
-            print(image_url)    
+            image=product_cart.products.image.first().image
+    
+                      
+    
             data={"id":product_cart.id,"amounts":cart.order_product_length(),
                 "product_category":product_cart.products.category.name,"product_name":product_cart.products.name,
                 "product_price":product_cart.product_price_individual(),"product_quantity":product_cart.quantity,
-                "product_image":json.dumps(image_url),"product_url":product_cart.get_url(),
+                "product_image":str(image),"product_url":product_cart.get_url(),
                 "product_category_url":product_cart.get_category_url(),"total":cart.before_discount(),
                 "product_remove":product_cart.get_cart_remove_url()} 
             print(data)   
@@ -1621,12 +1624,13 @@ def add_to_cart(request):
             product_cart.save()    
             cart.save()
             print("cart anonymous")         
-            print(product_cart.products.image.first().url)
+            image=product_cart.products.image.first().image
+
             messages.success(request,"Item Added Successfully") 
             data={"id":product_cart.id,"amounts":cart.order_product_length(),
                 "product_category":product_cart.products.category.name,"product_name":product_cart.products.name,
                 "product_price":product_cart.product_price_individual(),"product_quantity":product_cart.quantity,
-                "product_image":product_cart.products.image.first(),"product_url":product_cart.get_url(),
+                "product_image":str(image),"product_url":product_cart.get_url(),
                 "product_category_url":product_cart.get_category_url(),"total":cart.before_discount(),
                 "product_remove":product_cart.get_cart_remove_url()} 
             print(data)   
@@ -1850,15 +1854,15 @@ def quick_add(request,id):
 
 from bs4 import BeautifulSoup as bss4  
 import csv    
-def test(request):     
-    url=requests.get("https://deals.souq.com/eg-en/computers/c/13414")
-    details_url=requests.get("https://egypt.souq.com/eg-en/lenovo-yoga-9-14itl5-laptop-intel-core-i7-1185g7-14-inch-uhd-1tb-ssd-16-gb-ram-integrated-intel-iris-xe-graphics-windows-shadow-black-14968700075/u/")
-    souq=bss4(url.text,"lxml")
-    products=souq.findAll("div",{"class":"column column-block block-grid-large"})
-    details=bss4(details_url.text,"lxml")
-    pro__details=details.findAll("div",{"class":"item-details-mini clearfix"})
-    for i in Images.objects.all():
-        i.save()
+def test(request):   
+    # url=requests.get("https://deals.souq.com/eg-en/computers/c/13414")
+    # details_url=requests.get("https://egypt.souq.com/eg-en/lenovo-yoga-9-14itl5-laptop-intel-core-i7-1185g7-14-inch-uhd-1tb-ssd-16-gb-ram-integrated-intel-iris-xe-graphics-windows-shadow-black-14968700075/u/")
+    # souq=bss4(url.text,"lxml")
+    # products=souq.findAll("div",{"class":"column column-block block-grid-large"})
+    # details=bss4(details_url.text,"lxml")
+    # pro__details=details.findAll("div",{"class":"item-details-mini clearfix"})
+    # for i in Images.objects.all():
+    #     i.save()
     # print(pro__details)    
     # with open("details.csv","w",newline="") as file:
         # writer =csv.writer(file)     
@@ -1882,22 +1886,22 @@ def test(request):
    
     #         print(details_url)
      
-    category_url=requests.get("https://fakestoreapi.com/products/categories")
-    product_url=requests.get('https://fakestoreapi.com/products')
-    products=product_url.json()
-    categories=category_url.json()
+    # category_url=requests.get("https://fakestoreapi.com/products/categories")
+    # product_url=requests.get('https://fakestoreapi.com/products')
+    # products=product_url.json()
+    # categories=category_url.json()
    
-    for i in products:
-        for c in Category.objects.all():
-            if c.name == i["category"]:
-                cat=c
-        for b in Branch.objects.all():
-            if b.child == i["category"]: 
-                child=b
-        product= Product.objects.create(name=i["title"],price=i["price"],branch=b,stock=100,category=cat,details=i["description"])
-        images=Images.objects.create(image=i["image"],product_num=product.id)
-        product.image.add(images)
-        product.save()     
+    # for i in products:
+    #     for c in Category.objects.all():
+    #         if c.name == i["category"]:
+    #             cat=c
+    #     for b in Branch.objects.all():
+    #         if b.child == i["category"]: 
+    #             child=b
+    #     product= Product.objects.create(name=i["title"],price=i["price"],branch=b,stock=100,category=cat,details=i["description"])
+    #     images=Images.objects.create(image=i["image"],product_num=product.id)
+    #     product.image.add(images)
+    #     product.save()     
     context={}       
     return render(request,"test.html",context)
   

@@ -56,7 +56,7 @@
                                     <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">{{category}}</h1>
+                                                <h1 class="shop-w__h">{{category.name.upper}}</h1>
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-category" data-toggle="collapse"></span>
                                             </div>
@@ -66,9 +66,9 @@
                                                     
                                                     <li class="has-list">
 
-                                                        <a href="{% url 'home:branch_filter' slug=i.child %}">{{i.child}}</a>
+                                                        <a href="{% url 'home:branch_filter' slug=i.child %}">{{i.child|title}}</a>
 
-                                                        <span class="category-list__text u-s-m-l-6">({{i.my_products.count}})</span>
+                                                        <span class="category-list__text u-s-m-l-6">({{category.my_products.count}})</span>
 
                                                         <!-- <span class="js-shop-category-span is-expanded fas fa-plus u-s-m-l-6"></span> -->
                                                        
@@ -209,7 +209,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="u-s-m-b-30">
+                                    <!-- <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
                                                 <h1 class="shop-w__h">MANUFACTURER</h1>
@@ -237,9 +237,9 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     
-                         <div class="u-s-m-b-30"> 
+                         <!-- <div class="u-s-m-b-30"> 
                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
                                                 <h1 class="shop-w__h">SIZE</h1>
@@ -272,7 +272,7 @@
 
                                            
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -358,7 +358,7 @@
             
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="{% url 'home:this_product' id=i.id %}">
                                                      
-                                                        <img class="aspect__img" src="{{i.image.first.image.url}}" alt=""></a>
+                                                        <img class="aspect__img" src="{{i.image.first.image}}" alt=""></a>
                                                        
                                                     <div class="product-m__quick-look">
             
@@ -455,7 +455,7 @@
                                         <div id="js-product-detail-modal">
                                             <div>
 
-                                                <img class="u-img-fluid" src="{{i.image.first.image.url}}" alt=""></div>
+                                                <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
                                           
                                         </div>
                                     </div>
@@ -577,7 +577,9 @@
                                                 </div>
                                                 <div class="u-s-m-b-15">
 
-                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button></div>
+                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
+                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">Close</button>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -621,7 +623,7 @@
                                 <span>Item is added successfully!</span></div>
                             <div class="success__img-wrap">
 
-                                <img class="u-img-fluid" src="{{i.image.first.image.url}}" alt=""></div>
+                                <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
                             <div class="success__info-wrap">
 
                                 <span class="success__name">{{i.name|title}}</span>

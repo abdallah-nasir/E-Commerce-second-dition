@@ -62,7 +62,7 @@ padding-right:10px;
                                 <div class="slider-fouc pd-wrap">
                                     <div id="pd-o-initiate">
                                         {% for i in product.image.all %}
-                                        <div class="pd-o-img-wrap" data-src="{{i.image.url}}"><img class="u-img-fluid" src="{{i.image.url}}" data-zoom-image="{{i.image.url}}" alt=""></div>
+                                        <div class="pd-o-img-wrap" data-src="{{i.image}}"><img class="u-img-fluid" src="{{i.image}}" data-zoom-image="{{i.image}}" alt=""></div>
                                         {% endfor %}
 
                                     </div>
@@ -73,7 +73,7 @@ padding-right:10px;
                                     <div class="slider-fouc">
                                         <div id="pd-o-thumbnail">
                                             {% for i in product.image.all %}
-                                            <div><img class="u-img-fluid" src="{{i.image.url}}" alt=""></div>
+                                            <div><img class="u-img-fluid" src="{{i.image}}" alt=""></div>
                                             
                                                     {% endfor %}
 
@@ -148,7 +148,7 @@ padding-right:10px;
 
                                         <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                            <a href="signin.html">Email me When the price drops</a>
+                                            <a href="{% url 'home:home' %}">Email me When the price drops</a>
 
                                             <span class="pd-detail__click-count">(20)</span></span></div>
                                 </div>
@@ -172,9 +172,9 @@ padding-right:10px;
                                     </ul>
                                 </div>
                                 <div class="u-s-m-b-15">
-                                    <form id="add_form" class="pd-detail__form" action="{% url 'home:quantity_add' id=product.id %}" method="POST">
+                                    <form id="add_form" class="pd-detail__form" action="{% url 'home:quick_add' id=product.id %}" method="POST">
                                         {% csrf_token %}
-                                        <div class="u-s-m-b-15">
+                                        <!-- <div class="u-s-m-b-15">
 
                                             <span class="pd-detail__label u-s-m-b-8">Color:</span>
                                             <div class="pd-detail__color">
@@ -187,8 +187,8 @@ padding-right:10px;
                                                 </div>
                                               {% endfor %}
                                             </div>
-                                        </div>
-                                        <div class="u-s-m-b-15">
+                                        </div> -->
+                                        <!-- <div class="u-s-m-b-15">
 
                                             <span class="pd-detail__label u-s-m-b-8">Size:</span>
                                             <div class="pd-detail__size">
@@ -202,7 +202,7 @@ padding-right:10px;
                                                 </div>
                                               {% endfor %}
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="pd-detail-inline-2">
                                             <div class="u-s-m-b-15">
 
@@ -218,7 +218,7 @@ padding-right:10px;
                                             </div>
                                             <div class="u-s-m-b-15">
 
-                                                <button class="btn btn--e-brand-b-2" id="add_to_cart" type="submit">Add to Cart</button></div>
+                                                <button  class="btn btn--e-brand-b-2" id="ajax-product" type="submit">Add to Cart</button></div>
                                         </div>
                                     </form>
 
@@ -700,7 +700,7 @@ padding-right:10px;
                                               <div id="js-product-detail-modal">
                                                   <div>
           
-                                                      <img class="u-img-fluid" src="{{i.image.first.image.url}}" alt=""></div>
+                                                      <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
                                                 
                                               </div>
                                           </div>
@@ -779,7 +779,7 @@ padding-right:10px;
           
                                                   <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
           
-                                                      <a href="signin.html">Email me When the price drops</a>
+                                                      <a href="{% url 'home:home' %}">Email me When the price drops</a>
           
                                                       <span class="pd-detail__click-count">(20)</span></span></div>
                                           </div>
@@ -864,7 +864,7 @@ padding-right:10px;
                                       <span>Item is added successfully!</span></div>
                                   <div class="success__img-wrap">
           
-                                      <img class="u-img-fluid" src="{{i.image.first.image.url}}" alt=""></div>
+                                      <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
                                   <div class="success__info-wrap">
           
                                       <span class="success__name">{{i.name|title}}</span>
@@ -907,7 +907,7 @@ padding-right:10px;
 
                                             <a class="aspect aspect--bg-grey aspect--square u-d-block" href="{% url 'home:this_product' id=i.id %}">
 
-                                                <img class="aspect__img" src="{{i.image.first.image.url}}" alt=""></a>
+                                                <img class="aspect__img" src="{{i.image.first.image}}" alt=""></a>
                                             <div class="product-o__action-wrap">
                                                 <ul class="product-o__action-list">
                                                     <li>
@@ -934,7 +934,7 @@ padding-right:10px;
                                                         </li>
                                                     <li>
 
-                                                        <a href="signin.html" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                        <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -945,7 +945,7 @@ padding-right:10px;
 
                                         <span class="product-o__name">
 
-                                            <a href="product-detail.html">{{i.name|title}}</a></span>
+                                            <a href="{% url 'home:this_product' id=i.id %}">{{i.name|title}}</a></span>
                                         <div class="product-o__rating gl-rating-style"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
 
                                             <span class="product-o__review">({{i.comments}}) {{i.stars}}</span></div>
@@ -1260,6 +1260,9 @@ $(document).on('click',"#wishlist-same",function(){
         });
         // End
 });
+
+
+
   </script>
 
  

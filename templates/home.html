@@ -246,7 +246,7 @@ color:#ff4500;
                                                                 </li>
                                                             <li>
 
-                                                                <a href="signin.html" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                                <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -394,7 +394,7 @@ color:#ff4500;
                                 
                                                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
                                 
-                                                                                <a href="signin.html">Email me When the price drops</a>
+                                                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
                                 
                                                                                 <span class="pd-detail__click-count">(20)</span></span></div>
                                                                     </div>
@@ -595,7 +595,7 @@ color:#ff4500;
                                                         </li>
                                                 <li>
 
-                                                    <a href="signin.html" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                    <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -744,7 +744,7 @@ color:#ff4500;
 
                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                                <a href="signin.html">Email me When the price drops</a>
+                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
 
                                                 <span class="pd-detail__click-count">(20)</span></span></div>
                                     </div>
@@ -933,7 +933,7 @@ color:#ff4500;
                                                     </li>
                                                     <li>
 
-                                                        <a href="signin.html" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                        <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1091,7 +1091,7 @@ color:#ff4500;
 
                                     <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                        <a href="signin.html">Email me When the price drops</a>
+                                        <a href="{% url 'home:home' %}">Email me When the price drops</a>
 
                                         <span class="pd-detail__click-count">(20)</span></span></div>
                             </div>
@@ -1272,7 +1272,7 @@ color:#ff4500;
                 <div class="section__content">
                     <div class="container">
                         <div class="row">
-                            {% for i in arrivals|slice:"0:5" %}
+                            {% for i in arrivals|slice:"0:4" %}
                             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30">
                                 <div class="product-o product-o--hover-on u-h-100">
                                     <div class="product-o__wrap">
@@ -1307,7 +1307,7 @@ color:#ff4500;
                                                     </li>
                                                 <li>
 
-                                                    <a href="signin.html" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                    <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1454,7 +1454,7 @@ color:#ff4500;
 
                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                                <a href="signin.html">Email me When the price drops</a>
+                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
 
                                                 <span class="pd-detail__click-count">(20)</span></span></div>
                                     </div>
@@ -1634,7 +1634,7 @@ color:#ff4500;
                                 <a class="promotion" href="{% url 'home:products' %}">
                                     <div class="aspect aspect--bg-grey aspect--square">
 
-                                        <img class="aspect__img promotion__img" src="{% static 'images/promo/promo-img-3.jpg' %}" alt=""></div>
+                                        <img class="aspect__img promotion__img" src="{% static 'images/promo/promo-img-2.jpg' %}" alt=""></div>
                                     <div class="promotion__content">
                                         <div class="promotion__text-wrap">
                                             <div class="promotion__text-1">
@@ -1696,7 +1696,7 @@ color:#ff4500;
 
                                     <span class="column-product__title u-c-secondary u-s-m-b-25">MOST BUY</span>
                                     <ul class="column-product__list">
-                                        {% for i in paid %}
+                                        {% for i in paid|slice:"0:4" %}
                                         <li class="column-product__item">
                                             <div class="product-l">
                                                 <div class="product-l__img-wrap">
@@ -1712,7 +1712,7 @@ color:#ff4500;
 
                                                     <span class="product-l__name">
 
-                                                        <a href="product-detail.html">{{i.name|title}}</a></span>
+                                                        <a href="{% url 'home:this_product' id=i.id %}">{{i.name|title}}</a></span>
 
                                                     <span class="product-l__price">${{i.discount}}
 
@@ -1729,12 +1729,12 @@ color:#ff4500;
 
                                     <span class="column-product__title u-c-secondary u-s-m-b-25">FLASH PRODUCTS</span>
                                     <ul class="column-product__list">
-                                        {% for i in arrivals %}
+                                        {% for i in arrivals|slice:"0:4" %}
                                         <li class="column-product__item">
                                             <div class="product-l">
                                                 <div class="product-l__img-wrap">
 
-                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="{% url 'home:this_product' id=i.id %}">
 
                                                         <img class="aspect__img" src="{{i.image.first.image}}" alt=""></a></div>
                                                 <div class="product-l__info-wrap">
@@ -1819,9 +1819,9 @@ color:#ff4500;
 
 
             <!--====== Section 10 ======-->
-            <div class="u-s-p-b-60">
+            <!-- <div class="u-s-p-b-60">
 
-                <!--====== Section Intro ======-->
+              
                 <div class="section__intro u-s-m-b-46">
                     <div class="container">
                         <div class="row">
@@ -1835,10 +1835,10 @@ color:#ff4500;
                         </div>
                     </div>
                 </div>
-                <!--====== End - Section Intro ======-->
+              
 
 
-                <!--====== Section Content ======-->
+     
                 <div class="section__content">
                     <div class="container">
                         <div class="row">
@@ -1846,12 +1846,12 @@ color:#ff4500;
                                 <div class="bp-mini bp-mini--img u-h-100">
                                     <div class="bp-mini__thumbnail">
 
-                                        <!--====== Image Code ======-->
+                                     
 
                                         <a class="aspect aspect--bg-grey aspect--1366-768 u-d-block" href="blog-detail.html">
 
                                             <img class="aspect__img" src="{% static 'images/blog/post-2.jpg' %}" alt=""></a>
-                                        <!--====== End - Image Code ======-->
+                                       
                                     </div>
                                     <div class="bp-mini__content">
                                         <div class="bp-mini__stat">
@@ -1905,12 +1905,12 @@ color:#ff4500;
                                 <div class="bp-mini bp-mini--img u-h-100">
                                     <div class="bp-mini__thumbnail">
 
-                                        <!--====== Image Code ======-->
+                                      
 
                                         <a class="aspect aspect--bg-grey aspect--1366-768 u-d-block" href="blog-detail.html">
 
                                             <img class="aspect__img" src="{% static 'images/blog/post-12.jpg' %}" alt=""></a>
-                                        <!--====== End - Image Code ======-->
+                                      
                                     </div>
                                     <div class="bp-mini__content">
                                         <div class="bp-mini__stat">
@@ -1964,12 +1964,12 @@ color:#ff4500;
                                 <div class="bp-mini bp-mini--img u-h-100">
                                     <div class="bp-mini__thumbnail">
 
-                                        <!--====== Image Code ======-->
+                                        
 
                                         <a class="aspect aspect--bg-grey aspect--1366-768 u-d-block" href="blog-detail.html">
 
                                             <img class="aspect__img" src="{% static 'images/blog/post-5.jpg' %}" alt=""></a>
-                                        <!--====== End - Image Code ======-->
+                                       
                                     </div>
                                     <div class="bp-mini__content">
                                         <div class="bp-mini__stat">
@@ -2022,10 +2022,9 @@ color:#ff4500;
                         </div>
                     </div>
                 </div>
-                <!--====== End - Section Content ======-->
-            </div>
-            <!--====== End - Section 10 ======-->
-
+              
+            </div> -->
+        
 
             <!--====== Section 11 ======-->
             <div class="u-s-p-b-90 u-s-m-b-30">
@@ -2132,32 +2131,32 @@ color:#ff4500;
                             <div class="owl-carousel" id="brand-slider" data-item="5">
                                 <div class="brand-slide">
 
-                                    <a href="shop-side-version-2.html">
+                                    <a href="{% url 'home:products' %}">
 
                                         <img src="{% static 'images/brand/b1.png' %}" alt=""></a></div>
                                 <div class="brand-slide">
 
-                                    <a href="shop-side-version-2.html">
+                                    <a href="{% url 'home:products' %}">
 
                                         <img src="{% static 'images/brand/b2.png' %}" alt=""></a></div>
                                 <div class="brand-slide">
 
-                                    <a href="shop-side-version-2.html">
+                                    <a href="{% url 'home:products' %}">
 
                                         <img src="{% static 'images/brand/b3.png' %}" alt=""></a></div>
                                 <div class="brand-slide">
 
-                                    <a href="shop-side-version-2.html">
+                                    <a href="{% url 'home:products' %}">
 
                                         <img src="{% static 'images/brand/b4.png' %}" alt=""></a></div>
                                 <div class="brand-slide">
 
-                                    <a href="shop-side-version-2.html">
+                                    <a href="{% url 'home:products' %}">
 
                                         <img src="{% static 'images/brand/b5.png' %}" alt=""></a></div>
                                 <div class="brand-slide">
 
-                                    <a href="shop-side-version-2.html">
+                                    <a href="{% url 'home:products' %}">
 
                                         <img src="{% static 'images/brand/b6.png' %}" alt=""></a></div>
                             </div>
@@ -2168,7 +2167,49 @@ color:#ff4500;
                 <!--====== End - Section Content ======-->
             </div>
             <!--====== End - Section 12 ======-->
+  <!--====== Newsletter Subscribe Modal ======-->
+  <div class="modal fade new-l" id="newsletter-modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal--shadow">
 
+            <button class="btn new-l__dismiss fas fa-times" type="button" data-dismiss="modal"></button>
+            <div class="modal-body">
+                <div class="row u-s-m-x-0">
+                    <div class="col-lg-6 new-l__col-1 u-s-p-x-0">
+
+                        <a class="new-l__img-wrap u-d-block" href="{% url 'home:products' %}">
+
+                            <img class="u-img-fluid u-d-block" src="{% static 'images/newsletter/newsletter.jpg' %}" alt=""></a></div>
+                    <div class="col-lg-6 new-l__col-2">
+                        <div class="new-l__section u-s-m-t-30">
+                            <div class="u-s-m-b-8 new-l--center">
+                                <h3 class="new-l__h3">Newsletter</h3>
+                            </div>
+                            <div class="u-s-m-b-30 new-l--center">
+                                <p class="new-l__p1">Subscribe for emails to get the scoop on new arrivals, special sales and more.</p>
+                            </div>
+                            <form class="new-l__form">
+                                <div class="u-s-m-b-15">
+
+                                    <input class="news-l__input" type="text" placeholder="E-mail Address"></div>
+                                <div class="u-s-m-b-15">
+
+                                    <button class="btn btn--e-brand-b-2" type="submit">Subscribe!</button></div>
+                            </form>
+                            <div class="u-s-m-b-15 new-l--center">
+                                <p class="new-l__p2">By Signing up, you agree to receive Reshop offers,<br />promotions and other commercial messages. You may unsubscribe at any time.</p>
+                            </div>
+                            <div class="u-s-m-b-15 new-l--center">
+
+                                <a class="new-l__link" data-dismiss="modal">No Thanks</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--====== End - Newsletter Subscribe Modal ======-->
         <!--====== End - App Content ======-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -2201,7 +2242,7 @@ color:#ff4500;
 
                             <a class="mini-product__link" href="${res.product_url}">
 
-                                <img class="u-img-fluid" src=" ${res.product_image}" alt="${res.product_name}"></a></div>
+                                <img class="u-img-fluid" src="${res.product_image}" alt="${res.product_name}"></a></div>
                         <div class="mini-product__info-wrapper">
 
                             <span class="mini-product__category">
