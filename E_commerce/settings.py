@@ -212,20 +212,15 @@ AUTHENTICATION_BACKENDS = [
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 DATABASES={
     "default":{
         "ENGINE":"django.db.backends.postgresql_psycopg2",
-        "NAME":"dfrp3v06pht08j",
-        "USER":"oabycrvegvgibt",
-        "PASSWORD":"f032565b0a946426e24644c60b91f8cc4be4ef2476cbc689c2cc2f2bae16ca35",
-        "HOST":"ec2-54-159-35-35.compute-1.amazonaws.com",
+        "NAME":"d5q0tc1792lnrq",
+        "USER":"unpdvlifuabtup",
+        "PASSWORD":"210bd775543a6675320306b67e2321dccdec363604f1a554eed9f10eee7f1163",
+        "HOST":"ec2-54-156-151-232.compute-1.amazonaws.com",
         "PORT":"5432"
     }     
 }
