@@ -23,10 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^yvdhx^w5$jah)-p!vbbqy5vf9qco&ge)p0m^nr_p%$=4&6i56'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS =[]
-
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS =["127.0.0.1","localhost","ludus-ecommerce.herokuapp.com"]
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD =True
+SESSION_COOKIE_PATH = '/;HttpOnly'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+CSRF_COOKIE_SECURE = True 
+SECURE_REFERRER_POLICY = 'same-origin'
+SECURE_HSTS_INCLUDE_SUBDOMAINS =True
    
 # Application definition
 
@@ -207,10 +217,10 @@ AUTHENTICATION_BACKENDS = [
 DATABASES={
     "default":{
         "ENGINE":"django.db.backends.postgresql_psycopg2",
-        "NAME":"d5q0tc1792lnrq",
-        "USER":"unpdvlifuabtup",
-        "PASSWORD":"210bd775543a6675320306b67e2321dccdec363604f1a554eed9f10eee7f1163",
-        "HOST":"ec2-54-156-151-232.compute-1.amazonaws.com",
+        "NAME":"d8tg7je4o063ee",
+        "USER":"rdvfvmqazcbrys",
+        "PASSWORD":"932c1c13d552474925f1664c4873ec43a3dbef749906b4f99367e69658fa7080",
+        "HOST":"ec2-3-237-55-151.compute-1.amazonaws.com",
         "PORT":"5432"
     }     
 }
