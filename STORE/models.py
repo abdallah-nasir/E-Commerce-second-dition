@@ -15,8 +15,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
 from django.conf import settings
 
-GENDER=(
-    ("Male","Male"),
+GENDER=(   
+    ("Male","Male"),    
     ("Female","Female")
 )        
         
@@ -257,20 +257,20 @@ class Product_Cart(models.Model):
         return pro 
 
     def get_url(self): 
-        if settings.DEBUG:
+        if settings.DEBUG == False:
             url=f"https://ludus-ecommerce.herokuapp.com/product/{self.products.id}/"
         else:
             url=f"http://127.0.0.1:8000/product/{self.products.id}/"
         return url   
     def get_category_url(self):
-        if settings.DEBUG:
+        if settings.DEBUG == False:
             url=f"https://ludus-ecommerce.herokuapp.com/category/{self.products.category.name}/"
         else:
             url=f"http://127.0.0.1:8000/category/{self.products.category.name}/"
 
         return url   
     def get_cart_remove_url(self):  
-        if settings.DEBUG:
+        if settings.DEBUG == False:
             url=f"https://ludus-ecommerce.herokuapp.com/remove-from-cart/{self.id}/"
         else:
             url=f"http://127.0.0.1:8000/remove-from-cart/{self.id}/"
@@ -399,7 +399,7 @@ class Order(models.Model):
             api=requests.get("http://api.currencylayer.com/live?access_key=bbd4b1fcbe13b2bf0b8a008bc1daa606&currencies=EGP&format = 1")
             price=api.json()
             for i in price["quotes"]: 
-                pass
+                pass 
             money=price["quotes"][i] * self.price
             total=round(money)
             self.egy_currency=total
@@ -409,7 +409,7 @@ class Order(models.Model):
             total=None
         return total   
     def get_absolute_order(self):    
-        if settings.DEBUG:
+        if settings.DEBUG == False:
             url=f"https://ludus-ecommerce.herokuapp.com/order/user/{self.user}/"
         else:
             url=f"http://127.0.0.1:8000/order/user/{self.user}/"
@@ -527,4 +527,4 @@ class Blogs(models.Model):
     comments=models.ManyToManyField(Blog_Comments,blank=True)
 
     def __str__(self):
-        return self.title
+        return self.title    
