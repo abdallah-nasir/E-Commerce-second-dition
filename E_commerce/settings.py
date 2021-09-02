@@ -23,9 +23,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^yvdhx^w5$jah)-p!vbbqy5vf9qco&ge)p0m^nr_p%$=4&6i56'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 #TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS =[]
+if DEBUG == False:
+    TEMPLATE_DEBUG = DEBUG
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    SECURE_SSL_REDIRECT=True
+    SESSION_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_PRELOAD =True
+    SESSION_COOKIE_PATH = '/;HttpOnly'
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    CSRF_COOKIE_SECURE = True 
+    SECURE_REFERRER_POLICY = 'same-origin'
+    SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+    
+ALLOWED_HOSTS =["127.0.0.1","localhost","ludus-ecommerce.herokuapp.com"]
 
 # Application definition
 
@@ -201,15 +215,21 @@ AUTHENTICATION_BACKENDS = [
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-   
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 DATABASES={
     "default":{
         "ENGINE":"django.db.backends.postgresql_psycopg2",
-        "NAME":"d7719vsd49m53o",
-        "USER":"jkfogbydaxxdpl",
-        "PASSWORD":"5dd638604329161dd13fcff45ad84385ab877ddc62c935957c7220c6dd1810a3",
-        "HOST":"ec2-3-237-55-151.compute-1.amazonaws.com",
+        "NAME":"deqdvj9oqtl78t",
+        "USER":"yiqxgupmlcyarh",
+        "PASSWORD":"27c973e6ad81c95804856b99446bf8f93ddecb2919583f52691056bca5cffa76",
+        "HOST":"ec2-34-194-130-103.compute-1.amazonaws.com",
         "PORT":"5432"
     }     
 }
