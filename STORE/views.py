@@ -1915,12 +1915,12 @@ def test(request):
     #     images=Images.objects.create(image=i["image"],product_num=product.id)
     #     product.image.add(images)
     #     product.save()     
-    proc_1=Product.objects.create(name="Dji Phantom Drone 4k",price=160,discount_percent=70,branch_id=1,category_id=9,stock=120,details="this is drone")
-    image_1=Images.objects.create(image="https://d2r00w08fz6ft0.cloudfront.net/ludus-demo/images/product/electronic/product11.9408f979aded4474a5450849f8dbc556.jpg",product_num=proc_1.id)
-    proc_1.image.add(image_1)
-    proc_2=Product.objects.create(name="Dji Phantom Drone 2k",price=200,discount_percent=50,branch_id=1,category_id=9,stock=150,details="this is drone")
-    image_2=Images.objects.create(image="https://d2r00w08fz6ft0.cloudfront.net/ludus-demo/images/product/electronic/product12.656532af809b9068d2575bd4fe8a47ba.jpg",product_num=proc_2.id)
-    proc_2.image.add(image_2) 
+    # proc_1=Product.objects.create(name="Dji Phantom Drone 4k",price=160,discount_percent=70,branch_id=1,category_id=9,stock=120,details="this is drone")
+    # image_1=Images.objects.create(image="https://d2r00w08fz6ft0.cloudfront.net/ludus-demo/images/product/electronic/product11.9408f979aded4474a5450849f8dbc556.jpg",product_num=proc_1.id)
+    # proc_1.image.add(image_1)
+    # proc_2=Product.objects.create(name="Dji Phantom Drone 2k",price=200,discount_percent=50,branch_id=1,category_id=9,stock=150,details="this is drone")
+    # image_2=Images.objects.create(image="https://d2r00w08fz6ft0.cloudfront.net/ludus-demo/images/product/electronic/product12.656532af809b9068d2575bd4fe8a47ba.jpg",product_num=proc_2.id)
+    # proc_2.image.add(image_2) 
     context={}       
     return render(request,"test.html",context)
 
