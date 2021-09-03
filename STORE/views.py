@@ -1902,8 +1902,8 @@ def test(request):
     products=product_url.json()
     categories=category_url.json()
     for i in categories:
-       Category.objects.create(name=i)
-       Branch.objects.create(name__name=i,child=i)
+       category=Category.objects.create(name=i)
+       Branch.objects.create(name=category,child=i)
     for i in products:
         for c in Category.objects.all():
             if c.name == i["category"]:

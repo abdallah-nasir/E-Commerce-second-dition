@@ -39,6 +39,7 @@ if DEBUG == False:
     SECURE_REFERRER_POLICY = 'same-origin'
     SECURE_HSTS_INCLUDE_SUBDOMAINS =True
     
+    
 ALLOWED_HOSTS =["127.0.0.1","localhost","ludus-ecommerce.herokuapp.com"]
 
 # Application definition
@@ -117,10 +118,10 @@ WSGI_APPLICATION = 'E_commerce.wsgi.application'
       
 #cities
 # CITIES_LIGHT_APP_NAME = 'STORE'
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ["en","fr"]
+
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ["ara","en"]
 CITIES_LIGHT_INCLUDE_COUNTRIES = ["EG","AE","SA"]
 CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
-
 # crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 from django.contrib.messages import constants as messages
@@ -190,8 +191,8 @@ SOCIALACCOUNT_PROVIDERS = {
     # (``socialaccount`` app) containing the required client
     # credentials, or list them here:
     'APP': {
-        'client_id':"123",
-        'secret':"123",
+        'client_id':"2913945832252864",
+        'secret':"6b6c9520c639e0f62e1b4c68c0a5f81f",
         'key': '',
        
     }
@@ -216,23 +217,23 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASES={
-    "default":{
-        "ENGINE":"django.db.backends.postgresql_psycopg2",
-        "NAME":"deqdvj9oqtl78t",
-        "USER":"yiqxgupmlcyarh",
-        "PASSWORD":"27c973e6ad81c95804856b99446bf8f93ddecb2919583f52691056bca5cffa76",
-        "HOST":"ec2-34-194-130-103.compute-1.amazonaws.com",
-        "PORT":"5432"
-    }     
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES={
+#     "default":{
+#         "ENGINE":"django.db.backends.postgresql_psycopg2",
+#         "NAME":"deqdvj9oqtl78t",
+#         "USER":"yiqxgupmlcyarh",
+#         "PASSWORD":"27c973e6ad81c95804856b99446bf8f93ddecb2919583f52691056bca5cffa76",
+#         "HOST":"ec2-34-194-130-103.compute-1.amazonaws.com",
+#         "PORT":"5432"
+#     }     
+# }
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

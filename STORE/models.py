@@ -257,7 +257,7 @@ class Product_Cart(models.Model):
         return pro 
 
     def get_url(self): 
-        if settings.DEBUG == False:
+        if settings.DEBUG == False: 
             url=f"https://ludus-ecommerce.herokuapp.com/product/{self.products.id}/"
         else:
             url=f"http://127.0.0.1:8000/product/{self.products.id}/"
