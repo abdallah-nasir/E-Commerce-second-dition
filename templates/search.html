@@ -600,7 +600,7 @@ color:#ff4500;
                                         </ul>
                                     </div>
                                     <div class="u-s-m-b-15">
-                                        <form class="pd-detail__form" method="POST" action="{% url 'home:quantity_add' id=i.id %}">
+                                        <form class="pd-detail__form" method="POST" action="{% url 'home:quick_add' id=i.id %}">
                                            {% csrf_token %}
                                             <div class="pd-detail-inline-2">
                                                 <div class="u-s-m-b-15">
@@ -815,7 +815,7 @@ $('#rate-form').submit();
         
                                     <span class="mini-product__quantity">${res.product_quantity} x</span>
         
-                                    <span class="mini-product__price">${res.product_price}</span></div>
+                                    <span class="mini-product__price">$${res.product_price}</span></div>
                             </div>
         
                             <input class="total-remove-cart-${res.id}" type="hidden" value="${res.id}">
