@@ -93,11 +93,11 @@ class Size(models.Model):
 def image_upload(instance, filename):
     # imagename,extension=filename.split(".")
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return (f"products/{instance.product_num}/{filename}")
+    return (f"products/{instance.product_num}")
     # return 'user_{0}/{1}'.format(instance.name, filename)
      
 class Images(models.Model):   
-    image=models.ImageField(blank=True,upload_to=image_upload)
+    image=models.ImageField(blank=True,max_length=300,upload_to=image_upload)
     product_num=models.PositiveIntegerField(default=0,null=True)        
     # name=models.CharField(max_length=100)   
     def __str__(self):                                          
