@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<style type="text/css">
+#place{
+    background-color: #fff;
+    color:#ff4500;
+}
+</style>
 <script src="https://www.paypal.com/sdk/js?client-id=Ace7Ld83W3KguXWSs3uNjxUR39kUAxqA0WFqFE7tyOn9wEnPUDefnTNGtnh8gDdPuYDhWRem_adArGqP&currency=USD" ></script>
 
         <!--====== App Content ======-->
@@ -407,9 +412,12 @@
                                                         <a class="gl-link">Terms of Service.</a>
                                                     </div>
                                                     <div>
-                                                            
+                                                            {% if order.address %}
                                                         <button class="btn btn--e-brand-b-2" type="submit">PLACE ORDER</button></div>
-                                                   
+                                                        {% else %}
+                                                        <button id="place" class="btn btn--e-brand-b-2" disabled>Please Enter Your Address </button></div>
+
+                                                        {% endif %}
                                                     </div>
                                                     </form>
                                                   

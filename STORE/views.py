@@ -655,7 +655,7 @@ def order_confirm(request,id):
   "delivery_needed": "false",
   "amount_cents": order.egy_currency*100,
   "currency": "EGP",
-  "merchant_order_id": order.id + 19,
+  "merchant_order_id": order.id + 61,
   "items": [
     {
         "name": "ASC1515",
