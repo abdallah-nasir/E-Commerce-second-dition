@@ -1897,24 +1897,24 @@ def test(request):
    
     #         print(details_url)
      
-    category_url=requests.get("https://fakestoreapi.com/products/categories")
-    product_url=requests.get('https://fakestoreapi.com/products')
-    products=product_url.json()
-    categories=category_url.json()
-    for i in categories:
-       category=Category.objects.create(name=i)
-       Branch.objects.create(name=category,child=i)
-    for i in products:
-        for c in Category.objects.all():
-            if c.name == i["category"]:
-                cat=c
-        for b in Branch.objects.all():
-            if b.child == i["category"]: 
-                child=b
-        product= Product.objects.create(name=i["title"],price=i["price"],branch=b,stock=100,category=cat,details=i["description"])
-        images=Images.objects.create(image=i["image"],product_num=product.id)
-        product.image.add(images)
-        product.save()     
+    # category_url=requests.get("https://fakestoreapi.com/products/categories")
+    # product_url=requests.get('https://fakestoreapi.com/products')
+    # products=product_url.json()
+    # categories=category_url.json()
+    # for i in categories:
+    #    category=Category.objects.create(name=i)
+    #    Branch.objects.create(name=category,child=i)
+    # for i in products:
+    #     for c in Category.objects.all():
+    #         if c.name == i["category"]:
+    #             cat=c
+    #     for b in Branch.objects.all():
+    #         if b.child == i["category"]: 
+    #             child=b
+    #     product= Product.objects.create(name=i["title"],price=i["price"],branch=b,stock=100,category=cat,details=i["description"])
+    #     images=Images.objects.create(image=i["image"],product_num=product.id)
+    #     product.image.add(images)
+    #     product.save()     
     context={}       
     return render(request,"test.html",context)
 
