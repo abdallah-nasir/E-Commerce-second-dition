@@ -235,11 +235,12 @@ class Product_Cart(models.Model):
         products=Product.objects.filter(products_id=self.products)
         print(products)
         return products
-    
+          
     def discount(self):
         if self.products.discount_percent != 0:
-            disc=(self.products.discount_percent/100) * self.products.price *self.quantity
-            price= int(self.products.price) - disc
+            disc=(self.products.discount_percent/100) * self.products.price 
+            disc_2= int(self.products.price) - disc
+            price=disc_2 * self.quantity
         else:
             price=self.products.price * self.quantity          
         return price   
