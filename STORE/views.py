@@ -1583,7 +1583,8 @@ def add_to_cart(request):
         else:
             cart.products.add(product_cart)   
             cart.device=device
-            product_cart.ordered=True           
+            product_cart.ordered=True  
+            product_cart.quantity +=1         
             product_cart.save()      
             cart.save()
             print("cart authenticated")            
