@@ -1585,6 +1585,7 @@ def add_to_cart(request):
             cart.device=device
             product_cart.ordered=True  
             product_cart.quantity +=1         
+            print("quant")
             product_cart.save()      
             cart.save()
             print("cart authenticated")            
@@ -1623,7 +1624,8 @@ def add_to_cart(request):
             messages.error(request,"this item is in your cart")
         else:
             cart.products.add(product_cart)  
-            product_cart.ordered=True     
+            product_cart.ordered=True   
+            product_cart.quantity +=1   
             product_cart.save()    
             cart.save()
             print("cart anonymous")         
