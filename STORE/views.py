@@ -1872,7 +1872,7 @@ def test(request):
     # products=souq.findAll("div",{"class":"column column-block block-grid-large"})
     # details=bss4(details_url.text,"lxml")
     # pro__details=details.findAll("div",{"class":"item-details-mini clearfix"})
-    # for i in Images.objects.all():
+    # for i in Images.objects.all():      
     #     i.save()
     # print(pro__details)    
     # with open("details.csv","w",newline="") as file:

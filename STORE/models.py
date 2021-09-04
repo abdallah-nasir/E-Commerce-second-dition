@@ -211,7 +211,7 @@ class Filter(models.Model):
             loop =i
             loop +=1        
         if self.rating == 1.5 or self.rating == 2.5 or self.rating == 3.5 or self.rating == 4.5:
-            my_loop=True
+            my_loop=True    
         else:
             my_loop =False
         print(loop)
@@ -220,7 +220,7 @@ class Filter(models.Model):
 class Product_Cart(models.Model):
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ForeignKey(Product,blank=True,null=True,on_delete=models.CASCADE)
-    quantity=models.PositiveIntegerField(default=1)
+    quantity=models.PositiveIntegerField(default=0)
     size=models.ForeignKey(Size,default=1,null=True,on_delete=models.SET_NULL)
     color=models.ForeignKey(Color,default=1,null=True,on_delete=models.SET_NULL)
     price=models.PositiveIntegerField(default=0)
