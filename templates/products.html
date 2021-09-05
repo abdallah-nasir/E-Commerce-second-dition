@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 {% block content %}
 {% load crispy_forms_tags %}
@@ -50,12 +51,12 @@ color:#ff4500;
                                 
                                 <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
 
-                                    <span>FILTERS</span></h1>
+                                    <span>{% translate 'FILTERS' %}</span></h1>
                                 <div class="shop-w-master__sidebar">
                                     <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">CATEGORY</h1>
+                                                <h1 class="shop-w__h">{% translate 'CATEGORY' %}</h1>
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-category" data-toggle="collapse"></span>
                                             </div>
@@ -83,7 +84,7 @@ color:#ff4500;
                                                                         <a href="{% url 'home:this_product' id=c.id %}">{{c.name}}</a></li>
                                                                         {% endfor %}
                                                                     <li class="has-list">
-                                                                            <a href="{% url 'home:category_filter' slug=i.name %}">show more</a>
+                                                                            <a href="{% url 'home:category_filter' slug=i.name %}">{% translate 'show more' %}</a>
                                                                         </li>
                                                                 </ul>
                                                             </li>
@@ -98,7 +99,7 @@ color:#ff4500;
                                     <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">RATING</h1>
+                                                <h1 class="shop-w__h">{% translate 'RATING' %}</h1>
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-rating" data-toggle="collapse"></span>
                                             </div>
@@ -171,7 +172,7 @@ color:#ff4500;
                                     <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">SHIPPING</h1>
+                                                <h1 class="shop-w__h">{% translate 'SHIPPING' %}</h1>
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                                             </div>
@@ -187,7 +188,7 @@ color:#ff4500;
                                                             <input type="checkbox" name="shipping" value="free" id="free-shipping">
                                                             <div class="check-box__state check-box__state--primary">
 
-                                                                <label class="check-box__label" for="free-shipping">Free Shipping</label></div>
+                                                                <label class="check-box__label" for="free-shipping">{% translate 'Free Shipping' %}</label></div>
                                                         </div>
                                                         <!--====== End - Check Box ======-->
                                                     </li>
@@ -200,7 +201,7 @@ color:#ff4500;
                                     <div class="u-s-m-b-30">
                                         <div class="shop-w shop-w--style">
                                             <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">PRICE</h1>
+                                                <h1 class="shop-w__h">{% translate 'PRICE' %}</h1>
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
                                             </div>
@@ -212,12 +213,12 @@ color:#ff4500;
                                                             
                                                             <label for="price-min"></label>
 
-                                                            <input class="input-text input-text--primary-style" name="price_1"  type="text" id="price-min" placeholder="Min" required></div>
+                                                            <input class="input-text input-text--primary-style" name="price_1"  type="text" id="price-min" placeholder="{% translate 'Min' %}" required></div>
                                                         <div>
 
                                                             <label for="price-max"></label>
 
-                                                            <input class="input-text input-text--primary-style" name="price_2" type="text" id="price-max" placeholder="Max" required></div>
+                                                            <input class="input-text input-text--primary-style" name="price_2" type="text" id="price-max" placeholder="{% translate 'Max' %}" required></div>
                                                         <div>
 
                                                             <button  class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
@@ -238,20 +239,20 @@ color:#ff4500;
                                 <div class="shop-p__toolbar u-s-m-b-30">
                                     <div class="shop-p__meta-wrap u-s-m-b-60">
 
-                                        <span class="shop-p__meta-text-1">FOUND {{products.paginator.count}} RESULTS</span>
+                                        <span class="shop-p__meta-text-1">{% translate 'FOUND' %} {{products.paginator.count}} {% translate 'RESULTS' %}</span>
                                        
                                         <div class="shop-p__meta-text-2">
 
-                                            <span>Your Filter:</span>
+                                            <span>{% translate 'Your Filter' %}:</span>
                                                        <br>
                                                        {% if manu %}
-                                                       Manufacturer: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:manu_session_delete' %}">{{manu}}  <i class="fas fa-times"></i></a>
+                                                       {% translate 'Manufacturer' %}: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:manu_session_delete' %}">{{manu}}  <i class="fas fa-times"></i></a>
                                                      {% endif %}
                                                 {% if size %}
-                                                   Size: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:size_session_delete' %}">{{size}}  <i class="fas fa-times"></i></a>
+                                                   {% translate 'Size' %}: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:size_session_delete' %}">{{size}}  <i class="fas fa-times"></i></a>
                                                  {% endif %}
                                                        {% if rating %}                                                                                                         
-                                                       Rate: <div class="gl-tag btn--e-brand-shadow">
+                                                       {% translate 'Rate' %}: <div class="gl-tag btn--e-brand-shadow">
                                                      {% with ''|center:loop as range %}
                                                          {% for _ in range %}
                                                          <i class="fas fa-star"> </i>
@@ -263,10 +264,10 @@ color:#ff4500;
                                                                      </div>  </a>
                                                          {% endif %}
                                             {% if shipping %}
-                                             FREE SHIPING: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:shipping_delete' %}">Free <i class="fas fa-times"></i></a>
+                                            {% translate 'FREE SHIPING' %}: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:shipping_delete' %}">{% translate 'Free' %}  <i class="fas fa-times"></i></a>
                                            {% endif %}
                                            {% if price_1 %}
-                                           PRICE RANGE: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:price_session_delete' %}">{{price_1}} : {{price_2}}  <i class="fas fa-times"></i></a>
+                                           {% translate 'PRICE RANGE' %}: <a class="gl-tag btn--e-brand-shadow" href="{% url 'home:price_session_delete' %}">{{price_1}} : {{price_2}}  <i class="fas fa-times"></i></a>
                                           {% endif %}
                            
                                         </div>
@@ -276,26 +277,26 @@ color:#ff4500;
                                     <div class="shop-p__tool-style">
                                         <div class="tool-style__group u-s-m-b-8">
 
-                                            <span class="js-shop-grid-target is-active">Grid</span>
+                                            <span class="js-shop-grid-target is-active">{% translate 'Grid' %}</span>
 
-                                            <span class="js-shop-list-target">List</span></div>
+                                            <span class="js-shop-list-target">{% translate 'List' %}</span></div>
                                         <form id="my-form"  method="POST">
                                             {%csrf_token%}
                                             <div class="tool-style__form-wrap">
                                                 
                                                 <div class="u-s-m-b-8"><select id="show" name="paginat" class="select-box select-box--transparent-b-2">
-                                                        <option value="8" {% if paginated == 8 %}selected{% endif %}>Show: 8</option>
-                                                        <option value="12"  {% if paginated == 12 %}selected{% endif %}>Show: 12</option>
-                                                        <option value="16"  {% if paginated == 16 %}selected{% endif %}>Show: 16</option>
-                                                        <option value="28"  {% if paginated == 28 %}selected{% endif %}>Show: 28</option>
+                                                        <option value="8" {% if paginated == 8 %}selected{% endif %}>{% translate 'Show' %}: 8</option>
+                                                        <option value="12"  {% if paginated == 12 %}selected{% endif %}>{% translate 'Show' %}: 12</option>
+                                                        <option value="16"  {% if paginated == 16 %}selected{% endif %}>{% translate 'Show' %}: 16</option>
+                                                        <option value="28"  {% if paginated == 28 %}selected{% endif %}>{% translate 'Show' %}: 28</option>
                                                     </select></div>
                                                 <div id="select" class="u-s-m-b-8"><select  name="select_filter" class="select-box select-box--transparent-b-2">
-                                                        <option  value="1" {% if selected == 1 %}selected{% endif %}>Sort By: Newest Items</option>
-                                                        <option  value="2" {% if selected == 2 %}selected{% endif %}>Sort By: Latest Items</option>
+                                                        <option  value="1" {% if selected == 1 %}selected{% endif %}>{% translate 'Sort By: Newest Items' %}</option>
+                                                        <option  value="2" {% if selected == 2 %}selected{% endif %}>{% translate 'Sort By: Latest Items' %}</option>
                                                         <!-- <option value="3" {% if selected == 3 %}selected{% endif %}>Sort By: Best Selling</option>
                                                         <option  value="4" {% if selected == 4 %}selected{% endif %}>Sort By: Best Rating</option> -->
-                                                        <option  value="5"{% if selected == 5 %}selected{% endif %}>Sort By: Lowest Price</option>
-                                                        <option  value="6" {% if selected == 6 %}selected{% endif %}>Sort By: Highest Price</option>
+                                                        <option  value="5"{% if selected == 5 %}selected{% endif %}>{% translate 'Sort By: Lowest Price' %}</option>
+                                                        <option  value="6" {% if selected == 6 %}selected{% endif %}>{% translate 'Sort By: Highest Price' %}</option>
                                                     </select></div>
                                                 <!-- <button class="btn btn-primary" type="submit">submit</button> -->
 
@@ -321,10 +322,10 @@ color:#ff4500;
                                                        
                                                     <div class="product-m__quick-look">
             
-                                                        <a class="fas fa-search" data-modal="modal" data-modal-id=".pro-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                                        <a class="fas fa-search" data-modal="modal" data-modal-id=".pro-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Quick Look' %}"></a></div>
                                                     <div class="product-m__add-cart">
                                                             <input type="hidden" class="product-id-{{i.id}}"  value="{{i.id}}">
-                                                        <div class="btn--e-brand " value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#add-to-cart-{{i.id}}">Add to Cart</div>
+                                                        <div class="btn--e-brand " value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#add-to-cart-{{i.id}}">{% translate 'Add to Cart' %}</div>
                                                     </div>
                                                 </div>
                                                 <div class="product-m__content">
@@ -361,11 +362,11 @@ color:#ff4500;
                                                             {% if  i in wishlist.products.all %}
                                                             <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                            <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                                            <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"></div>
                                                        
                                                           {% else %}
                                                           <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                                          <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                                          <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"></div>
                                                        
                                                             {% endif %}
                                                        </div>
@@ -391,7 +392,7 @@ color:#ff4500;
                                     <ul class="pd-breadcrumb__list">
                                         <li class="has-separator">
 
-                                            <a href="{% url 'home:home' %}">Home</a></li>
+                                            <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                         <li class="has-separator">
 
                                             <a href="{% url 'home:category_filter' slug=i.category.name %}">{{i.category.name|title}}</a></li>
@@ -439,7 +440,7 @@ color:#ff4500;
 
                                             <span class="pd-detail__price">${{i.discount}}</span>
                                        
-                                            <span class="pd-detail__discount">({{i.discount_percent}}% OFF)</span><del class="pd-detail__del">${{i.price}}</del></div>
+                                            <span class="pd-detail__discount">({{i.discount_percent}}% {% translate 'OFF' %})</span><del class="pd-detail__del">${{i.price}}</del></div>
                                            
                                         </div>
                                     <div class="u-s-m-b-15">
@@ -456,14 +457,14 @@ color:#ff4500;
 
                                             <span class="pd-detail__review u-s-m-l-4">
 
-                                                <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}} Reviews</a></span></div>
+                                                <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}}{% translate ' Reviews' %}</a></span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
 
-                                            <span class="pd-detail__stock">{{i.stock}} in stock</span>
+                                            <span class="pd-detail__stock">{{i.stock}}{% translate ' in stock' %}</span>
 
-                                            <span class="pd-detail__left">Only 2 left</span></div>
+                                            <span class="pd-detail__left">{% translate 'Only 2 left' %}</span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
 
@@ -478,11 +479,11 @@ color:#ff4500;
                                                 {% if  i in wishlist.products.all %}
                                                 <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"></div>
                                            
                                               {% else %}
                                               <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"></div>
                                            
                                                 {% endif %}
                                            </div>
@@ -493,9 +494,9 @@ color:#ff4500;
 
                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
+                                                <a href="{% url 'home:home' %}">{% translate 'Email me When the price drops' %}</a>
 
-                                                <span class="pd-detail__click-count">(20)</span></span></div>
+                                                <span class="pd-detail__click-count"></span></span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <ul class="pd-social-list">
@@ -534,8 +535,8 @@ color:#ff4500;
                                                 </div>
                                                 <div class="u-s-m-b-15">
 
-                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
-                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">Close</button>
+                                                    <button class="btn btn--e-brand-b-2" type="submit">{% translate 'Add to Cart' %}</button>
+                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">{% translate 'Close' %}</button>
 
                                                 </div>
                                             </div>
@@ -543,17 +544,17 @@ color:#ff4500;
                                     </div>
                                     <div class="u-s-m-b-15">
 
-                                        <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                        <span class="pd-detail__label u-s-m-b-8">{% translate 'Product Policy:' %}</span>
                                         <ul class="pd-detail__policy-list">
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Buyer Protection.</span></li>
+                                                <span>{% translate 'Buyer Protection.' %}</span></li>
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Full Refund if you don't receive your order.</span></li>
+                                                <span>{% translate "Full Refund if you don't receive your order." %}</span></li>
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Returns accepted if product not as described.</span></li>
+                                                <span>{% translate 'Returns accepted if product not as described.' %}</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -578,7 +579,7 @@ color:#ff4500;
                         <div class="success u-s-m-b-30">
                             <div class="success__text-wrap"><i class="fas fa-check"></i>
 
-                                <span>Item is added successfully!</span></div>
+                                <span>{% translate 'Item is added successfully!' %}</span></div>
                             <div class="success__img-wrap">
 
                                 <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
@@ -586,7 +587,7 @@ color:#ff4500;
 
                                 <!-- <span class="success__name">{{i.name|title}}</span> -->
 
-                                <span class="success__quantity">Quantity: 1</span>
+                                <span class="success__quantity">{% translate 'Quantity: 1' %}</span>
 
                                 <span class="success__price">${{i.price}}</span></div>
                         </div>
@@ -594,17 +595,17 @@ color:#ff4500;
                     <div class="col-lg-6 col-md-12">
                         <div class="s-option">
 
-                            <span class="s-option__text">1 item (s) in your cart</span>
+                            <span class="s-option__text">{% translate '1 item (s) in your cart' %}</span>
                             <div class="s-option__link-box">
 
-                                <a class="s-option__link btn--e-white-brand-shadow"  data-dismiss="modal">CONTINUE SHOPPING</a>
+                                <a class="s-option__link btn--e-white-brand-shadow"  data-dismiss="modal">{% translate 'CONTINUE SHOPPING' %}</a>
 
-                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">{% translate 'VIEW CART' %}</a>
                                     {% if request.user.is_authenticated %}
-                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' cart.id %}">PROCEED TO CHECKOUT</a>
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' cart.id %}">{% translate 'PROCEED TO CHECKOUT' %}</a>
                             </div>
                                 {% else %}
-                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">PROCEED TO CHECKOUT</a>
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">{% translate 'PROCEED TO CHECKOUT' %}</a>
                             </div>
 
                                 {% endif %}
@@ -623,7 +624,7 @@ color:#ff4500;
   
                                     </div>
                                     {% else %}
-<h1 style="text-align:center;">Sorry we didn't find what you want</h1>
+<h1 style="text-align:center;">{% translate "Sorry we didn't find what you want" %}</h1>
                                     {% endif %}
                                 </div>
                                 <div class="u-s-p-y-60">

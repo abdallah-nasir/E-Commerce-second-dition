@@ -138,7 +138,9 @@ def search(request):
    
     page_number = request.GET.get('page')      
     page_obj = paginator.get_page(page_number)     
-    context={"category":category,"paginated":paginated,"selected":selected,"shipping":shipping,"loop":loop,"price_1":price_1,"price_2":price_2,"rate":rating,"search":search,"products":page_obj}
+    context={"category":category,"paginated":paginated,"selected":selected,"shipping":shipping,
+             "loop":loop,"price_1":price_1,"price_2":price_2,
+             "rating":rating,"search":search,"products":page_obj}
     return render(request,"search.html",context)
 
 def shipping_session(request):
@@ -1867,66 +1869,24 @@ def quick_add(request,id):
             messages.error(request,"invalid data")
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-import csv    
-def test(request):   
-    # url=requests.get("https://deals.souq.com/eg-en/computers/c/13414")
-    # details_url=requests.get("https://egypt.souq.com/eg-en/lenovo-yoga-9-14itl5-laptop-intel-core-i7-1185g7-14-inch-uhd-1tb-ssd-16-gb-ram-integrated-intel-iris-xe-graphics-windows-shadow-black-14968700075/u/")
-    # souq=bss4(url.text,"lxml")
-    # products=souq.findAll("div",{"class":"column column-block block-grid-large"})
-    # details=bss4(details_url.text,"lxml")
-    # pro__details=details.findAll("div",{"class":"item-details-mini clearfix"})
-    # for i in Images.objects.all():      
-    #     i.save()
-    # print(pro__details)    
-    # with open("details.csv","w",newline="") as file:
-        # writer =csv.writer(file)     
-        # writer.writerow(["name","price","image","url"])
-        # print(details)    
-        # for product in products:
-        #     name=product.find("h6","title").text
-        #     price=product.find("h5","price").text
-        #     image=product.find("img","img-size-medium")["data-src"]
-        #     url=product.find("a","img-link imgShowQuickView")["href"]
-            # print(price)           
-            # writer.writerow([name,price,image,url])          
+import csv   
+from django.utils.translation import gettext as _
+from django.utils.translation import get_language,activate,gettext
 
-    # with open('laptops.csv') as csv_file:
-    #     csv_reader = csv.reader(csv_file)
-    #     for row in csv_reader: 
-    #         product=Product.objects.create(name=row[0],price=int(row[1]),details="any details",stock=100)
-    #         images=Images.objects.create(image__url=row[2])
-    #         product.image.add(images)
-    #         product.save()  
-   
-    #         print(details_url)
-     
-    # category_url=requests.get("https://fakestoreapi.com/products/categories")
-    # product_url=requests.get('https://fakestoreapi.com/products')
-    # products=product_url.json()
-    # categories=category_url.json()
-    # for i in categories:
-    #    category=Category.objects.create(name=i)
-    #    Branch.objects.create(name=category,child=i)
-    # for i in products:
-    #     for c in Category.objects.all():
-    #         if c.name == i["category"]:
-    #             cat=c
-    #     for b in Branch.objects.all():
-    #         if b.child == i["category"]: 
-    #             child=b
-    #     product= Product.objects.create(name=i["title"],price=i["price"],branch=b,stock=100,category=cat,details=i["description"])
-    #     images=Images.objects.create(image=i["image"],product_num=product.id)
-    #     product.image.add(images)
-    #     product.save()     
-    # proc_1=Product.objects.create(name="Dji Phantom Drone 4k",price=160,discount_percent=70,branch_id=1,category_id=9,stock=120,details="this is drone")
-    # image_1=Images.objects.create(image="https://d2r00w08fz6ft0.cloudfront.net/ludus-demo/images/product/electronic/product11.9408f979aded4474a5450849f8dbc556.jpg",product_num=proc_1.id)
-    # proc_1.image.add(image_1)
-    # proc_2=Product.objects.create(name="Dji Phantom Drone 2k",price=200,discount_percent=50,branch_id=1,category_id=9,stock=150,details="this is drone")
-    # image_2=Images.objects.create(image="https://d2r00w08fz6ft0.cloudfront.net/ludus-demo/images/product/electronic/product12.656532af809b9068d2575bd4fe8a47ba.jpg",product_num=proc_2.id)
-    # proc_2.image.add(image_2) 
-    context={}       
+
+def test(request):  
+    trans =transalte(language="ar")
+    context={"trans":trans}       
     return render(request,"test.html",context)
 
+def transalte(language):
+    current_lang=get_language()
+    try:
+        activate(language)
+        text=gettext("hello")
+    finally:
+        activate(current_lang)
+    return text
 def success(request):
     return render(request,"success.html")
 

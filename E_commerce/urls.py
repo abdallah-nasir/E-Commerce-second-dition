@@ -22,18 +22,16 @@ from django.conf.urls import (handler400, handler403, handler404, handler500
 from django.conf.urls.i18n import i18n_patterns
 from django.utils.translation import gettext_lazy as _
 # from allauth.urls import   
-urlpatterns = [
+   
+
+urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.urls')),    
     path("",include("STORE.urls",namespace="home")),
-    
-]
-
-urlpatterns += i18n_patterns(    
-    re_path("",include("STORE.urls",namespace="trans")),
-)
-
+    re_path('rosetta/', include('rosetta.urls'))
+    )
+   
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
@@ -41,4 +39,4 @@ if settings.DEBUG:
 handler404 = 'STORE.views.my_custom_page_not_found_view'
 handler500 = 'STORE.views.my_custom_error_view'
 handler403 = 'STORE.views.my_custom_permission_denied_view'
-handler400 = 'STORE.views.my_custom_bad_request_view'
+handler400 = 'STORE.views.my_custom_bad_request_view'   

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 {% block content %}
 <style type="text/css">
@@ -38,17 +39,17 @@ color:#ff4500;
                                          
                                     <div class="slider-content slider-content--animation">
 
-                                        <span class="content-span-1 u-c-secondary">Latest Update Stock</span>
+                                        <span class="content-span-1 u-c-secondary">{% translate 'Latest Update Stock' %}</span>
 
-                                        <span class="content-span-2 u-c-secondary">30% Off On Electronics</span>
+                                        <span class="content-span-2 u-c-secondary">{% translate '30% Off On Electronics' %}</span>
 
-                                        <span class="content-span-3 u-c-secondary">Find electronics on best prices, Also Discover most selling products of electronics</span>
+                                        <span class="content-span-3 u-c-secondary">{% translate 'Find electronics on best prices, Also Discover most selling products of electronics' %}</span>
 
-                                        <span class="content-span-4 u-c-secondary">Starting At
+                                        <span class="content-span-4 u-c-secondary">{% translate 'Starting At' %}
 
                                             <span class="u-c-brand">$1050.00</span></span>
 
-                                        <a class="shop-now-link btn--e-brand" href="{% url 'home:products' %}">SHOP NOW</a></div>
+                                        <a class="shop-now-link btn--e-brand" href="{% url 'home:products' %}">{% translate 'SHOP NOW' %}</a></div>
                                 </div>
                             </div>
                         </div>
@@ -59,17 +60,17 @@ color:#ff4500;
                                 <div class="col-12">
                                     <div class="slider-content slider-content--animation">
 
-                                        <span class="content-span-1 u-c-white">Find Top Brands</span>
+                                        <span class="content-span-1 u-c-white">{% translate 'Find Top Brands' %}</span>
 
-                                        <span class="content-span-2 u-c-white">10% Off On Electronics</span>
+                                        <span class="content-span-2 u-c-white">{% translate '10% Off On Electronic' %}s</span>
 
-                                        <span class="content-span-3 u-c-white">Find electronics on best prices, Also Discover most selling products of electronics</span>
+                                        <span class="content-span-3 u-c-white">{% translate 'Find electronics on best prices, Also Discover most selling products of electronics' %}</span>
 
-                                        <span class="content-span-4 u-c-white">Starting At
+                                        <span class="content-span-4 u-c-white">{% translate 'Starting At' %}
 
                                             <span class="u-c-brand">$380.00</span></span>
 
-                                        <a class="shop-now-link btn--e-brand" href="{% url 'home:products' %}">SHOP NOW</a></div>
+                                        <a class="shop-now-link btn--e-brand" href="{% url 'home:products' %}">{% translate 'SHOP NOW' %}</a></div>
                                 </div>
                             </div>
                         </div>
@@ -80,17 +81,17 @@ color:#ff4500;
                                 <div class="col-12">
                                     <div class="slider-content slider-content--animation">
 
-                                        <span class="content-span-1 u-c-secondary">Find Top Brands</span>
+                                        <span class="content-span-1 u-c-secondary">{% translate 'Find Top Brands' %}</span>
 
-                                        <span class="content-span-2 u-c-secondary">10% Off On Electronics</span>
+                                        <span class="content-span-2 u-c-secondary">{% translate '10% Off On Electronics' %}</span>
 
-                                        <span class="content-span-3 u-c-secondary">Find electronics on best prices, Also Discover most selling products of electronics</span>
+                                        <span class="content-span-3 u-c-secondary">{% translate 'Find electronics on best prices, Also Discover most selling products of electronics' %}</span>
 
-                                        <span class="content-span-4 u-c-secondary">Starting At
+                                        <span class="content-span-4 u-c-secondary">{% translate 'Starting At' %}
 
                                             <span class="u-c-brand">$550.00</span></span>
 
-                                        <a class="shop-now-link btn--e-brand" href="{% url 'home:products' %}">SHOP NOW</a></div>
+                                        <a class="shop-now-link btn--e-brand" href="{% url 'home:products' %}">{% translate 'SHOP NOW' %}</a></div>
                                 </div>
                             </div>
                         </div>
@@ -109,9 +110,9 @@ color:#ff4500;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">SHOP BY DEALS</h1>
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">{% translate 'SHOP BY DEALS' %}</h1>
 
-                                    <span class="section__span u-c-silver">BROWSE FAVOURITE DEALS</span>
+                                    <span class="section__span u-c-silver">{% translate 'BROWSE FAVOURITE DEALS' %}</span>
                                 </div>
                             </div>
                         </div>
@@ -170,9 +171,9 @@ color:#ff4500;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">TOP TRENDING</h1>
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">{% translate 'TOP TRENDING' %}</h1>
 
-                                    <span class="section__span u-c-silver">CHOOSE CATEGORY</span>
+                                    <span class="section__span u-c-silver">{% translate 'CHOOSE CATEGORY' %}</span>
                                 </div>
                             </div>
                         </div>
@@ -212,10 +213,10 @@ color:#ff4500;
                                                         <ul class="product-o__action-list">
                                                             <li>
 
-                                                                <a data-modal="modal" data-modal-id=".pro-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                                <a data-modal="modal" data-modal-id=".pro-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Quick View' %}"><i class="fas fa-search-plus"></i></a></li>
                                                             <li>
                                                                 <input type="hidden" class="product-id-{{i.id}}"  value="{{i.id}}">
-                                                                <a data-tooltip="tooltip" data-placement="top" title="Add to Cart"  value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#add-to-cart-{{i.id}}"><i class="fas fa-plus-circle"></i></a>
+                                                                <a data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Cart' %}"  value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#add-to-cart-{{i.id}}"><i class="fas fa-plus-circle"></i></a>
                                                                 
 
                                                             </li>
@@ -226,11 +227,11 @@ color:#ff4500;
                                                                     {% if  i in wishlist.products.all %}
                                                                     <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
                     
-                                                                    <a id="wishlist" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"><i class="fas fa-heart"></i></a>
+                                                                    <a id="wishlist" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"><i class="fas fa-heart"></i></a>
                                                                
                                                                   {% else %}
                                                                   <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                                                  <a  id="wishlist-add"  data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a>
+                                                                  <a  id="wishlist-add"  data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"><i class="fas fa-heart"></i></a>
                                                                
                                                                     {% endif %}
                                                               
@@ -239,7 +240,7 @@ color:#ff4500;
                                                                 </li>
                                                             <li>
 
-                                                                <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                                <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Email me When the price drops' %}"><i class="fas fa-envelope"></i></a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -285,7 +286,7 @@ color:#ff4500;
                                                                     <ul class="pd-breadcrumb__list">
                                                                         <li class="has-separator">
                                 
-                                                                            <a href="{% url 'home:home' %}">Home</a></li>
+                                                                            <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                                                         <li class="has-separator">
                                 
                                                                             <a href="{% url 'home:category_filter' slug=i.category.name %}">{{i.category.name|title}}</a></li>
@@ -333,7 +334,7 @@ color:#ff4500;
                                 
                                                                             <span class="pd-detail__price">${{i.discount}}</span>
                                                                        
-                                                                            <span class="pd-detail__discount">({{i.discount_percent}}% OFF)</span><del class="pd-detail__del">${{i.price}}</del></div>
+                                                                            <span class="pd-detail__discount">({{i.discount_percent}}% {% translate 'OFF' %})</span><del class="pd-detail__del">${{i.price}}</del></div>
                                                                            
                                                                         </div>
                                                                     <div class="u-s-m-b-15">
@@ -350,14 +351,14 @@ color:#ff4500;
                                 
                                                                             <span class="pd-detail__review u-s-m-l-4">
                                 
-                                                                                <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}} Reviews</a></span></div>
+                                                                                <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}}{% translate ' Review' %}</a></span></div>
                                                                     </div>
                                                                     <div class="u-s-m-b-15">
                                                                         <div class="pd-detail__inline">
                                 
-                                                                            <span class="pd-detail__stock">{{i.stock}} in stock</span>
+                                                                            <span class="pd-detail__stock">{{i.stock}}{% translate ' in stock' %}</span>
                                 
-                                                                            <span class="pd-detail__left">Only 2 left</span></div>
+                                                                            <span class="pd-detail__left">{% translate 'Only 2 left' %}</span></div>
                                                                     </div>
                                                                     <div class="u-s-m-b-15">
                                 
@@ -372,11 +373,11 @@ color:#ff4500;
                                                                                 {% if  i in wishlist.products.all %}
                                                                                 <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
                                 
-                                                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"></div>
                                                                            
                                                                               {% else %}
                                                                               <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"></div>
                                                                            
                                                                                 {% endif %}
                                                                            </div>
@@ -387,9 +388,9 @@ color:#ff4500;
                                 
                                                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
                                 
-                                                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
+                                                                                <a href="{% url 'home:home' %}">{% translate 'Email me When the price drops' %}</a>
                                 
-                                                                                <span class="pd-detail__click-count">(20)</span></span></div>
+                                                                                <span class="pd-detail__click-count"> </span></span></div>
                                                                     </div>
                                                                     <div class="u-s-m-b-15">
                                                                         <ul class="pd-social-list">
@@ -428,26 +429,26 @@ color:#ff4500;
                                                                                 </div>
                                                                                 <div class="u-s-m-b-15">
                                 
-                                                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
+                                                                                    <button class="btn btn--e-brand-b-2" type="submit">{% translate 'Add to Cart' %}</button>
                                                                                     
-                                                                                    <button class="btn btn--e-brand-b-2 " id="dismis" data-dismiss="modal" type="button">Close</button>
+                                                                                    <button class="btn btn--e-brand-b-2 " id="dismis" data-dismiss="modal" type="button">{% translate 'Close' %}</button>
                                                                                 </div>
                                                                             </div>
                                                                         </form>
                                                                     </div>
                                                                     <div class="u-s-m-b-15">
                                 
-                                                                        <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                                                        <span class="pd-detail__label u-s-m-b-8">{% translate 'Product Policy:' %}</span>
                                                                         <ul class="pd-detail__policy-list">
                                                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
                                 
-                                                                                <span>Buyer Protection.</span></li>
+                                                                                <span>{% translate 'Buyer Protection.' %}</span></li>
                                                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
                                 
-                                                                                <span>Full Refund if you don't receive your order.</span></li>
+                                                                                <span>{% translate "Full Refund if you don't receive your order." %}</span></li>
                                                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
                                 
-                                                                                <span>Returns accepted if product not as described.</span></li>
+                                                                                <span>{% translate 'Returns accepted if product not as described.' %}</span></li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -473,7 +474,7 @@ color:#ff4500;
                         <div class="success u-s-m-b-30">
                             <div class="success__text-wrap"><i class="fas fa-check"></i>
 
-                                <span>Item is added successfully!</span></div>
+                                <span>{% translate 'Item is added successfully!' %}</span></div>
                             <div class="success__img-wrap">
 
                                 <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
@@ -481,7 +482,7 @@ color:#ff4500;
 
                                 <span class="success__name">{{i.name|title}}</span>
 
-                                <span class="success__quantity">Quantity: 1</span>
+                                <span class="success__quantity">{% translate 'Quantity' %}: 1</span>
 
                                 <span class="success__price">${{i.price}}</span></div>
                         </div>
@@ -489,16 +490,16 @@ color:#ff4500;
                     <div class="col-lg-6 col-md-12">
                         <div class="s-option">
 
-                            <span class="s-option__text">1 item (s) in your cart</span>
+                            <span class="s-option__text">{% translate '1 item (s) in your cart' %}</span>
                             <div class="s-option__link-box">
 
-                                <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">CONTINUE SHOPPING</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">{% translate 'CONTINUE SHOPPING' %}</a>
 
-                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">{% translate 'VIEW CART' %}</a>
                                 {% if request.user.is_authenticated %}
-                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">PROCEED TO CHECKOUT</a></div>
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
                                 {% else %}
-                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">PROCEED TO CHECKOUT</a></div>
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
 
                                 {% endif %}
                         </div>
@@ -516,7 +517,7 @@ color:#ff4500;
                             <div class="col-lg-12">
                                 <div class="load-more">
 
-                                    <button class="btn btn--e-brand"  type="button"><a style="color:#fff;" href="{% url 'home:products' %}">Load More</a></button></div>
+                                    <button class="btn btn--e-brand"  type="button"><a style="color:#fff;" href="{% url 'home:products' %}">{% translate 'Load More' %}</a></button></div>
                             </div>
                         </div>
                     </div>
@@ -535,11 +536,11 @@ color:#ff4500;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">DEAL OF THE DAY</h1>
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">{% translate 'DEAL OF THE DAY' %}</h1>
 
-                                    <span class="section__span u-c-silver">BUY DEAL OF THE DAY, HURRY UP! THESE NEW PRODUCTS WILL EXPIRE SOON.</span>
+                                    <span class="section__span u-c-silver">{% translate 'BUY DEAL OF THE DAY, HURRY UP! THESE NEW PRODUCTS WILL EXPIRE SOON.' %}</span>
 
-                                    <span class="section__span u-c-silver">ADD THESE ON YOUR CART.</span>
+                                    <span class="section__span u-c-silver">{% translate 'ADD THESE ON YOUR CART' %}.</span>
                                 </div>
                             </div>
                         </div>
@@ -569,27 +570,27 @@ color:#ff4500;
                                             <ul class="product-o__action-list">
                                                 <li>
 
-                                                    <a data-modal="modal" data-modal-id=".deal-{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                    <a data-modal="modal" data-modal-id=".deal-{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Quick View' %}"><i class="fas fa-search-plus"></i></a></li>
                                                 <li>
                                                     <input type="hidden" class="product-id-{{i.product.id}}"  value="{{i.product.id}}">
-                                                <a  value="{{i.product.id}}" data-index="{{i.product.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#deal-{{i.product.id}}"  data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a>
+                                                <a  value="{{i.product.id}}" data-index="{{i.product.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#deal-{{i.product.id}}"  data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Cart' %}"><i class="fas fa-plus-circle"></i></a>
 
                                                 <li  class="red-heart-{{i.product.id}}">
       
                                                         {% if  i.product in wishlist.products.all %}
                                                         <input class="wishlist-add-{{i.product.id}}" type="hidden" value="{{i.product.id}}">
         
-                                                        <a id="wishlist" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"><i class="fas fa-heart"></i> </a>
+                                                        <a id="wishlist" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"><i class="fas fa-heart"></i> </a>
                                                    
                                                       {% else %}
                                                       <input class="wishlist-add-{{i.product.id}}" type="hidden" value="{{i.product.id}}">
-                                                      <a  id="wishlist-add" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a>
+                                                      <a  id="wishlist-add" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"><i class="fas fa-heart"></i></a>
                                                    
                                                         {% endif %}
                                                         </li>
                                                 <li>
 
-                                                    <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                    <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Email me When the price drops' %}"><i class="fas fa-envelope"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -636,7 +637,7 @@ color:#ff4500;
                                     <ul class="pd-breadcrumb__list">
                                         <li class="has-separator">
 
-                                            <a href="{% url 'home:home' %}">Home</a></li>
+                                            <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                         <li class="has-separator">
 
                                             <a href="{% url 'home:category_filter' slug=i.product.category.name %}">{{i.product.category.name|title}}</a></li>
@@ -684,7 +685,7 @@ color:#ff4500;
 
                                             <span class="pd-detail__price">${{i.product.discount}}</span>
                                        
-                                            <span class="pd-detail__discount">({{i.product.discount_percent}}% OFF)</span><del class="pd-detail__del">${{i.product.price}}</del></div>
+                                            <span class="pd-detail__discount">({{i.product.discount_percent}}% {% translate 'OFF' %})</span><del class="pd-detail__del">${{i.product.price}}</del></div>
                                            
                                         </div>
                                     <div class="u-s-m-b-15">
@@ -701,14 +702,14 @@ color:#ff4500;
 
                                             <span class="pd-detail__review u-s-m-l-4">
 
-                                                <a href="{% url 'home:this_product' id=i.product.id %}">{{i.product.comments}} Reviews</a></span></div>
+                                                <a href="{% url 'home:this_product' id=i.product.id %}">{{i.product.comments}}{% translate ' Reviews' %}</a></span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
 
-                                            <span class="pd-detail__stock">{{i.product.stock}} in stock</span>
+                                            <span class="pd-detail__stock">{{i.product.stock}}{% translate ' in stock' %}</span>
 
-                                            <span class="pd-detail__left">Only 2 left</span></div>
+                                            <span class="pd-detail__left">{% translate 'Only 2 left' %}</span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
 
@@ -723,11 +724,11 @@ color:#ff4500;
                                                 {% if  i.product in wishlist.products.all %}
                                                 <input class="wishlist-add-{{i.product.id}}" type="hidden" value="{{i.product.id}}">
 
-                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"></div>
                                            
                                               {% else %}
                                               <input class="wishlist-add-{{i.product.id}}" type="hidden" value="{{i.product.id}}">
-                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.product.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"></div>
                                            
                                                 {% endif %}
                                            </div>
@@ -738,9 +739,9 @@ color:#ff4500;
 
                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
+                                                <a href="{% url 'home:home' %}">{% translate 'Email me When the price drops' %}</a>
 
-                                                <span class="pd-detail__click-count">(20)</span></span></div>
+                                                <span class="pd-detail__click-count"> </span></span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <ul class="pd-social-list">
@@ -779,25 +780,25 @@ color:#ff4500;
                                                 </div>
                                                 <div class="u-s-m-b-15">
 
-                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
-                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">Close</button>
+                                                    <button class="btn btn--e-brand-b-2" type="submit">{% translate 'Add to Cart' %}</button>
+                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">{% translate 'Close' %}</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="u-s-m-b-15">
 
-                                        <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                        <span class="pd-detail__label u-s-m-b-8">{% translate 'Product Policy:' %}</span>
                                         <ul class="pd-detail__policy-list">
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Buyer Protection.</span></li>
+                                                <span>{% translate 'Buyer Protection' %}.</span></li>
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Full Refund if you don't receive your order.</span></li>
+                                                <span>{% translate "Full Refund if you don't receive your order" %}.</span></li>
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Returns accepted if product not as described.</span></li>
+                                                <span>{% translate 'Returns accepted if product not as described' %}.</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -822,7 +823,7 @@ color:#ff4500;
                         <div class="success u-s-m-b-30">
                             <div class="success__text-wrap"><i class="fas fa-check"></i>
 
-                                <span>Item is added successfully!</span></div>
+                                <span>{% translate 'Item is added successfully!' %}</span></div>
                             <div class="success__img-wrap">
 
                                 <img class="u-img-fluid" src="{{i.product.image.first.image}}" alt=""></div>
@@ -830,7 +831,7 @@ color:#ff4500;
 
                                 <span class="success__name">{{i.product.name|title}}</span>
 
-                                <span class="success__quantity">Quantity: 1</span>
+                                <span class="success__quantity">{% translate 'Quantity: 1' %}</span>
 
                                 <span class="success__price">${{i.product.price}}</span></div>
                         </div>
@@ -838,17 +839,17 @@ color:#ff4500;
                     <div class="col-lg-6 col-md-12">
                         <div class="s-option">
 
-                            <span class="s-option__text">1 item (s) in your cart</span>
+                            <span class="s-option__text">{% translate '1 item (s) in your cart' %}</span>
                             <div class="s-option__link-box">
 
-                                <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">CONTINUE SHOPPING</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">{% translate 'CONTINUE SHOPPING' %}</a>
 
-                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">{% translate 'VIEW CART' %}</a>
 
                                 {% if request.user.is_authenticated %}
-                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">PROCEED TO CHECKOUT</a></div>
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
                                 {% else %}
-                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">PROCEED TO CHECKOUT</a></div>
+                                <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
 
                                 {% endif %}                        </div>
                     </div>
@@ -877,9 +878,9 @@ color:#ff4500;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">NEW ARRIVALS</h1>
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">{% translate 'NEW ARRIVALS' %}</h1>
 
-                                    <span class="section__span u-c-silver">GET UP FOR NEW ARRIVALS</span>
+                                    <span class="section__span u-c-silver">{% translate 'GET UP FOR NEW ARRIVALS' %}</span>
                                 </div>
                             </div>
                         </div>
@@ -905,29 +906,29 @@ color:#ff4500;
                                                 <ul class="product-o__action-list">
                                                     <li>
 
-                                                    <a data-modal="modal" data-modal-id=".arrivallls-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a>
+                                                    <a data-modal="modal" data-modal-id=".arrivallls-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Quick View' %}"><i class="fas fa-search-plus"></i></a>
                                                     </li>
                                                     <li>
                                                          <input type="hidden" class="product-id-{{i.id}}"  value="{{i.id}}">
-                                                         <a value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#arrivals-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a>
+                                                         <a value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#arrivals-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Cart' %}"><i class="fas fa-plus-circle"></i></a>
 
                                                         </li>
                                                     <li class="red-heart-{{i.id}}">
                                                     {% if  i in wishlist.products.all %}
                                                             <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
             
-                                                            <a id="wishlist" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"><i class="fas fa-heart"></i> </a>
+                                                            <a id="wishlist" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"><i class="fas fa-heart"></i> </a>
                                                        
                                                           {% else %}
                                                           <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                                          <a  id="wishlist-add" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a>
+                                                          <a  id="wishlist-add" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"><i class="fas fa-heart"></i></a>
                                                        
                                                             {% endif %}
                                                        
                                                     </li>
                                                     <li>
 
-                                                        <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                        <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Email me When the price drops' %}"><i class="fas fa-envelope"></i></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -984,7 +985,7 @@ color:#ff4500;
                             <ul class="pd-breadcrumb__list">
                                 <li class="has-separator">
 
-                                    <a href="{% url 'home:home' %}">Home</a></li>
+                                    <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                 <li class="has-separator">
 
                                     <a href="{% url 'home:category_filter' slug=i.category.name %}">{{i.category.name|title}}</a></li>
@@ -1032,7 +1033,7 @@ color:#ff4500;
 
                                     <span class="pd-detail__price">${{i.discount}}</span>
                                
-                                    <span class="pd-detail__discount">({{i.discount_percent}}% OFF)</span><del class="pd-detail__del">${{i.price}}</del></div>
+                                    <span class="pd-detail__discount">({{i.discount_percent}}% {% translate 'OFF' %})</span><del class="pd-detail__del">${{i.price}}</del></div>
                                    
                                 </div>
                             <div class="u-s-m-b-15">
@@ -1049,14 +1050,14 @@ color:#ff4500;
 
                                     <span class="pd-detail__review u-s-m-l-4">
 
-                                        <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}} Reviews</a></span></div>
+                                        <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}}{% translate ' Reviews' %}</a></span></div>
                             </div>
                             <div class="u-s-m-b-15">
                                 <div class="pd-detail__inline">
 
-                                    <span class="pd-detail__stock">{{i.stock}} in stock</span>
+                                    <span class="pd-detail__stock">{{i.stock}}{% translate ' in stock' %}</span>
 
-                                    <span class="pd-detail__left">Only 2 left</span></div>
+                                    <span class="pd-detail__left">{% translate 'Only 2 left' %}</span></div>
                             </div>
                             <div class="u-s-m-b-15">
 
@@ -1070,11 +1071,11 @@ color:#ff4500;
                                         {% if  i in wishlist.products.all %}
                                         <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                        <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                        <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"></div>
                                    
                                       {% else %}
                                       <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                      <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                      <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"></div>
                                    
                                         {% endif %}
                                    </div>
@@ -1085,9 +1086,9 @@ color:#ff4500;
 
                                     <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                        <a href="{% url 'home:home' %}">Email me When the price drops</a>
+                                        <a href="{% url 'home:home' %}">{% translate 'Email me When the price drops' %}</a>
 
-                                        <span class="pd-detail__click-count">(20)</span></span></div>
+                                        <span class="pd-detail__click-count"> </span></span></div>
                             </div>
                             <div class="u-s-m-b-15">
                                 <ul class="pd-social-list">
@@ -1126,25 +1127,25 @@ color:#ff4500;
                                         </div>
                                         <div class="u-s-m-b-15">
 
-                                            <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
-                                            <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">Close</button>
+                                            <button class="btn btn--e-brand-b-2" type="submit">{% translate 'Add to Cart' %}</button>
+                                            <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">{% translate 'Close' %}</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="u-s-m-b-15">
 
-                                <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                <span class="pd-detail__label u-s-m-b-8">{% translate 'Product Policy:' %}</span>
                                 <ul class="pd-detail__policy-list">
                                     <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                        <span>Buyer Protection.</span></li>
+                                        <span>{% translate 'Buyer Protection' %}.</span></li>
                                     <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                        <span>Full Refund if you don't receive your order.</span></li>
+                                        <span>{% translate "Full Refund if you don't receive your order" %}.</span></li>
                                     <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                        <span>Returns accepted if product not as described.</span></li>
+                                        <span>{% translate 'Returns accepted if product not as described' %}.</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -1169,7 +1170,7 @@ color:#ff4500;
                 <div class="success u-s-m-b-30">
                     <div class="success__text-wrap"><i class="fas fa-check"></i>
 
-                        <span>Item is added successfully!</span></div>
+                        <span>{% translate 'Item is added successfully' %}!</span></div>
                     <div class="success__img-wrap">
 
                         <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
@@ -1185,16 +1186,16 @@ color:#ff4500;
             <div class="col-lg-6 col-md-12">
                 <div class="s-option">
 
-                    <span class="s-option__text">1 item (s) in your cart</span>
+                    <span class="s-option__text">{% translate '1 item (s) in your cart' %}</span>
                     <div class="s-option__link-box">
 
-                        <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">CONTINUE SHOPPING</a>
+                        <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">{% translate 'CONTINUE SHOPPING' %}</a>
 
-                        <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
+                        <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">{% translate 'VIEW CART' %}</a>
                         {% if request.user.is_authenticated %}
-                        <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">PROCEED TO CHECKOUT</a></div>
+                        <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' id=cart.id %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
                         {% else %}
-                        <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">PROCEED TO CHECKOUT</a></div>
+                        <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
                         {% endif %}
                     </div>
             </div>
@@ -1220,18 +1221,18 @@ color:#ff4500;
                                 <div class="banner-bg__wrap">
                                     <div class="banner-bg__text-1">
 
-                                        <span class="u-c-white">Global</span>
+                                        <span class="u-c-white">{% translate 'Global' %}</span>
 
-                                        <span class="u-c-secondary">Offers</span></div>
+                                        <span class="u-c-secondary">{% translate 'Offers' %}</span></div>
                                     <div class="banner-bg__text-2">
 
-                                        <span class="u-c-secondary">Official Launch</span>
+                                        <span class="u-c-secondary">{% translate 'Official Launch' %}</span>
 
-                                        <span class="u-c-white">Don't Miss!</span></div>
+                                        <span class="u-c-white">{% translate "Don't Miss!" %}</span></div>
 
-                                    <span class="banner-bg__text-block banner-bg__text-3 u-c-secondary">Enjoy Free Shipping when you buy 2 items and above!</span>
+                                    <span class="banner-bg__text-block banner-bg__text-3 u-c-secondary">{% translate 'Enjoy Free Shipping when you buy 2 items and above!' %}</span>
 
-                                    <a class="banner-bg__shop-now btn--e-secondary" href="{% url 'home:products' %}">Shop Now</a>
+                                    <a class="banner-bg__shop-now btn--e-secondary" href="{% url 'home:products' %}">{% translate 'Shop Now' %}</a>
                                 </div>
                             </div>
                         </div>
@@ -1251,9 +1252,9 @@ color:#ff4500;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">FEATURED PRODUCTS</h1>
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">{% translate 'FEATURED PRODUCTS' %}</h1>
 
-                                    <span class="section__span u-c-silver">FIND NEW FEATURED PRODUCTS</span>
+                                    <span class="section__span u-c-silver">{% translate 'FIND NEW FEATURED PRODUCTS' %}</span>
                                 </div>
                             </div>
                         </div>
@@ -1278,7 +1279,7 @@ color:#ff4500;
                                             <ul class="product-o__action-list">
                                                 <li>
 
-                                                    <a data-modal="modal" data-modal-id=".featured-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                    <a data-modal="modal" data-modal-id=".featured-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Quick View"' %}><i class="fas fa-search-plus"></i></a></li>
                                                 <li>
                                                     <input type="hidden" class="product-id-{{i.id}}"  value="{{i.id}}">
                                                     <a value="{{i.id}}" data-index="{{i.id}}" id="ajax-cart" data-modal="modal" data-modal-id="#featured-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a>
@@ -1291,17 +1292,17 @@ color:#ff4500;
                                                         {% if  i in wishlist.products.all %}
                                                         <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
         
-                                                        <a id="wishlist" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"><i class="fas fa-heart"></i> </a>
+                                                        <a id="wishlist" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"><i class="fas fa-heart"></i> </a>
                                                    
                                                       {% else %}
                                                       <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                                      <a  id="wishlist-add" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a>
+                                                      <a  id="wishlist-add" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"><i class="fas fa-heart"></i></a>
                                                    
                                                         {% endif %}
                                                     </li>
                                                 <li>
 
-                                                    <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                    <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Email me When the price drops' %}"><i class="fas fa-envelope"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1347,7 +1348,7 @@ color:#ff4500;
                                     <ul class="pd-breadcrumb__list">
                                         <li class="has-separator">
 
-                                            <a href="{% url 'home:home' %}">Home</a></li>
+                                            <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                         <li class="has-separator">
 
                                             <a href="{% url 'home:category_filter' slug=i.category.name %}">{{i.category.name|title}}</a></li>
@@ -1395,7 +1396,7 @@ color:#ff4500;
 
                                             <span class="pd-detail__price">${{i.discount}}</span>
                                        
-                                            <span class="pd-detail__discount">({{i.discount_percent}}% OFF)</span><del class="pd-detail__del">${{i.price}}</del></div>
+                                            <span class="pd-detail__discount">({{i.discount_percent}}% {% translate 'OFF' %})</span><del class="pd-detail__del">${{i.price}}</del></div>
                                            
                                         </div>
                                     <div class="u-s-m-b-15">
@@ -1412,14 +1413,14 @@ color:#ff4500;
 
                                             <span class="pd-detail__review u-s-m-l-4">
 
-                                                <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}} Reviews</a></span></div>
+                                                <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}}{% translate ' Reviews' %}</a></span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <div class="pd-detail__inline">
 
-                                            <span class="pd-detail__stock">{{i.stock}} in stock</span>
+                                            <span class="pd-detail__stock">{{i.stock}}{% translate ' in stock' %}</span>
 
-                                            <span class="pd-detail__left">Only 2 left</span></div>
+                                            <span class="pd-detail__left">{% translate 'Only 2 left' %}</span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
 
@@ -1433,11 +1434,11 @@ color:#ff4500;
                                                 {% if  i in wishlist.products.all %}
                                                 <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
 
-                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                                <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"></div>
                                            
                                               {% else %}
                                               <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                              <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"></div>
                                            
                                                 {% endif %}
                                            </div>
@@ -1448,9 +1449,9 @@ color:#ff4500;
 
                                             <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                                <a href="{% url 'home:home' %}">Email me When the price drops</a>
+                                                <a href="{% url 'home:home' %}">{% translate 'Email me When the price drops' %}</a>
 
-                                                <span class="pd-detail__click-count">(20)</span></span></div>
+                                                <span class="pd-detail__click-count"> </span></span></div>
                                     </div>
                                     <div class="u-s-m-b-15">
                                         <ul class="pd-social-list">
@@ -1489,25 +1490,25 @@ color:#ff4500;
                                                 </div>
                                                 <div class="u-s-m-b-15">
 
-                                                    <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
-                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">Close</button>
+                                                    <button class="btn btn--e-brand-b-2" type="submit">{% translate 'Add to Cart' %}</button>
+                                                    <button class="btn btn--e-brand-b-2" id="dismis" data-dismiss="modal" type="button">{% translate 'Close' %}</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="u-s-m-b-15">
 
-                                        <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                        <span class="pd-detail__label u-s-m-b-8">{% translate 'Product Policy' %}:</span>
                                         <ul class="pd-detail__policy-list">
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Buyer Protection.</span></li>
+                                                <span>{% translate 'Buyer Protection' %}.</span></li>
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Full Refund if you don't receive your order.</span></li>
+                                                <span>{% translate "Full Refund if you don't receive your order." %}</span></li>
                                             <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                                <span>Returns accepted if product not as described.</span></li>
+                                                <span>{% translate 'Returns accepted if product not as described.' %}</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1532,7 +1533,7 @@ color:#ff4500;
                         <div class="success u-s-m-b-30">
                             <div class="success__text-wrap"><i class="fas fa-check"></i>
 
-                                <span>Item is added successfully!</span></div>
+                                <span>{% translate 'Item is added successfully!' %}</span></div>
                             <div class="success__img-wrap">
 
                                 <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
@@ -1540,7 +1541,7 @@ color:#ff4500;
 
                                 <span class="success__name">{{i.name|title}}</span>
 
-                                <span class="success__quantity">Quantity: 1</span>
+                                <span class="success__quantity">{% translate 'Quantity: 1' %}</span>
 
                                 <span class="success__price">${{i.price}}</span></div>
                         </div>
@@ -1548,17 +1549,17 @@ color:#ff4500;
                     <div class="col-lg-6 col-md-12">
                         <div class="s-option">
 
-                            <span class="s-option__text">1 item (s) in your cart</span>
+                            <span class="s-option__text">{% translate '1 item (s) in your car' %}t</span>
                             <div class="s-option__link-box">
 
-                                <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">CONTINUE SHOPPING</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">{% translate 'CONTINUE SHOPPING' %}</a>
 
-                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
+                                <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">{% translate 'VIEW CAR' %}T</a>
 {% if request.user.is_authenticated %}
-<a class="s-option__link btn--e-brand-shadow" href= "{% url 'home:order' id=cart.id %}">PROCEED TO CHECKOUT</a></div>
+<a class="s-option__link btn--e-brand-shadow" href= "{% url 'home:order' id=cart.id %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
 
 {% else %}
-                                <a class="s-option__link btn--e-brand-shadow" href= "{% url 'account_login'  %}">PROCEED TO CHECKOUT</a></div>
+                                <a class="s-option__link btn--e-brand-shadow" href= "{% url 'account_login'  %}">{% translate 'PROCEED TO CHECKOUT' %}</a></div>
                      {% endif %}
                      
                             </div>
@@ -1595,12 +1596,12 @@ color:#ff4500;
                                         <div class="promotion__text-wrap">
                                             <div class="promotion__text-1">
 
-                                                <span class="u-c-secondary">ACCESSORIES FOR YOUR EVERYDAY</span></div>
+                                                <span class="u-c-secondary">{% translate 'ACCESSORIES FOR YOUR EVERYDAY' %}</span></div>
                                             <div class="promotion__text-2">
 
-                                                <span class="u-c-secondary">GET IN</span>
+                                                <span class="u-c-secondary">{% translate 'GET IN' %}</span>
 
-                                                <span class="u-c-brand">TOUCH</span></div>
+                                                <span class="u-c-brand">{% translate 'TOUCH' %}</span></div>
                                         </div>
                                     </div>
                                 </a></div>
@@ -1614,12 +1615,12 @@ color:#ff4500;
                                         <div class="promotion__text-wrap">
                                             <div class="promotion__text-1">
 
-                                                <span class="u-c-secondary">SMARTPHONE</span>
+                                                <span class="u-c-secondary">{% translate 'SMARTPHONE' %}</span>
 
-                                                <span class="u-c-brand">2019</span></div>
+                                                <span class="u-c-brand">2021</span></div>
                                             <div class="promotion__text-2">
 
-                                                <span class="u-c-secondary">NEW ARRIVALS</span></div>
+                                                <span class="u-c-secondary">{% translate 'NEW ARRIVALS' %}</span></div>
                                         </div>
                                     </div>
                                 </a></div>
@@ -1633,10 +1634,10 @@ color:#ff4500;
                                         <div class="promotion__text-wrap">
                                             <div class="promotion__text-1">
 
-                                                <span class="u-c-secondary">DSLR FOR NEW GENERATION</span></div>
+                                                <span class="u-c-secondary">{% translate 'DSLR FOR NEW GENERATION' %}</span></div>
                                             <div class="promotion__text-2">
 
-                                                <span class="u-c-brand">GET UP TO 10% OFF</span></div>
+                                                <span class="u-c-brand">{% translate 'GET UP TO 10 % OFF' %}</span></div>
                                         </div>
                                     </div>
                                 </a></div>
@@ -1658,7 +1659,7 @@ color:#ff4500;
                             <div class="col-lg-4 col-md-6 col-sm-6 u-s-m-b-30">
                                 <div class="column-product">
 
-                                    <span class="column-product__title u-c-secondary u-s-m-b-25">SPECIAL PRODUCTS</span>
+                                    <span class="column-product__title u-c-secondary u-s-m-b-25">{% translate 'SPECIAL PRODUCTS' %}</span>
                                     <ul class="column-product__list">
                                         {% for i in arrivals|slice:"0:4" %}
                                         <li class="column-product__item">
@@ -1688,7 +1689,7 @@ color:#ff4500;
                             <div class="col-lg-4 col-md-6 col-sm-6 u-s-m-b-30">
                                 <div class="column-product">
 
-                                    <span class="column-product__title u-c-secondary u-s-m-b-25">MOST BUY</span>
+                                    <span class="column-product__title u-c-secondary u-s-m-b-25">{% translate 'MOST BUY' %}</span>
                                     <ul class="column-product__list">
                                         {% for i in paid|slice:"0:4" %}
                                         <li class="column-product__item">
@@ -1721,7 +1722,7 @@ color:#ff4500;
                             <div class="col-lg-4 col-md-6 col-sm-6 u-s-m-b-30">
                                 <div class="column-product">
 
-                                    <span class="column-product__title u-c-secondary u-s-m-b-25">FLASH PRODUCTS</span>
+                                    <span class="column-product__title u-c-secondary u-s-m-b-25">{% translate 'FLASH PRODUCTS' %}</span>
                                     <ul class="column-product__list">
                                         {% for i in arrivals|slice:"0:4" %}
                                         <li class="column-product__item">
@@ -1779,9 +1780,9 @@ color:#ff4500;
                                     <div class="service__icon"><i class="fas fa-truck"></i></div>
                                     <div class="service__info-wrap">
 
-                                        <span class="service__info-text-1">Free Shipping</span>
+                                        <span class="service__info-text-1">{% translate 'Free Shipping' %}</span>
 
-                                        <span class="service__info-text-2">Free shipping on all US order or order above $200</span></div>
+                                        <span class="service__info-text-2">{% translate 'Free shipping on all US order or order above $200' %}</span></div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 u-s-m-b-30">
@@ -1789,9 +1790,9 @@ color:#ff4500;
                                     <div class="service__icon"><i class="fas fa-redo"></i></div>
                                     <div class="service__info-wrap">
 
-                                        <span class="service__info-text-1">Shop with Confidence</span>
+                                        <span class="service__info-text-1">{% translate 'Shop with Confidence' %}</span>
 
-                                        <span class="service__info-text-2">Our Protection covers your purchase from click to delivery</span></div>
+                                        <span class="service__info-text-2">{% translate 'Our Protection covers your purchase from click to delivery' %}</span></div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 u-s-m-b-30">
@@ -1799,9 +1800,9 @@ color:#ff4500;
                                     <div class="service__icon"><i class="fas fa-headphones-alt"></i></div>
                                     <div class="service__info-wrap">
 
-                                        <span class="service__info-text-1">24/7 Help Center</span>
+                                        <span class="service__info-text-1">{% translate '24/7 Help Center' %}</span>
 
-                                        <span class="service__info-text-2">Round-the-clock assistance for a smooth shopping experience</span></div>
+                                        <span class="service__info-text-2">{% translate 'Round-the-clock assistance for a smooth shopping experience' %}</span></div>
                                 </div>
                             </div>
                         </div>
@@ -2029,9 +2030,9 @@ color:#ff4500;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">CLIENTS FEEDBACK</h1>
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">{% translate 'CLIENTS FEEDBACK' %}</h1>
 
-                                    <span class="section__span u-c-silver">WHAT OUR CLIENTS SAY</span>
+                                    <span class="section__span u-c-silver">{% translate 'WHAT OUR CLIENTS SAY' %}</span>
                                 </div>
                             </div>
                         </div>
@@ -2177,10 +2178,10 @@ color:#ff4500;
                     <div class="col-lg-6 new-l__col-2">
                         <div class="new-l__section u-s-m-t-30">
                             <div class="u-s-m-b-8 new-l--center">
-                                <h3 class="new-l__h3">Newsletter</h3>
+                                <h3 class="new-l__h3">{% translate 'Newsletter' %}</h3>
                             </div>
                             <div class="u-s-m-b-30 new-l--center">
-                                <p class="new-l__p1">Subscribe for emails to get the scoop on new arrivals, special sales and more.</p>
+                                <p class="new-l__p1">{% translate 'Subscribe for emails to get the scoop on new arrivals, special sales and more.' %}</p>
                             </div>
                             <form class="new-l__form">
                                 <div class="u-s-m-b-15">
@@ -2188,14 +2189,14 @@ color:#ff4500;
                                     <input class="news-l__input" type="text" placeholder="E-mail Address"></div>
                                 <div class="u-s-m-b-15">
 
-                                    <button class="btn btn--e-brand-b-2" type="submit">Subscribe!</button></div>
+                                    <button class="btn btn--e-brand-b-2" type="submit">{% translate 'Subscribe' %}!</button></div>
                             </form>
                             <div class="u-s-m-b-15 new-l--center">
-                                <p class="new-l__p2">By Signing up, you agree to receive Reshop offers,<br />promotions and other commercial messages. You may unsubscribe at any time.</p>
+                                <p class="new-l__p2">{% translate "By Signing up, you agree to receive Reshop offers" %},<br />{% translate "promotions and other commercial messages. You may unsubscribe at any time." %}</p>
                             </div>
                             <div class="u-s-m-b-15 new-l--center">
 
-                                <a class="new-l__link" data-dismiss="modal">No Thanks</a></div>
+                                <a class="new-l__link" data-dismiss="modal">{% translate 'No Thanks' %}</a></div>
                         </div>
                     </div>
                 </div>

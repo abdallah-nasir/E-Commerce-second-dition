@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
 <style type="text/css">
@@ -42,7 +43,7 @@ padding-right:10px;
                                 <ul class="pd-breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="has-separator">
 
                                         <a href="{% url 'home:category_filter' slug=product.category.name %}">{{product.category.name}}</a></li>
@@ -67,7 +68,7 @@ padding-right:10px;
 
                                     </div>
 
-                                    <span class="pd-text">Click for larger zoom</span>
+                                    <span class="pd-text">{% translate 'Click for larger zoom' %}</span>
                                 </div>
                                 <div class="u-s-m-t-15">
                                     <div class="slider-fouc">
@@ -95,7 +96,7 @@ padding-right:10px;
 
                                         <span class="pd-detail__price">${{product.discount}}</span>
 
-                                        <span class="pd-detail__discount">({{product.discount_percent}}% OFF)</span><del class="pd-detail__del">${{product.price}}</del></div>
+                                        <span class="pd-detail__discount">({{product.discount_percent}}%{% translate 'OFF' %})</span><del class="pd-detail__del">${{product.price}}</del></div>
                                 </div>
                                 <div class="u-s-m-b-15">
                                     <div class="pd-detail__rating gl-rating-style">
@@ -112,14 +113,14 @@ padding-right:10px;
 
                                         <span class="pd-detail__review u-s-m-l-4">
 
-                                            <a id="counts-4" data-click-scroll="#view-review">{{details.count}} Reviews</a></span></div>
+                                            <a id="counts-4" data-click-scroll="#view-review">{{details.count}}{% translate ' Reviews' %}</a></span></div>
                                 </div>
                                 <div class="u-s-m-b-15">
                                     <div class="pd-detail__inline">
 
-                                        <span class="pd-detail__stock">{{product.stock}} in stock</span>
+                                        <span class="pd-detail__stock">{{product.stock}}{% translate ' in stock' %}</span>
 
-                                        <span class="pd-detail__left">Only 2 left</span></div>
+                                        <span class="pd-detail__left">{% translate 'Only 2 left' %}</span></div>
                                 </div>
                                 <div class="u-s-m-b-15">
 
@@ -131,11 +132,11 @@ padding-right:10px;
                                             {% if  product in wishlist.products.all %}
                                             <input class="wishlist-add-{{product.id}}" type="hidden" value="{{product.id}}">
 
-                                            <a id="wishlist" data-index="{{product.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"><i id="fas-heart" class="fas fa-heart"></i> Remove from Wishlist</a>
+                                            <a id="wishlist" data-index="{{product.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"><i id="fas-heart" class="fas fa-heart"></i>{% translate 'Remove from Wishlist' %}</a>
                                        
                                           {% else %}
                                           <input class="wishlist-add-{{product.id}}" type="hidden" value="{{product.id}}">
-                                          <a  id="wishlist-add" data-index="{{product.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i id="fas-heart" class="fas fa-heart"></i>Add to Wishlist </a>
+                                          <a  id="wishlist-add" data-index="{{product.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"><i id="fas-heart" class="fas fa-heart"></i>{% translate 'Add to Wishlist' %} </a>
                                        
                                             {% endif %}
                                          
@@ -148,9 +149,9 @@ padding-right:10px;
 
                                         <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
 
-                                            <a href="{% url 'home:home' %}">Email me When the price drops</a>
+                                            <a href="{% url 'home:home' %}">{% translate 'Email me When the price drops' %}</a>
 
-                                            <span class="pd-detail__click-count">(20)</span></span></div>
+                                            <span class="pd-detail__click-count"></span></span></div>
                                 </div>
                                 <div class="u-s-m-b-15">
                                     <ul class="pd-social-list">
@@ -218,7 +219,7 @@ padding-right:10px;
                                             </div>
                                             <div class="u-s-m-b-15">
 
-                                                <button  class="btn btn--e-brand-b-2" id="ajax-product" type="submit">Add to Cart</button></div>
+                                                <button  class="btn btn--e-brand-b-2" id="ajax-product" type="submit">{% translate 'Add to Cart' %}</button></div>
                                         </div>
                                     </form>
 
@@ -228,17 +229,17 @@ padding-right:10px;
                                 </div>
                                 <div class="u-s-m-b-15">
 
-                                    <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                    <span class="pd-detail__label u-s-m-b-8">{% translate 'Product Policy' %}:</span>
                                     <ul class="pd-detail__policy-list">
                                         <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                            <span>Buyer Protection.</span></li>
+                                            <span>{% translate 'Buyer Protection' %}.</span></li>
                                         <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                            <span>Full Refund if you don't receive your order.</span></li>
+                                            <span>{% translate "Full Refund if you don't receive your order" %}.</span></li>
                                         <li><i class="fas fa-check-circle u-s-m-r-8"></i>
 
-                                            <span>Returns accepted if product not as described.</span></li>
+                                            <span>{% translate "Returns accepted if product not as described" %}.</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -258,13 +259,13 @@ padding-right:10px;
                                     <ul class="nav pd-tab__list">
                                         <li class="nav-item">
 
-                                            <a class="nav-link" data-toggle="tab" href="#pd-desc">DESCRIPTION</a></li>
+                                            <a class="nav-link" data-toggle="tab" href="#pd-desc">{% translate "DESCRIPTION" %}</a></li>
                                         <!-- <li class="nav-item">
 
                                             <a class="nav-link" data-toggle="tab" href="#pd-tag">TAGS</a></li> -->
                                         <li class="nav-item">
 
-                                            <a class="nav-link active" id="view-review" data-toggle="tab" href="#pd-rev">REVIEWS
+                                            <a class="nav-link active" id="view-review" data-toggle="tab" href="#pd-rev">{% translate "REVIEWS" %}
 
                                                 <span id="counts-2">({{details.count}})</span></a></li>
                                     </ul>
@@ -275,6 +276,9 @@ padding-right:10px;
                                     <div class="tab-pane" id="pd-desc">
                                         <div class="pd-tab__desc">
                                             <div class="u-s-m-b-15">
+                                                <h4>{% translate "PRODUCT INFORMATION" %}</h4>
+                                            </div>
+                                            <div class="u-s-m-b-15">
                                                 <p>{{product.details}}</p>
                                             </div>
                                             <div class="u-s-m-b-30"><iframe src="https://www.youtube.com/embed/qKqSBm07KZk" allowfullscreen></iframe></div>
@@ -282,62 +286,17 @@ padding-right:10px;
                                                 <ul>
                                                     <li><i class="fas fa-check u-s-m-r-8"></i>
 
-                                                        <span>Buyer Protection.</span></li>
+                                                        <span>{% translate "Buyer Protection" %}.</span></li>
                                                     <li><i class="fas fa-check u-s-m-r-8"></i>
 
-                                                        <span>Full Refund if you don't receive your order.</span></li>
+                                                        <span>{% translate "Full Refund if you don't receive your order" %}.</span></li>
                                                     <li><i class="fas fa-check u-s-m-r-8"></i>
 
-                                                        <span>Returns accepted if product not as described.</span></li>
+                                                        <span>{% translate "Returns accepted if product not as described" %}.</span></li>
                                                 </ul>
                                             </div>
-                                            <div class="u-s-m-b-15">
-                                                <h4>PRODUCT INFORMATION</h4>
-                                            </div>
-                                            <div class="u-s-m-b-15">
-                                                <div class="pd-table gl-scroll">
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Main Material</td>
-                                                                <td>Cotton</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Color</td>
-                                                                <td>Green, Blue, Red</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Sleeves</td>
-                                                                <td>Long Sleeve</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Top Fit</td>
-                                                                <td>Regular</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Print</td>
-                                                                <td>Not Printed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Neck</td>
-                                                                <td>Round Neck</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Pieces Count</td>
-                                                                <td>1 Piece</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Occasion</td>
-                                                                <td>Casual</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Shipping Weight (kg)</td>
-                                                                <td>0.5</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                          
+                                         
                                         </div>
                                     </div>
                                     <!--====== End - Tab 1 ======-->
@@ -368,7 +327,14 @@ padding-right:10px;
                                                 <div class="pd-tab__rev-score">
                                                     {% for i in details|slice:"0:1" %}
                                                     <div class="u-s-m-b-8">
-                                                    <h2 id="counts-3">{{details.count}} Review(s) - {{product.average.average|floatformat:1}} (Overall)</h2>
+                                                        {% get_current_language as LANGUAGE_CODE %}
+                                                        {% get_available_languages as LANGUAGES %}
+                                                        {% get_language_info_list for LANGUAGES as languages %}
+                                                        {% for language in languages %}
+                                                        {% if language.code == "ar" %}
+                                                    <h2 id="counts-3"> {% translate "Review(s)" %} {{details.count}} - {% translate '(Overall)' %} ({{product.average.average|floatformat:1}})</h2>
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 </div>
                                                     <div class="gl-rating-style-2 u-s-m-b-8">
                                                         {% with ''|center:product.average.average as range %}
@@ -385,25 +351,28 @@ padding-right:10px;
                                                     </div>
                                                     {% endfor %}
                                                     <div class="u-s-m-b-8">
-                                                        <h4>We want to hear from you!</h4>
+                                                        <h4>{% translate "We want to hear from you" %}!</h4>
                                                     </div>
 
-                                                    <span class="gl-text">Tell us what you think about this item</span>
+                                                    <span class="gl-text">{% translate "Tell us what you think about this item" %}</span>
                                                 </div>
                                             </div>
+
                                             <div class="u-s-m-b-30">
                                                 <form id="comments-form" method="POST" class="pd-tab__rev-f1">
                                                {% csrf_token %}
                                                     <div class="rev-f1__group">
                                                         <div class="u-s-m-b-15">
-                                                            <h2 id="counts-1">{{details.count}} Review(s)</h2>
+                                                    
+                                                        <h2 id="counts-1">{{details.count}} {% translate ' Review(s)' %}</h2>
+                                                       
                                                         </div>
                                                         <div  class="u-s-m-b-15">
 
                                                             <label for="sort-review"></label>
                                                             <select  name="comments" class="select-box select-box--primary-style" id="sort-review">
-                                                                <option value="1" {% if details_order == 1 %}selected {% endif %}>Sort by: Best Rating</option>
-                                                                <option value="2" {% if details_order == 2 %}selected {% endif %} >Sort by: Worst Rating</option>
+                                                                <option value="1" {% if details_order == 1 %}selected {% endif %}>{% translate 'Sort by: Best Rating' %}</option>
+                                                                <option value="2" {% if details_order == 2 %}selected {% endif %} >{% translate 'Sort by: Worst Rating' %}</option>
                                                             </select></div>
                                                     </div>
                                                     <div class="rev-f1__review">
@@ -429,7 +398,7 @@ padding-right:10px;
         
                                                                 {% endif %}
                                                                 {%endwith%}
-                                                                <span>({{b.stars}} of 5 )</span></div>
+                                                                <span>({{b.stars}} {% translate 'of' %} 5 )</span></div>
                                                             <p class="review-o__text">{{b.review}}</p>
                                                         </div>
                                                         {% endfor %}
@@ -440,9 +409,8 @@ padding-right:10px;
                                             <div class="u-s-m-b-30">
                                                 <form class="pd-tab__rev-f2" id="post-form" method="POST">
                                                     {% csrf_token %}
-                                                    <h2 class="u-s-m-b-15">Add a Review</h2>
+                                                    <h2 class="u-s-m-b-15">{% translate 'Add a Review' %}</h2>
 
-                                                    <span class="gl-text u-s-m-b-15">Your email address will not be published. Required fields are marked *</span>
                                                     <div class="u-s-m-b-30">
                                                         <div class="rev-f2__table-wrap gl-scroll">
                                                             <table class="rev-f2__table">
@@ -613,7 +581,7 @@ padding-right:10px;
                                                     <div class="rev-f2__group">
                                                         <div class="u-s-m-b-15">
 
-                                                            <label class="gl-label" for="reviewer-text">YOUR REVIEW *</label>
+                                                            <label class="gl-label" for="reviewer-text">{% translate 'YOUR REVIEW' %} *</label>
                                                             <textarea name="review" class="text-area text-area--primary-style" id="reviewer-text" required></textarea>
                                                         </div>
                                                         <!-- <div>
@@ -631,7 +599,7 @@ padding-right:10px;
                                                     </div>
                                                     <div>
 
-                                                        <button  value="{{product.id}}" data-index="{{product.id}}" class="btn btn--e-brand-shadow" type="submit">SUBMIT</button></div>
+                                                        <button  value="{{product.id}}" data-index="{{product.id}}" class="btn btn--e-brand-shadow" type="submit">{% translate 'SUBMIT' %}</button></div>
                                                 </form>
 
                                             </div>
@@ -653,9 +621,9 @@ padding-right:10px;
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">CUSTOMER ALSO VIEWED</h1>
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">{% translate 'CUSTOMER ALSO VIEWED' %}</h1>
 
-                                    <span class="section__span u-c-grey">PRODUCTS THAT CUSTOMER VIEWED</span>
+                                    <span class="section__span u-c-grey">{% translate 'PRODUCTS THAT CUSTOMER VIEWED' %}</span>
                                 </div>
                             </div>
                         </div>
@@ -679,7 +647,7 @@ padding-right:10px;
                                           <ul class="pd-breadcrumb__list">
                                               <li class="has-separator">
           
-                                                  <a href="{% url 'home:home' %}">Home</a></li>
+                                                  <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                               <li class="has-separator">
           
                                                   <a href="{% url 'home:category_filter' slug=i.category.name %}">{{i.category.name|title}}</a></li>
@@ -725,7 +693,7 @@ padding-right:10px;
           
                                                   <span class="pd-detail__price">${{i.discount}}</span>
                                              
-                                                  <span class="pd-detail__discount">({{i.discount_percent}}% OFF)</span><del class="pd-detail__del">${{i.price}}</del></div>
+                                                  <span class="pd-detail__discount">({{i.discount_percent}}% {% translate 'OFF' %}})</span><del class="pd-detail__del">${{i.price}}</del></div>
                                                  
                                               </div>
                                           <div class="u-s-m-b-15">
@@ -742,14 +710,14 @@ padding-right:10px;
           
                                                   <span class="pd-detail__review u-s-m-l-4">
           
-                                                      <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}} Reviews</a></span></div>
+                                                      <a href="{% url 'home:this_product' id=i.id %}">{{i.comments}}{% translate ' Reviews' %}</a></span></div>
                                           </div>
                                           <div class="u-s-m-b-15">
                                               <div class="pd-detail__inline">
           
-                                                  <span class="pd-detail__stock">{{i.stock}} in stock</span>
+                                                  <span class="pd-detail__stock">{{i.stock}}{% translate ' in stock' %}</span>
           
-                                                  <span class="pd-detail__left">Only 2 left</span></div>
+                                                  <span class="pd-detail__left">{% translate 'Only 2 left' %}</span></div>
                                           </div>
                                           <div class="u-s-m-b-15">
           
@@ -764,11 +732,11 @@ padding-right:10px;
                                                       {% if  i in wishlist.products.all %}
                                                       <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
           
-                                                      <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"></div>
+                                                      <div id="wishlist" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"></div>
                                                  
                                                     {% else %}
                                                     <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                                    <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></div>
+                                                    <div  id="wishlist-add" class="fas fa-heart" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"></div>
                                                  
                                                       {% endif %}
                                                  </div>
@@ -779,9 +747,9 @@ padding-right:10px;
           
                                                   <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
           
-                                                      <a href="{% url 'home:home' %}">Email me When the price drops</a>
+                                                      <a href="{% url 'home:home' %}">{% translate 'Email me When the price drops' %}</a>
           
-                                                      <span class="pd-detail__click-count">(20)</span></span></div>
+                                                      <span class="pd-detail__click-count"></span></span></div>
                                           </div>
                                           <div class="u-s-m-b-15">
                                               <ul class="pd-social-list">
@@ -820,23 +788,23 @@ padding-right:10px;
                                                       </div>
                                                       <div class="u-s-m-b-15">
           
-                                                          <button class="btn btn--e-brand-b-2" type="submit">Add to Cart</button></div>
+                                                          <button class="btn btn--e-brand-b-2" type="submit">{% translate 'Add to Cart' %}</button></div>
                                                   </div>
                                               </form>
                                           </div>
                                           <div class="u-s-m-b-15">
           
-                                              <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                              <span class="pd-detail__label u-s-m-b-8">{% translate 'Product Policy' %}:</span>
                                               <ul class="pd-detail__policy-list">
                                                   <li><i class="fas fa-check-circle u-s-m-r-8"></i>
           
-                                                      <span>Buyer Protection.</span></li>
+                                                      <span>{% translate 'Buyer Protection' %}.</span></li>
                                                   <li><i class="fas fa-check-circle u-s-m-r-8"></i>
           
-                                                      <span>Full Refund if you don't receive your order.</span></li>
+                                                      <span>{% translate "Full Refund if you don't receive your order" %}.</span></li>
                                                   <li><i class="fas fa-check-circle u-s-m-r-8"></i>
           
-                                                      <span>Returns accepted if product not as described.</span></li>
+                                                      <span>{% translate 'Returns accepted if product not as described' %}.</span></li>
                                               </ul>
                                           </div>
                                       </div>
@@ -861,7 +829,7 @@ padding-right:10px;
                               <div class="success u-s-m-b-30">
                                   <div class="success__text-wrap"><i class="fas fa-check"></i>
           
-                                      <span>Item is added successfully!</span></div>
+                                      <span>{% translate 'Item is added successfully' %}!</span></div>
                                   <div class="success__img-wrap">
           
                                       <img class="u-img-fluid" src="{{i.image.first.image}}" alt=""></div>
@@ -869,7 +837,7 @@ padding-right:10px;
           
                                       <span class="success__name">{{i.name|title}}</span>
           
-                                      <span class="success__quantity">Quantity: 1</span>
+                                      <span class="success__quantity">{% translate 'Quantity: 1' %}</span>
           
                                       <span class="success__price">${{i.price}}</span></div>
                               </div>
@@ -877,15 +845,20 @@ padding-right:10px;
                           <div class="col-lg-6 col-md-12">
                               <div class="s-option">
           
-                                  <span class="s-option__text">1 item (s) in your cart</span>
+                                  <span class="s-option__text">{% translate '1 item (s) in your car' %}t</span>
                                   <div class="s-option__link-box">
           
-                                      <a class="s-option__link btn--e-white-brand-shadow"  data-dismiss="modal">CONTINUE SHOPPING</a>
+                                      <a class="s-option__link btn--e-white-brand-shadow"  data-dismiss="modal">{% translate 'CONTINUE SHOPPING' %}</a>
           
-                                      <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">VIEW CART</a>
-          
-                                      <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' cart.id %}">PROCEED TO CHECKOUT</a></div>
-                              </div>
+                                      <a class="s-option__link btn--e-white-brand-shadow" href="{% url 'home:cart' %}">{% translate 'VIEW CART' %}</a>
+                                    {% if request.user.is_authenticated %}
+                                      <a class="s-option__link btn--e-brand-shadow" href="{% url 'home:order' cart.id %}">{% translate 'PROCEED TO CHECKOU' %}T</a></div>
+                                    {% else %}
+                                    <a class="s-option__link btn--e-brand-shadow" href="{% url 'account_login' %}">{% translate 'PROCEED TO CHECKOU' %}T</a></div>
+
+                                    {% endif %}
+                                    
+                                    </div>
                           </div>
                       </div>
                   </div>
@@ -912,20 +885,20 @@ padding-right:10px;
                                                 <ul class="product-o__action-list">
                                                     <li>
 
-                                                        <a data-modal="modal" data-modal-id=".same-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                        <a data-modal="modal" data-modal-id=".same-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Quick View' %}"><i class="fas fa-search-plus"></i></a></li>
                                                     <li>
                                                         <input type="hidden" class="product-id-{{i.id}}"  value="{{i.id}}">
 
-                                                        <a data-modal="modal"  value="{{i.id}}" data-index="{{i.id}}" id="ajax-same" data-modal-id="#add-to-cart-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>
+                                                        <a data-modal="modal"  value="{{i.id}}" data-index="{{i.id}}" id="ajax-same" data-modal-id="#add-to-cart-{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Cart' %}"><i class="fas fa-plus-circle"></i></a></li>
                                                         <li class="red-heart-{{i.id}}">
                                                             {% if  i in wishlist.products.all %}
                                                             <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
             
-                                                            <a id="wishlist-same" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Remove From Wishlist"><i class="fas fa-heart"></i></a>
+                                                            <a id="wishlist-same" data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Remove From Wishlist' %}"><i class="fas fa-heart"></i></a>
                                                        
                                                           {% else %}
                                                           <input class="wishlist-add-{{i.id}}" type="hidden" value="{{i.id}}">
-                                                          <a  id="wishlist-same-add"  data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a>
+                                                          <a  id="wishlist-same-add"  data-index="{{i.id}}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Add to Wishlist' %}"><i class="fas fa-heart"></i></a>
                                                        
                                                             {% endif %}
                                                       
@@ -934,7 +907,7 @@ padding-right:10px;
                                                         </li>
                                                     <li>
 
-                                                        <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
+                                                        <a href="{% url 'home:home' %}" data-tooltip="tooltip" data-placement="top" title="{% translate 'Email me When the price drops' %}"><i class="fas fa-envelope"></i></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1042,7 +1015,7 @@ $('#comments-form').submit();
             let html_data2=`
             <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
 
-            <a id="wishlist"  data-index="${_productId}" data-tooltip="tooltip" data-placement="top"><i  title="Remove From Wishlist" id="fas-heart" class="fas fa-heart"></i> Remove From Wishlist</a>`;
+            <a id="wishlist"  data-index="${_productId}" data-tooltip="tooltip" data-placement="top"><i  title="{% translate 'Remove From Wishlist' %}" id="fas-heart" class="fas fa-heart"></i>{% translate 'Remove From Wishlist' %}</a>`;
        
             $("#red-heart").html(html_data2);
             _vm.attr('disabled',false);
@@ -1071,7 +1044,7 @@ $(document).on('click',"#wishlist",function(){
         let html_data2=`
         <input class="wishlist-add-${_productId}" type="hidden" value="${_productId}">
 
-        <a  id="wishlist-add"  data-index="${_productId}" data-tooltip="tooltip" data-placement="top" ><i  title="Add to Wishlist" id="fas-heart" class="fas fa-heart"></i> Add to Wishlist</a>
+        <a  id="wishlist-add"  data-index="${_productId}" data-tooltip="tooltip" data-placement="top" ><i  title="{% translate 'Add to Wishlist' %}" id="fas-heart" class="fas fa-heart"></i>{% translate 'Add to Wishlist' %}</a>
         `;
     
         $("#red-heart").html(html_data2);
