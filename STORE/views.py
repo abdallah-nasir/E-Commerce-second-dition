@@ -1549,6 +1549,7 @@ def cart_clear(request):
             i.delete()
     return redirect(reverse("home:cart"))
 
+
 def add_to_cart(request):
     device=request.COOKIES["device"]
     try:

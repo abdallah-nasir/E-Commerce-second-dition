@@ -14,6 +14,7 @@ from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
 from django.conf import settings
+from django.utils import translation                                          
 
 GENDER=(   
     ("Male","Male"),    
@@ -216,7 +217,7 @@ class Filter(models.Model):
             my_loop =False
         print(loop)
         context={"my_loop":my_loop,"loop":loop}
-        return context   
+        return context 
 class Product_Cart(models.Model):
     user=models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     products=models.ForeignKey(Product,blank=True,null=True,on_delete=models.CASCADE)
@@ -259,23 +260,28 @@ class Product_Cart(models.Model):
         return pro 
 
     def get_url(self): 
+        lang=translation.get_language()
         if settings.DEBUG == False: 
-            url=f"https://ludus-ecommerce.herokuapp.com/product/{self.products.id}/"
+            url=f"https://ludus-ecommerce.herokuapp.com/{lang}/product/{self.products.id}/"
         else:
-            url=f"http://127.0.0.1:8000/product/{self.products.id}/"
+            url=f"http://127.0.0.1:8000/{lang}/product/{self.products.id}/"
         return url   
     def get_category_url(self):
+        lang=translation.get_language()
+
         if settings.DEBUG == False:
-            url=f"https://ludus-ecommerce.herokuapp.com/category/{self.products.category.name}/"
+            url=f"https://ludus-ecommerce.herokuapp.com/{lang}/category/{self.products.category.name}/"
         else:
-            url=f"http://127.0.0.1:8000/category/{self.products.category.name}/"
+            url=f"http://127.0.0.1:8000/{lang}/category/{self.products.category.name}/"
 
         return url   
     def get_cart_remove_url(self):  
+        lang=translation.get_language()
+
         if settings.DEBUG == False:
-            url=f"https://ludus-ecommerce.herokuapp.com/remove-from-cart/{self.id}/"
+            url=f"https://ludus-ecommerce.herokuapp.com/{lang}/remove-from-cart/{self.id}/"
         else:
-            url=f"http://127.0.0.1:8000/remove-from-cart/{self.id}/"
+            url=f"http://127.0.0.1:8000/{lang}/remove-from-cart/{self.id}/"
         return url   
 class Shipping(models.Model):
     country=models.CharField(max_length=50,blank=True,null=True)
@@ -410,11 +416,13 @@ class Order(models.Model):
         except:
             total=None
         return total   
-    def get_absolute_order(self):    
+    def get_absolute_order(self):  
+        lang=translation.get_language()
+  
         if settings.DEBUG == False:
-            url=f"https://ludus-ecommerce.herokuapp.com/order/user/{self.user}/"
+            url=f"https://ludus-ecommerce.herokuapp.com/{lang}/order/user/{self.user}/"
         else:
-            url=f"http://127.0.0.1:8000/order/user/{self.user}/"
+            url=f"http://127.0.0.1:8000/{lang}/ order/user/{self.user}/"
         return url
     def order_total(self):
         price=self.cart.total_price()
@@ -447,7 +455,7 @@ class Wishlist(models.Model):
     def product_length(self):
         num=self.products.count()
         print(num)
-        return num
+        return num  
 
 class FAQ(models.Model):
     question=models.CharField(max_length=200)
