@@ -1,5 +1,6 @@
 
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
 
@@ -20,10 +21,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'home:contact' %}">Contact</a></li>
+                                        <a href="{% url 'home:contact' %}">{% translate 'Contact' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -67,7 +68,7 @@
                                     <div class="contact-o__wrap">
                                         <div class="contact-o__icon"><i class="fas fa-phone-volume"></i></div>
 
-                                        <span class="contact-o__info-text-1">LET'S HAVE A CALL</span>
+                                        <span class="contact-o__info-text-1">{%  translate  "LET'S HAVE A CALL" %}</span>
 
                                         <span class="contact-o__info-text-2">(+0) 1064675906</span>
 
@@ -79,11 +80,11 @@
                                     <div class="contact-o__wrap">
                                         <div class="contact-o__icon"><i class="fas fa-map-marker-alt"></i></div>
 
-                                        <span class="contact-o__info-text-1">OUR LOCATION</span>
+                                        <span class="contact-o__info-text-1">{%  translate 'OUR LOCATION' %}</span>
 
-                                        <span class="contact-o__info-text-2">SENZO MALL, HURGHADA</span>
+                                        <span class="contact-o__info-text-2">{%  translate 'SENZO MALL, HURGHADA' %}</span>
 
-                                        <span class="contact-o__info-text-2">Egypt </span>
+                                        <span class="contact-o__info-text-2">{% translate 'Egypt' %} </span>
                                     </div>
                                 </div>
                             </div>
@@ -92,11 +93,11 @@
                                     <div class="contact-o__wrap">
                                         <div class="contact-o__icon"><i class="far fa-clock"></i></div>
 
-                                        <span class="contact-o__info-text-1">WORK TIME</span>
+                                        <span class="contact-o__info-text-1">{% translate  'WORK TIME' %}</span>
 
-                                        <span class="contact-o__info-text-2">5 Days a Week</span>
+                                        <span class="contact-o__info-text-2">5 {%  translate ' Days a Week' %}</span>
 
-                                        <span class="contact-o__info-text-2">From 9 AM to 7 PM</span>
+                                        <span class="contact-o__info-text-2">{% translate  'From 9 AM to 7 PM' %}</span>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +119,7 @@
                             <div class="col-lg-12">
                                 <div class="contact-area u-h-100">
                                     <div class="contact-area__heading">
-                                        <h2>Get In Touch</h2>
+                                        <h2>{% translate 'Get In Touch' %}</h2>
                                     </div>
                                     <form class="contact-f" id="contact-form" method="POST" >
                                         {% csrf_token %}
@@ -128,22 +129,22 @@
 
                                                     <label for="c-name"></label>
 
-                                                    <input class="input-text input-text--border-radius input-text--primary-style" type="text" name="name" id="c-name" placeholder="Name (Required)" required></div>
+                                                    <input class="input-text input-text--border-radius input-text--primary-style" type="text" name="name" id="c-name" placeholder="{% translate 'Name (Required)' %}" required></div>
                                                 <div class="u-s-m-b-30">
 
                                                     <label for="c-email"></label>
 
-                                                    <input class="input-text input-text--border-radius input-text--primary-style" type="email" name="email" id="c-email" placeholder="Email (Required)" required></div>
+                                                    <input class="input-text input-text--border-radius input-text--primary-style" type="email" name="email" id="c-email" placeholder="{% translate 'Email (Required)' %}" required></div>
                                                 <div class="u-s-m-b-30">
 
                                                     <label for="c-subject"></label>
 
-                                                    <input class="input-text input-text--border-radius input-text--primary-style" type="text" name="subject" id="c-subject" placeholder="Subject (Required)" required></div>
+                                                    <input class="input-text input-text--border-radius input-text--primary-style" type="text" name="subject" id="c-subject" placeholder="{% translate 'Subject (Required)' %}" required></div>
                                             </div>
                                             <div class="col-lg-6 col-md-6 u-h-100">
                                                 <div class="u-s-m-b-30">
 
-                                                    <label for="c-message"></label><textarea class="text-area text-area--border-radius text-area--primary-style" name="message" id="c-message" placeholder="Compose a Message (Required)" required></textarea>
+                                                    <label for="c-message"></label><textarea class="text-area text-area--border-radius text-area--primary-style" name="message" id="c-message" placeholder="{% translate 'Compose a Message (Required)' %}" required></textarea>
                                                 </div>
                                             </div>
                                             <div id="message" class="col-lg-6 col-md-6 u-h-100">
@@ -151,7 +152,7 @@
                                             </div>
                                             <div class="col-lg-12">
 
-                                                <button class="btn btn--e-brand-b-2" is="send" type="submit">Send Message</button></div>
+                                                <button class="btn btn--e-brand-b-2" is="send" type="submit">{% translate 'Send Message' %}</button></div>
                                         </div>
                                     </form>
                                 </div>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-05 20:11+0200\n"
+"POT-Creation-Date: 2021-09-06 01:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,8 +26,70 @@ msgstr ""
 msgid "Arabic"
 msgstr ""
 
-#: .\STORE\views.py:1886 .\templates\test.html:19
+#: .\STORE\views.py:1887 .\templates\test.html:19
 msgid "hello"
+msgstr ""
+
+#: .\templates\about.html:19 .\templates\branch.html:393
+#: .\templates\category.html:440 .\templates\contact.html:24
+#: .\templates\faq.html:18 .\templates\home.html:289 .\templates\home.html:640
+#: .\templates\home.html:988 .\templates\home.html:1351
+#: .\templates\products.html:395 .\templates\profile.html:18
+#: .\templates\search.html:395 .\templates\this_product.html:46
+#: .\templates\this_product.html:650
+msgid "Home"
+msgstr ""
+
+#: .\templates\about.html:22
+msgid "About"
+msgstr ""
+
+#: .\templates\about.html:43
+msgid "Welcome to Reshop Store!"
+msgstr ""
+
+#: .\templates\about.html:45
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since the "
+"1500s, when an unknown printer took a galley of type and scrambled it to "
+"make a type specimen book. It has survived not only five centuries, but also "
+"the leap into electronic typesetting, remaining essentially unchanged. It "
+"was popularised in the 1960s with the release of Letraset sheets containing "
+"Lorem Ipsum passages, and more recently with desktop publishing software "
+"like Aldus PageMaker including versions of Lorem Ipsum"
+msgstr ""
+
+#: .\templates\about.html:48 .\templates\home.html:1235
+msgid "Shop Now"
+msgstr ""
+
+#: .\templates\about.html:70
+msgid "Our Team Members"
+msgstr ""
+
+#: .\templates\about.html:110
+msgid "Manager"
+msgstr ""
+
+#: .\templates\about.html:140
+msgid "UI, Designer"
+msgstr ""
+
+#: .\templates\about.html:170
+msgid "App, Architect"
+msgstr ""
+
+#: .\templates\about.html:200
+msgid "Team Leader"
+msgstr ""
+
+#: .\templates\about.html:220 .\templates\home.html:2033
+msgid "CLIENTS FEEDBACK"
+msgstr ""
+
+#: .\templates\about.html:222 .\templates\home.html:2035
+msgid "WHAT OUR CLIENTS SAY"
 msgstr ""
 
 #: .\templates\account\account_inactive.html:5
@@ -399,7 +461,7 @@ msgstr ""
 msgid "€ - EURO"
 msgstr ""
 
-#: .\templates\base.html:237
+#: .\templates\base.html:237 .\templates\contact.html:27
 msgid "Contact"
 msgstr ""
 
@@ -420,7 +482,7 @@ msgstr ""
 msgid "CONTACT"
 msgstr ""
 
-#: .\templates\base.html:375
+#: .\templates\base.html:375 .\templates\faq.html:21
 msgid "FAQ"
 msgstr ""
 
@@ -514,7 +576,7 @@ msgstr ""
 msgid "Enter your Email"
 msgstr ""
 
-#: .\templates\base.html:639
+#: .\templates\base.html:639 .\templates\profile.html:177
 msgid "SUBSCRIBE"
 msgstr ""
 
@@ -705,14 +767,6 @@ msgstr ""
 msgid "Add to Wishlist"
 msgstr ""
 
-#: .\templates\branch.html:393 .\templates\category.html:440
-#: .\templates\home.html:289 .\templates\home.html:640
-#: .\templates\home.html:988 .\templates\home.html:1351
-#: .\templates\products.html:395 .\templates\search.html:395
-#: .\templates\this_product.html:46 .\templates\this_product.html:650
-msgid "Home"
-msgstr ""
-
 #: .\templates\branch.html:441 .\templates\category.html:488
 #: .\templates\home.html:337 .\templates\home.html:688
 #: .\templates\home.html:1036 .\templates\home.html:1399
@@ -820,6 +874,119 @@ msgstr ""
 #: .\templates\branch.html:625 .\templates\category.html:669
 #: .\templates\products.html:627 .\templates\search.html:626
 msgid "Sorry we didn't find what you want"
+msgstr ""
+
+#: .\templates\contact.html:71
+msgid "LET'S HAVE A CALL"
+msgstr ""
+
+#: .\templates\contact.html:83
+msgid "OUR LOCATION"
+msgstr ""
+
+#: .\templates\contact.html:85
+msgid "SENZO MALL, HURGHADA"
+msgstr ""
+
+#: .\templates\contact.html:87
+msgid "Egypt"
+msgstr ""
+
+#: .\templates\contact.html:96
+msgid "WORK TIME"
+msgstr ""
+
+#: .\templates\contact.html:98
+msgid " Days a Week"
+msgstr ""
+
+#: .\templates\contact.html:100
+msgid "From 9 AM to 7 PM"
+msgstr ""
+
+#: .\templates\contact.html:122
+msgid "Get In Touch"
+msgstr ""
+
+#: .\templates\contact.html:132
+msgid "Name (Required)"
+msgstr ""
+
+#: .\templates\contact.html:137
+msgid "Email (Required)"
+msgstr ""
+
+#: .\templates\contact.html:142
+msgid "Subject (Required)"
+msgstr ""
+
+#: .\templates\contact.html:147
+msgid "Compose a Message (Required)"
+msgstr ""
+
+#: .\templates\contact.html:155
+msgid "Send Message"
+msgstr ""
+
+#: .\templates\faq.html:40
+msgid "FREQUENTLY QUESTIONS"
+msgstr ""
+
+#: .\templates\faq.html:41
+msgid ""
+"Below are frequently asked questions, you may find the answer for yourself"
+msgstr ""
+
+#: .\templates\faq.html:42
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since the "
+"1500s, when an unknown printer took a galley of type and scrambled it to "
+"make a type specimen book. It has survived not only five centuries, but also "
+"the leap into electronic typesetting, remaining essentially unchanged. It "
+"was popularised in the 1960s with the release of Letraset sheets"
+msgstr ""
+
+#: .\templates\faq.html:64
+msgid "How can I get discount coupon ?"
+msgstr ""
+
+#: .\templates\faq.html:66 .\templates\faq.html:73 .\templates\faq.html:80
+#: .\templates\faq.html:87 .\templates\faq.html:94 .\templates\faq.html:101
+#: .\templates\faq.html:108 .\templates\faq.html:115
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since the "
+"1500s, when an unknown printer took a galley of type and scrambled it to "
+"make a type specimen book"
+msgstr ""
+
+#: .\templates\faq.html:71
+msgid "Do I need to create account for buy products ?"
+msgstr ""
+
+#: .\templates\faq.html:78
+msgid "How can I track my order ?"
+msgstr ""
+
+#: .\templates\faq.html:85
+msgid "What is the payment security system ?"
+msgstr ""
+
+#: .\templates\faq.html:92
+msgid "What policy do you have for product sell ?"
+msgstr ""
+
+#: .\templates\faq.html:99
+msgid "How I Return back my product ?"
+msgstr ""
+
+#: .\templates\faq.html:106
+msgid "What Payment Methods are Available ?"
+msgstr ""
+
+#: .\templates\faq.html:113
+msgid "What Shipping Methods are Available ?"
 msgstr ""
 
 #: .\templates\home.html:42
@@ -950,10 +1117,6 @@ msgstr ""
 msgid "Enjoy Free Shipping when you buy 2 items and above!"
 msgstr ""
 
-#: .\templates\home.html:1235
-msgid "Shop Now"
-msgstr ""
-
 #: .\templates\home.html:1255
 msgid "FEATURED PRODUCTS"
 msgstr ""
@@ -1036,14 +1199,6 @@ msgstr ""
 msgid "Round-the-clock assistance for a smooth shopping experience"
 msgstr ""
 
-#: .\templates\home.html:2033
-msgid "CLIENTS FEEDBACK"
-msgstr ""
-
-#: .\templates\home.html:2035
-msgid "WHAT OUR CLIENTS SAY"
-msgstr ""
-
 #: .\templates\home.html:2181
 msgid "Newsletter"
 msgstr ""
@@ -1077,6 +1232,109 @@ msgstr ""
 
 #: .\templates\products.html:59 .\templates\search.html:59
 msgid "CATEGORY"
+msgstr ""
+
+#: .\templates\profile.html:21
+msgid "My Account"
+msgstr ""
+
+#: .\templates\profile.html:45
+msgid "Hello"
+msgstr ""
+
+#: .\templates\profile.html:49 .\templates\profile.html:109
+msgid "Manage My Account"
+msgstr ""
+
+#: .\templates\profile.html:52
+msgid "My Profile"
+msgstr ""
+
+#: .\templates\profile.html:55
+msgid "Address Book"
+msgstr ""
+
+#: .\templates\profile.html:58
+msgid "Track Order"
+msgstr ""
+
+#: .\templates\profile.html:67
+msgid "My Returns & Cancellations"
+msgstr ""
+
+#: .\templates\profile.html:81
+msgid "Orders Placed"
+msgstr ""
+
+#: .\templates\profile.html:90
+msgid "Cancel Orders"
+msgstr ""
+
+#: .\templates\profile.html:111
+msgid ""
+"From your My Account Dashboard you have the ability to view a snapshot of "
+"your recent account activity and update your account information. Select a "
+"link below to view or edit information"
+msgstr ""
+
+#: .\templates\profile.html:116
+msgid "PERSONAL PROFILE"
+msgstr ""
+
+#: .\templates\profile.html:119 .\templates\profile.html:138
+msgid "Edit"
+msgstr ""
+
+#: .\templates\profile.html:126
+msgid "Subscribe Newsletter"
+msgstr ""
+
+#: .\templates\profile.html:133
+msgid "ADDRESS BOOK"
+msgstr ""
+
+#: .\templates\profile.html:135
+msgid "Default Shipping Address"
+msgstr ""
+
+#: .\templates\profile.html:169
+msgid "Newsletter Subscription"
+msgstr ""
+
+#: .\templates\profile.html:171
+msgid "I have read and understood"
+msgstr ""
+
+#: .\templates\profile.html:173
+msgid "Ludus Privacy Policy"
+msgstr ""
+
+#: .\templates\profile.html:179
+msgid "CANCEL"
+msgstr ""
+
+#: .\templates\profile.html:188
+msgid "RECENT ORDERS"
+msgstr ""
+
+#: .\templates\profile.html:193
+msgid "Order"
+msgstr ""
+
+#: .\templates\profile.html:194
+msgid "Placed On"
+msgstr ""
+
+#: .\templates\profile.html:195
+msgid "statue"
+msgstr ""
+
+#: .\templates\profile.html:196
+msgid "Total"
+msgstr ""
+
+#: .\templates\profile.html:212
+msgid "MANAGE"
 msgstr ""
 
 #: .\templates\socialaccount\authentication_error.html:5

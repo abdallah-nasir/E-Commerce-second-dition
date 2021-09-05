@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-05 20:11+0200\n"
-"PO-Revision-Date: 2021-09-05 20:14+0205\n"
+"POT-Creation-Date: 2021-09-06 01:13+0200\n"
+"PO-Revision-Date: 2021-09-06 01:27+0205\n"
 "Last-Translator: abdallah nasir <abdallah.nasir@ymail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,9 +27,78 @@ msgstr "الانجليزيه"
 msgid "Arabic"
 msgstr "العربيه"
 
-#: .\STORE\views.py:1886 .\templates\test.html:19
+#: .\STORE\views.py:1887 .\templates\test.html:19
 msgid "hello"
 msgstr "مرحبا"
+
+#: .\templates\about.html:19 .\templates\branch.html:393
+#: .\templates\category.html:440 .\templates\contact.html:24
+#: .\templates\faq.html:18 .\templates\home.html:289 .\templates\home.html:640
+#: .\templates\home.html:988 .\templates\home.html:1351
+#: .\templates\products.html:395 .\templates\profile.html:18
+#: .\templates\search.html:395 .\templates\this_product.html:46
+#: .\templates\this_product.html:650
+msgid "Home"
+msgstr "الصفحه الرئيسيه"
+
+#: .\templates\about.html:22
+msgid "About"
+msgstr "من نحن"
+
+#: .\templates\about.html:43
+msgid "Welcome to Reshop Store!"
+msgstr "مرحبا بك في متجرنا "
+
+#: .\templates\about.html:45
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since the "
+"1500s, when an unknown printer took a galley of type and scrambled it to "
+"make a type specimen book. It has survived not only five centuries, but also"
+" the leap into electronic typesetting, remaining essentially unchanged. It "
+"was popularised in the 1960s with the release of Letraset sheets containing "
+"Lorem Ipsum passages, and more recently with desktop publishing software "
+"like Aldus PageMaker including versions of Lorem Ipsum"
+msgstr ""
+"لوريم إيبسوم هو ببساطة نص شكلي يستخدم في صناعة الطباعة والتنضيد. كان Lorem "
+"Ipsum هو النص الوهمي القياسي في الصناعة منذ القرن الخامس عشر الميلادي ، "
+"عندما أخذت طابعة غير معروفة لوحًا من النوع وتدافعت عليه لعمل كتاب عينة. لقد "
+"نجت ليس فقط خمسة قرون ، ولكن أيضًا القفزة في التنضيد الإلكتروني ، وظلت دون "
+"تغيير جوهري. تم نشره في الستينيات من القرن الماضي بإصدار أوراق Letraset التي"
+" تحتوي على مقاطع Lorem Ipsum ، ومؤخرًا مع برامج النشر المكتبي مثل Aldus "
+"PageMaker بما في ذلك إصدارات Lorem Ipsum"
+
+#: .\templates\about.html:48 .\templates\home.html:1235
+msgid "Shop Now"
+msgstr "تسوق الان"
+
+#: .\templates\about.html:70
+msgid "Our Team Members"
+msgstr "اعضاء الفريق"
+
+#: .\templates\about.html:110
+msgid "Manager"
+msgstr "المدير"
+
+#: .\templates\about.html:140
+msgid "UI, Designer"
+msgstr "مصمم الواجهات"
+
+#: .\templates\about.html:170
+msgid "App, Architect"
+msgstr "مهندس معماري"
+
+#: .\templates\about.html:200
+msgid "Team Leader"
+msgstr "رئيس الفريق"
+
+#: .\templates\about.html:220 .\templates\home.html:2033
+msgid "CLIENTS FEEDBACK"
+msgstr "اراء العملاء"
+
+#: .\templates\about.html:222 .\templates\home.html:2035
+msgid "WHAT OUR CLIENTS SAY"
+msgstr "ماذا يقول عملاؤنا"
 
 #: .\templates\account\account_inactive.html:5
 #: .\templates\account\account_inactive.html:15
@@ -398,7 +467,7 @@ msgstr "الجنيه الريطاني"
 msgid "€ - EURO"
 msgstr "اليورو "
 
-#: .\templates\base.html:237
+#: .\templates\base.html:237 .\templates\contact.html:27
 msgid "Contact"
 msgstr "الاتصال"
 
@@ -419,7 +488,7 @@ msgstr "من نحن"
 msgid "CONTACT"
 msgstr "اتصل بنا"
 
-#: .\templates\base.html:375
+#: .\templates\base.html:375 .\templates\faq.html:21
 msgid "FAQ"
 msgstr "اسئله و أجوبه"
 
@@ -513,7 +582,7 @@ msgstr "انثي"
 msgid "Enter your Email"
 msgstr ""
 
-#: .\templates\base.html:639
+#: .\templates\base.html:639 .\templates\profile.html:177
 msgid "SUBSCRIBE"
 msgstr "اشتراك"
 
@@ -704,14 +773,6 @@ msgstr "حذف من المفضلة "
 msgid "Add to Wishlist"
 msgstr "اضافه الي المفضله"
 
-#: .\templates\branch.html:393 .\templates\category.html:440
-#: .\templates\home.html:289 .\templates\home.html:640
-#: .\templates\home.html:988 .\templates\home.html:1351
-#: .\templates\products.html:395 .\templates\search.html:395
-#: .\templates\this_product.html:46 .\templates\this_product.html:650
-msgid "Home"
-msgstr "الصفحه الرئيسيه"
-
 #: .\templates\branch.html:441 .\templates\category.html:488
 #: .\templates\home.html:337 .\templates\home.html:688
 #: .\templates\home.html:1036 .\templates\home.html:1399
@@ -820,6 +881,129 @@ msgstr "مواصلة التسوق"
 #: .\templates\products.html:627 .\templates\search.html:626
 msgid "Sorry we didn't find what you want"
 msgstr "ناسف لعدم توافر المنتج"
+
+#: .\templates\contact.html:71
+msgid "LET'S HAVE A CALL"
+msgstr "اتصل بنا"
+
+#: .\templates\contact.html:83
+msgid "OUR LOCATION"
+msgstr "موقعنا"
+
+#: .\templates\contact.html:85
+msgid "SENZO MALL, HURGHADA"
+msgstr "سينزو مول, الغردقه"
+
+#: .\templates\contact.html:87
+msgid "Egypt"
+msgstr "مصر"
+
+#: .\templates\contact.html:96
+msgid "WORK TIME"
+msgstr "اوقات العمل"
+
+#: .\templates\contact.html:98
+msgid " Days a Week"
+msgstr "ايام في الاسبوع "
+
+#: .\templates\contact.html:100
+msgid "From 9 AM to 7 PM"
+msgstr "من الساعه 9 الي 7 مساءا"
+
+#: .\templates\contact.html:122
+msgid "Get In Touch"
+msgstr "ابقي علي تواصل"
+
+#: .\templates\contact.html:132
+msgid "Name (Required)"
+msgstr "الاسم (مطلوب)"
+
+#: .\templates\contact.html:137
+msgid "Email (Required)"
+msgstr "الايميل (مطلوب)"
+
+#: .\templates\contact.html:142
+msgid "Subject (Required)"
+msgstr "الموضوع(مطلوب)"
+
+#: .\templates\contact.html:147
+msgid "Compose a Message (Required)"
+msgstr "الرساله (مطلوب)"
+
+#: .\templates\contact.html:155
+msgid "Send Message"
+msgstr "ارسال رساله"
+
+#: .\templates\faq.html:40
+msgid "FREQUENTLY QUESTIONS"
+msgstr "الأسئلة الشائعة "
+
+#: .\templates\faq.html:41
+msgid ""
+"Below are frequently asked questions, you may find the answer for yourself"
+msgstr "فيما يلي الأسئلة المتداولة ، قد تجد الإجابة بنفسك"
+
+#: .\templates\faq.html:42
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since the "
+"1500s, when an unknown printer took a galley of type and scrambled it to "
+"make a type specimen book. It has survived not only five centuries, but also"
+" the leap into electronic typesetting, remaining essentially unchanged. It "
+"was popularised in the 1960s with the release of Letraset sheets"
+msgstr ""
+"لوريم إيبسوم هو ببساطة نص شكلي يستخدم في صناعة الطباعة والتنضيد. كان Lorem "
+"Ipsum هو النص الوهمي القياسي في الصناعة منذ القرن الخامس عشر الميلادي ، "
+"عندما أخذت طابعة غير معروفة لوحًا من النوع وتدافعت عليه لعمل كتاب عينة. لقد "
+"نجت ليس فقط خمسة قرون ، ولكن أيضًا القفزة في التنضيد الإلكتروني ، وظلت دون "
+"تغيير جوهري. تم نشره في الستينيات من القرن الماضي بإصدار أوراق Letraset التي"
+" تحتوي على مقاطع Lorem Ipsum ، ومؤخرًا مع برامج النشر المكتبي مثل Aldus "
+"PageMaker بما في ذلك إصدارات Lorem Ipsum"
+
+#: .\templates\faq.html:64
+msgid "How can I get discount coupon ?"
+msgstr "كيف يمكنني الحصول على كوبون الخصم؟"
+
+#: .\templates\faq.html:66 .\templates\faq.html:73 .\templates\faq.html:80
+#: .\templates\faq.html:87 .\templates\faq.html:94 .\templates\faq.html:101
+#: .\templates\faq.html:108 .\templates\faq.html:115
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since the "
+"1500s, when an unknown printer took a galley of type and scrambled it to "
+"make a type specimen book"
+msgstr ""
+"لوريم إيبسوم هو ببساطة نص شكلي يستخدم في صناعة الطباعة والتنضيد. كان Lorem "
+"Ipsum هو النص الوهمي القياسي في الصناعة منذ القرن الخامس عشر الميلادي ، "
+"عندما أخذت طابعة غير معروفة لوحًا من النوع وتدافعت عليه لعمل كتاب عينة."
+
+#: .\templates\faq.html:71
+msgid "Do I need to create account for buy products ?"
+msgstr "هل أحتاج إلى إنشاء حساب لشراء المنتجات؟"
+
+#: .\templates\faq.html:78
+msgid "How can I track my order ?"
+msgstr "كيف يمكنني تتبع طلبي؟"
+
+#: .\templates\faq.html:85
+msgid "What is the payment security system ?"
+msgstr "ما هو نظام تأمين الدفع؟"
+
+#: .\templates\faq.html:92
+msgid "What policy do you have for product sell ?"
+msgstr "ما هي السياسة التي لديك لبيع المنتج ؟"
+
+#: .\templates\faq.html:99
+msgid "How I Return back my product ?"
+msgstr "كيف أعود المنتج الخاص بي؟"
+
+#: .\templates\faq.html:106
+msgid "What Payment Methods are Available ?"
+msgstr "ما هي طرق الدفع المتاحة؟"
+
+#: .\templates\faq.html:113
+msgid "What Shipping Methods are Available ?"
+msgstr "ما هي طرق الشحن المتوفرة؟"
 
 #: .\templates\home.html:42
 msgid "Latest Update Stock"
@@ -951,10 +1135,6 @@ msgstr "لاتفوت العرض"
 msgid "Enjoy Free Shipping when you buy 2 items and above!"
 msgstr "استمتع بالشحن المجاني عند شراء سلعتين او اكثر !"
 
-#: .\templates\home.html:1235
-msgid "Shop Now"
-msgstr "تسوق الان"
-
 #: .\templates\home.html:1255
 msgid "FEATURED PRODUCTS"
 msgstr "منتجات مميزة"
@@ -1039,14 +1219,6 @@ msgstr "خدمه 24/7"
 msgid "Round-the-clock assistance for a smooth shopping experience"
 msgstr "مساعدة على مدار الساعة لتجربة تسوق سلسة"
 
-#: .\templates\home.html:2033
-msgid "CLIENTS FEEDBACK"
-msgstr "اراء العملاء"
-
-#: .\templates\home.html:2035
-msgid "WHAT OUR CLIENTS SAY"
-msgstr "ماذا يقول عملاؤنا"
-
 #: .\templates\home.html:2181
 msgid "Newsletter"
 msgstr "البريد"
@@ -1083,6 +1255,118 @@ msgstr ""
 #: .\templates\products.html:59 .\templates\search.html:59
 msgid "CATEGORY"
 msgstr "الفئة"
+
+#: .\templates\profile.html:21
+msgid "My Account"
+msgstr "حسابي "
+
+#: .\templates\profile.html:45
+#| msgid "hello"
+msgid "Hello"
+msgstr "مرحبا"
+
+#: .\templates\profile.html:49 .\templates\profile.html:109
+msgid "Manage My Account"
+msgstr "التحكم في حسابي"
+
+#: .\templates\profile.html:52
+msgid "My Profile"
+msgstr "البروفايل الخاص بي"
+
+#: .\templates\profile.html:55
+msgid "Address Book"
+msgstr "العناوين"
+
+#: .\templates\profile.html:58
+msgid "Track Order"
+msgstr "تتبع الطلبات "
+
+#: .\templates\profile.html:67
+msgid "My Returns & Cancellations"
+msgstr "الطلبات المرتجعه"
+
+#: .\templates\profile.html:81
+msgid "Orders Placed"
+msgstr "الطلبات المنفذة"
+
+#: .\templates\profile.html:90
+msgid "Cancel Orders"
+msgstr "الطلبات الملغية"
+
+#: .\templates\profile.html:111
+msgid ""
+"From your My Account Dashboard you have the ability to view a snapshot of "
+"your recent account activity and update your account information. Select a "
+"link below to view or edit information"
+msgstr ""
+"من لوحة معلومات حسابي لديك القدرة على عرض لقطة من نشاط حسابك الأخير وتحديث "
+"معلومات حسابك. حدد ارتباط أدناه لعرض أو تحرير المعلومات."
+
+#: .\templates\profile.html:116
+msgid "PERSONAL PROFILE"
+msgstr "الملف الشخصي"
+
+#: .\templates\profile.html:119 .\templates\profile.html:138
+msgid "Edit"
+msgstr "تعديل"
+
+#: .\templates\profile.html:126
+#| msgid "Join our Newsletter"
+msgid "Subscribe Newsletter"
+msgstr "انضم الي البريد الخاصه بنا "
+
+#: .\templates\profile.html:133
+msgid "ADDRESS BOOK"
+msgstr "العناوين"
+
+#: .\templates\profile.html:135
+#| msgid "Default Shipping Addres"
+msgid "Default Shipping Address"
+msgstr "عناوين الشحن الافتراضية"
+
+#: .\templates\profile.html:169
+#, fuzzy
+#| msgid "Newsletter"
+msgid "Newsletter Subscription"
+msgstr "البريد"
+
+#: .\templates\profile.html:171
+msgid "I have read and understood"
+msgstr "لقد قرأت وفهمت"
+
+#: .\templates\profile.html:173
+#, fuzzy
+#| msgid "Ludus Privacy Polic"
+msgid "Ludus Privacy Policy"
+msgstr "سياسة الخاصوصية"
+
+#: .\templates\profile.html:179
+msgid "CANCEL"
+msgstr "الغاء"
+
+#: .\templates\profile.html:188
+msgid "RECENT ORDERS"
+msgstr "الطلبات الاخيره"
+
+#: .\templates\profile.html:193
+msgid "Order"
+msgstr "اوردر"
+
+#: .\templates\profile.html:194
+msgid "Placed On"
+msgstr "التاريخ"
+
+#: .\templates\profile.html:195
+msgid "statue"
+msgstr "الحالة"
+
+#: .\templates\profile.html:196
+msgid "Total"
+msgstr "المجموع"
+
+#: .\templates\profile.html:212
+msgid "MANAGE"
+msgstr "التحكم"
 
 #: .\templates\socialaccount\authentication_error.html:5
 #: .\templates\socialaccount\authentication_error.html:8
@@ -1231,6 +1515,10 @@ msgstr "المنتجات التي شاهدها الزوار"
 #| msgid "PROCEED TO CHECKOUT"
 msgid "PROCEED TO CHECKOU"
 msgstr "استكمال طلب المنتج"
+
+#, fuzzy
+#~ msgid "Manage My Accounف"
+#~ msgstr "التحكم في حسابي"
 
 #~ msgid "{{details.count}} Review(s)"
 #~ msgstr "تعليقات"
