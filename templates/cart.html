@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-
+{% load i18n %}
 
 
 {% block content %}
@@ -31,10 +31,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'home:cart' %}">Cart</a></li>
+                                        <a href="{% url 'home:cart' %}">{% translate 'Cart' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary">SHOPPING CART</h1>
+                                    <h1 class="section__heading u-c-secondary">{% translate 'SHOPPING CART' %}</h1>
                                 </div>
                             </div>
                         </div>
@@ -151,16 +151,16 @@
 
                                         <a class="route-box__link" href="{% url 'home:products' %}"><i class="fas fa-long-arrow-alt-left"></i>
 
-                                            <span>CONTINUE SHOPPING</span></a></div>
+                                            <span>{% translate 'CONTINUE SHOPPING' %}</span></a></div>
                                     <div class="route-box__g2">
 
                                         <a class="route-box__link" href="{% url 'home:cart_clear' %}"><i class="fas fa-trash"></i>
 
-                                            <span>CLEAR CART</span></a>
+                                            <span>{% translate 'CLEAR CART' %}</span></a>
 
                                         <a class="route-box__link" href="{% url 'home:cart' %}"><i class="fas fa-sync"></i>
 
-                                            <span>UPDATE CART</span></a></div>
+                                            <span>{% translate 'UPDATE CART' %}</span></a></div>
                                 </div>
                             </div>
                         </div>
@@ -184,15 +184,15 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 u-s-m-b-30">
                                             <div class="f-cart__pad-box">
-                                                <h1 class="gl-h1">ESTIMATE SHIPPING AND TAXES</h1>
+                                                <h1 class="gl-h1">{% translate "ESTIMATE SHIPPING AND TAXES" %}</h1>
 
-                                                <span class="gl-text u-s-m-b-30">Enter your destination to get a shipping estimate.</span>
+                                                <span class="gl-text u-s-m-b-30">{% translate "Enter your destination to get a shipping estimate" %}.</span>
                                                 <div class="u-s-m-b-30">
 
                                                     <!--====== Select Box ======-->
 
-                                                    <label class="gl-label" for="shipping-country">COUNTRY *</label><select name="country" class="select-box select-box--primary-style" id="shipping-country" required>
-                                                        <option  value="" selected>Choose Country</option>
+                                                    <label class="gl-label" for="shipping-country">{% translate "COUNTRY" %}*</label><select name="country" class="select-box select-box--primary-style" id="shipping-country" required>
+                                                        <option  value="" selected>{% translate "Choose Country" %}</option>
                                                     {% for i in countries %}
                                                 <option   value="{{i.id}}">{{i.name|title}}</option>
 
@@ -204,8 +204,8 @@
 
                                                     <!--====== Select Box ======-->
 
-                                                    <label class="gl-label" for="shipping-state">Region *</label><select name="region" class="select-box select-box--primary-style" id="shipping-region"required>
-                                                        <option selected value="">Choose Region</option>
+                                                    <label class="gl-label" for="shipping-state">{% translate "Region" %}*</label><select name="region" class="select-box select-box--primary-style" id="shipping-region"required>
+                                                        <option selected value="">{% translate "Choose Region" %}</option>
 
                                                     </select>
                                                     <!--====== End - Select Box ======-->
@@ -214,22 +214,22 @@
 
                                                     <!--====== Select Box ======-->
 
-                                                    <label class="gl-label" for="shipping-state">STATE/PROVINCE *</label><select name="city" class="select-box select-box--primary-style" id="shipping-state" required>
-                                                        <option selected value="">Choose State/Province</option>
+                                                    <label class="gl-label" for="shipping-state">{% translate "STATE/PROVINCE" %}*</label><select name="city" class="select-box select-box--primary-style" id="shipping-state" required>
+                                                        <option selected value="">{% translate "Choose State/Province"  %}</option>
 
                                                     </select>
                                                     <!--====== End - Select Box ======-->
                                                 </div>
                                                 <div class="u-s-m-b-30">
 
-                                                    <label class="gl-label" for="shipping-zip">ZIP/POSTAL CODE *</label>
+                                                    <label class="gl-label" for="shipping-zip">{% translate "ZIP/POSTAL CODE" %}*</label>
 
-                                                    <input class="input-text input-text--primary-style" type="number" id="shipping-zip" placeholder="Zip/Postal Code" required></div>
+                                                    <input class="input-text input-text--primary-style" type="number" id="shipping-zip" placeholder="{% translate 'Zip/Postal Code' %}" required></div>
                                                 <div class="u-s-m-b-30">
 
-                                                    <button type="submit" id="button-id" class="f-cart__ship-link btn--e-transparent-brand-b-2" >CALCULATE SHIPPING</button></div>
+                                                    <button type="submit" id="button-id" class="f-cart__ship-link btn--e-transparent-brand-b-2" >{% translate "CALCULATE SHIPPING" %}</button></div>
 
-                                                <span class="gl-text">Note: There are some countries where free shipping is available otherwise our flat rate charges or country delivery charges will be apply.</span>
+                                                <span class="gl-text">{% translate "Note: There are some countries where free shipping is available otherwise our flat rate charges or country delivery charges will be apply" %}.</span>
                                             </div>
                                         </div>
                                         <!-- <div class="col-lg-4 col-md-6 u-s-m-b-30">
@@ -249,20 +249,20 @@
                                                     <table class="f-cart__table">
                                                         <tbody>
                                                             <tr>
-                                                                <td>SUBTOTAL</td>
+                                                                <td>{% translate "SUBTOTAL" %}</td>
                                                                 <td>${{cart.before_discount}}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>SHIPPING</td>
+                                                                <td>{% translate "SHIPPING" %}</td>
                                                                 <td>${{cart.shipping.amount}}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>TAX</td>
+                                                                <td>{% translate "TAX" %}</td>
                                                                 <td>$0.00</td>
                                                             </tr>
                                                           
                                                             <tr>
-                                                                <td>GRAND TOTAL</td>
+                                                                <td>{% translate "GRAND TOTAL" %}</td>
                                                             <td>${{cart.shipping_price}}</td>
                                                             </tr>
                                                         </tbody>
@@ -270,9 +270,9 @@
                                                 </div>
                                                 <div>
                                                        {% if request.user.is_authenticated %}     
-                                                    <a {% if cart.order_product_length == 0 %}  style="background-color:#fff; color:#fa4400;"  disabled {% endif %} class="btn btn--e-brand-b-2" href='{% url "home:order" id=cart.id %}' > PROCEED TO CHECKOUT</a>
+                                                    <a {% if cart.order_product_length == 0 %}  style="background-color:#fff; color:#fa4400;"  disabled {% endif %} class="btn btn--e-brand-b-2" href='{% url "home:order" id=cart.id %}' >{% translate 'PROCEED TO CHECKOUT' %}</a>
                                                     {% else %}
-                                                    <a {% if cart.order_product_length == 0 %}  style="background-color:#fff; color:#fa4400;"  disabled {% endif %} class="btn btn--e-brand-b-2" href='{% url "account_login" %}' > PROCEED TO CHECKOUT</a>
+                                                    <a {% if cart.order_product_length == 0 %}  style="background-color:#fff; color:#fa4400;"  disabled {% endif %} class="btn btn--e-brand-b-2" href='{% url "account_login" %}' >{% translate 'PROCEED TO CHECKOUT' %}</a>
 
                                                     {% endif %}
                                                 </div>

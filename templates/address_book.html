@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 <style type="text/css">
 #len_info{
@@ -23,10 +23,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a  href="{% url 'home:address' slug=profile.user %}">Address Book</a></li>
+                                        <a  href="{% url 'home:address' slug=profile.user %}">{% translate 'Address Book' %}</a></li>
                                     </ul>
                             </div>
                         </div>
@@ -50,20 +50,20 @@
                                     <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                         <div class="dash__pad-1">
 
-                                            <span class="dash__text u-s-m-b-16">Hello, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
+                                            <span class="dash__text u-s-m-b-16">{% translate 'Hello' %}, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
                                             <ul class="dash__f-list">
                                                 <li>
 
-                                                    <a  href="{% url 'home:profile' slug=profile.user %}">Manage My Account</a></li>
+                                                    <a class="dash-active" href="{% url 'home:profile' slug=profile.user %}">{% translate 'Manage My Account' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:profile_account' slug=profile.user %}">My Profile</a></li>
+                                                    <a href="{% url 'home:profile_account' slug=profile.user %}">{% translate 'My Profile' %}</a></li>
                                                 <li>
 
-                                                    <a class="dash-active"  href="{% url 'home:address' slug=profile.user %}">Address Book</a></li>
+                                                    <a href="{% url 'home:address' slug=profile.user %}">{% translate 'Address Book' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:order_track' slug=profile.user %}">Track Order</a></li>
+                                                    <a href="{% url 'home:order_track' slug=profile.user %}">{% translate 'Track Order' %}</a></li>
                                                 <!-- <li>
 
                                                     <a href="{%url 'home:order_track' slug=profile.user %}">My Orders</a></li> -->
@@ -72,7 +72,7 @@
                                                     <a href="dash-payment-option.html">My Payment Options</a></li> -->
                                                 <li> 
 
-                                                    <a href="{% url 'home:canceled_order' slug=profile.user %}">My Returns & Cancellations</a></li>
+                                                    <a href="{% url 'home:canceled_order' slug=profile.user %}">{% translate 'My Returns & Cancellations' %}</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
 
                                                         <span class="dash__w-text">{{order}}</span>
 
-                                                        <span class="dash__w-name">Orders Placed</span></div>
+                                                        <span class="dash__w-name">{% translate 'Orders Placed' %}</span></div>
                                                 </li>
                                                 <li>
                                                     <div class="dash__w-wrap">
@@ -95,7 +95,7 @@
 
                                                         <span class="dash__w-text">{{canceled}}</span>
 
-                                                        <span class="dash__w-name">Cancel Orders</span></div>
+                                                        <span class="dash__w-name">{% translate 'Cancel Orders' %}</span></div>
                                                 </li>
                                                 <!-- <li>
                                                     <div class="dash__w-wrap">
@@ -115,7 +115,7 @@
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
                                             <div class="dash__address-header">
-                                                <h1 class="dash__h1">Address Book</h1>
+                                                <h1 class="dash__h1">{% translate 'Address Book' %}</h1>
                                                 <!-- <div>
 
                                                     <span class="dash__link dash__link--black u-s-m-r-8">
@@ -133,25 +133,25 @@
                                             <table class="dash__table-2">
                                                 <thead>
                                                     <tr>
-                                                        <th>Action</th>
-                                                        <th>Full Name</th>
-                                                        <th>Address</th>
-                                                        <th>Phone Number</th>
-                                                        <th>Status</th>
+                                                        <th>{% translate 'Action' %}</th>
+                                                        <th>{% translate 'Full Name' %}</th>
+                                                        <th>{% translate 'Address' %}</th>
+                                                        <th>{% translate 'Phone Number' %}</th>
+                                                        <th>{% translate 'Status' %}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {% for i in info %}
                                                     <tr>
                                                         <td>
-                                                            <a class="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id=".address-{{i.id}}">Edit</a>
+                                                            <a class="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id=".address-{{i.id}}">{% translate 'Edit' %}</a>
 
                                                         <td>{{i.profile.user.first_name|title}} {{i.profile.user.last_name|title}}</td>
                                                         <td>{{i.street}} {{i.city}} </td>
                                                         <td>{{i.phone}}</td>
                                                         {% if i.primary %}
                                                         <td>
-                                                            <div class="gl-text">Default Shipping Address</div>
+                                                            <div class="gl-text">{% translate 'Default Shipping Address' %}</div>
                                                         </td>
                                                         {% endif %}
                                                     </tr>
@@ -171,7 +171,7 @@
                                         {% else %}
                                         <a class="dash__custom-link btn--e-brand-b-2" href="{% url 'home:address_add' slug=profile.user %}" ><i class="fas fa-plus u-s-m-r-8"></i>
 
-                                            <span>Add New Address</span></a>
+                                            <span>{% translate 'Add New Address' %}</span></a>
                                         {% endif %}
                                         </div>
                                 </div>
@@ -193,7 +193,7 @@
                             <form method='POST' action="{%  url 'home:address_edit' id=i.id %}" class="checkout-modal1__form">
                                 {% csrf_token %}
                                 <div class="u-s-m-b-30">
-                                    <h1 class="gl-modal-h1">Add new Shipping Address</h1>
+                                    <h1 class="gl-modal-h1">{% translate 'Add new Shipping Address' %}</h1>
                                 </div>
                                 <!-- <div class="gl-inline">
                                     <div class="u-s-m-b-30">
@@ -212,7 +212,7 @@
 
                                         <!--====== Select Box ======-->
 
-                                        <label class="gl-label" for="address-country">COUNTRY *</label><select name="country" class="select-box select-box--primary-style" id="address-country" required>
+                                        <label class="gl-label" for="address-country">{% translate 'COUNTRY' %} *</label><select name="country" class="select-box select-box--primary-style" id="address-country" required>
                                             <option selected value="{{i.country.id}}">{{i.country|upper}}</option>
                                             {% for b in countries %}
                                             <option  value="{{b.id}}">{{b.name|upper}}</option>
@@ -225,7 +225,7 @@
 
                                         <!--====== Select Box ======-->
 
-                                        <label class="gl-label" for="address-state">REGION *</label><select name="region" class="select-box select-box--primary-style" id="address-region" required>
+                                        <label class="gl-label" for="address-state">{% translate 'REGION' %} *</label><select name="region" class="select-box select-box--primary-style" id="address-region" required>
                                             <option selected value="{{i.region.id}}">{{i.region}}</option>
                                           
                                         </select>
@@ -235,7 +235,7 @@
 
                                         <!--====== Select Box ======-->
 
-                                        <label class="gl-label" for="address-state">CITY *</label><select name="city" class="select-box select-box--primary-style" id="address-state" required>
+                                        <label class="gl-label" for="address-state">{% translate 'CITY' %} *</label><select name="city" class="select-box select-box--primary-style" id="address-state" required>
                                             <option selected value="{{i.city.id}}">{{i.city}}</option>
                                           
                                         </select>
@@ -245,12 +245,12 @@
                                 <div class="gl-inline">
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-street">STREET ADDRESS *</label>
+                                        <label class="gl-label" for="address-street">{% translate 'STREET ADDRESS' %} *</label>
 
                                         <input class="input-text input-text--primary-style" name="street" type="text" id="address-street" placeholder="{{i.street}}" required></div>
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-phone">PHONE *</label>
+                                        <label class="gl-label" for="address-phone">{% translate 'PHONE' %} *</label>
 
                                         <input class="input-text input-text--primary-style" name="phone" type="number" id="address-phone" placeholder="{{i.phone}}" required></div>
 
@@ -264,15 +264,15 @@
                                         <input class="input-text input-text--primary-style" type="text" id="address-city"></div> -->
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-street">ZIP/POSTAL CODE *</label>
+                                        <label class="gl-label" for="address-street">{% translate 'ZIP/POSTAL CODE' %} *</label>
 
                                         <input name="zip" class="input-text input-text--primary-style" type="number" id="address-postal" placeholder="{{i.zip}}" required></div>
                                 </div>
                                 <div class="gl-modal-btn-group">
 
-                                    <button class="btn btn--e-brand-b-2" type="submit">SAVE</button>
+                                    <button class="btn btn--e-brand-b-2" type="submit">{% translate 'SAVE' %}</button>
 
-                                    <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">CANCEL</button></div>
+                                    <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">{% translate 'CANCEL' %}</button></div>
                             </form>
                         </div>
                     </div>
@@ -296,8 +296,8 @@
                     },
                     success: function (data) {   // `data` is from `get_topics_ajax` view function
                        
-                        let html_data2="<option value=''>Choose Region</option>";
-                        let html_data1="<option value=''>Choose State/Province</option>";
+                        let html_data2="<option value=''>{% translate 'Choose Region' %}</option>";
+                        let html_data1="<option value=''>{% translate 'Choose State/Province' %}</option>";
                         data.forEach(function (data) {
                             html_data2 += `
                             <option value='${data.id}'>${data.name}</option>
@@ -322,7 +322,7 @@
                     },
                     success: function (data) {   // `data` is from `get_topics_ajax` view function
                        
-                        let html_data2="<option value=''>Choose State/Province</option>";
+                        let html_data2="<option value=''>{% translate 'Choose State/Province' %}</option>";
                         
                         data.forEach(function (data) {
                             html_data2 += `

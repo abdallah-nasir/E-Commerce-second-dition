@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
         <!--====== App Content ======-->
         <div class="app-content">
@@ -15,10 +15,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'home:profile_account' slug=profile.user %}">My Profile</a></li>
+                                        <a href="{% url 'home:profile_account' slug=profile.user %}">{% translate 'My Profile' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -42,20 +42,20 @@
                                     <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                         <div class="dash__pad-1">
 
-                                            <span class="dash__text u-s-m-b-16">Hello, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
+                                            <span class="dash__text u-s-m-b-16">{% translate 'Hello' %}, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
                                             <ul class="dash__f-list">
                                                 <li>
 
-                                                    <a  href="{% url 'home:profile' slug=profile.user %}">Manage My Account</a></li>
+                                                    <a class="dash-active" href="{% url 'home:profile' slug=profile.user %}">{% translate 'Manage My Account' %}</a></li>
                                                 <li>
 
-                                                    <a class="dash-active" href="{% url 'home:profile_account' slug=profile.user %}">My Profile</a></li>
+                                                    <a href="{% url 'home:profile_account' slug=profile.user %}">{% translate 'My Profile' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:address' slug=profile.user %}">Address Book</a></li>
+                                                    <a href="{% url 'home:address' slug=profile.user %}">{% translate 'Address Book' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:order_track' slug=profile.user %}">Track Order</a></li>
+                                                    <a href="{% url 'home:order_track' slug=profile.user %}">{% translate 'Track Order' %}</a></li>
                                                 <!-- <li>
 
                                                     <a href="{%url 'home:order_track' slug=profile.user %}">My Orders</a></li> -->
@@ -64,7 +64,7 @@
                                                     <a href="dash-payment-option.html">My Payment Options</a></li> -->
                                                 <li> 
 
-                                                    <a href="{% url 'home:canceled_order' slug=profile.user %}">My Returns & Cancellations</a></li>
+                                                    <a href="{% url 'home:canceled_order' slug=profile.user %}">{% translate 'My Returns & Cancellations' %}</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -78,7 +78,7 @@
 
                                                         <span class="dash__w-text">{{order}}</span>
 
-                                                        <span class="dash__w-name">Orders Placed</span></div>
+                                                        <span class="dash__w-name">{% translate 'Orders Placed' %}</span></div>
                                                 </li>
                                                 <li>
                                                     <div class="dash__w-wrap">
@@ -87,7 +87,7 @@
 
                                                         <span class="dash__w-text">{{canceled}}</span>
 
-                                                        <span class="dash__w-name">Cancel Orders</span></div>
+                                                        <span class="dash__w-name">{% translate 'Cancel Orders' %}</span></div>
                                                 </li>
                                                 <!-- <li>
                                                     <div class="dash__w-wrap">
@@ -101,47 +101,22 @@
                                             </ul>
                                         </div>
                                     </div>
-                                                                               <!--====== Unsubscribe or Subscribe Newsletter ======-->
-        <div class="modal fade" id="dash-newsletter">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal--shadow">
-                    <div class="modal-body">
-                        <form class="d-modal__form">
-                            <div class="u-s-m-b-15">
-                                <h1 class="gl-modal-h1">Newsletter Subscription</h1>
-
-                                <span class="gl-modal-text">I have read and understood</span>
-
-                                <a class="d_modal__link" href="/">Ludus Privacy Policy</a>
-                            </div>
-                            <div class="gl-modal-btn-group">
-
-                                <button class="btn btn--e-brand-b-2" type="submit">SUBSCRIBE</button>
-
-                                <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">CANCEL</button></div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--====== Unsubscribe or Subscribe Newsletter ======-->
                                     <!--====== End - Dashboard Features ======-->
                                 </div>
                                 <div class="col-lg-9 col-md-12">
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
-                                            <h1 class="dash__h1 u-s-m-b-14">My Profile</h1>
+                                            <h1 class="dash__h1 u-s-m-b-14">{% translate 'My Profile' %}</h1>
 
-                                            <span class="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>
+                                            <span class="dash__text u-s-m-b-30">{% translate 'Look all your info, you could customize your profile' %}.</span>
                                             <div class="row">
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Full Name</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">{% translate 'Full Name' %}</h2>
 
                                                     <span class="dash__text">{{request.user.first_name|title}} {{request.user.last_name|title}}</span>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">{% translate 'E-mail' %}</h2>
 
                                                     <span class="dash__text">{{request.user.email}}</span>
                                                     <div class="dash__link dash__link--secondary">
@@ -149,11 +124,11 @@
                                                        </div>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">{% translate 'Phone' %}</h2>
                                                         {% if profile.phone %}
                                                     <span class="dash__text">{{profile.phone}}</span>
                                                     {%else%}
-                                                    <span class="dash__text">Please enter your mobile</span>
+                                                    <span class="dash__text">{% translate 'Please enter your mobile' %}</span>
 
                                                     {% endif %}
                                                     <!-- <div class="dash__link dash__link--secondary">
@@ -161,12 +136,12 @@
                                                         <a href="#">Add</a></div> -->
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Birthday</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">{% translate 'Birthday' %}</h2>
 
                                                     <span class="dash__text">{{profile.birthday|date:"M d , Y"}}</span>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Gender</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">{% translate 'Gender' %}</h2>
 
                                                     <span class="dash__text">{{profile.gender}}</span>
                                                 </div>
@@ -175,13 +150,13 @@
                                                 <div class="col-lg-12">
                                                     <div class="dash__link dash__link--secondary u-s-m-b-30">
 
-                                                        <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
+                                                        <a data-modal="modal" data-modal-id="#dash-newsletter">{% translate 'Subscribe Newsletter' %}</a></div>
                                                     <div class="u-s-m-b-16">
 
-                                                        <a class="dash__custom-link btn--e-transparent-brand-b-2" href="{% url 'home:profile_edit' slug=request.user %}">Edit Profile</a></div>
+                                                        <a class="dash__custom-link btn--e-transparent-brand-b-2" href="{% url 'home:profile_edit' slug=request.user %}">{% translate 'Edit Profile' %}</a></div>
                                                     <div>
 
-                                                        <a class="dash__custom-link btn--e-brand-b-2" href="{% url 'account_change_password' %}">Change Password</a></div>
+                                                        <a class="dash__custom-link btn--e-brand-b-2" href="{% url 'account_change_password' %}">{% translate 'Change Password' %}</a></div>
                                                 </div>
                                             </div>
                                         </div>

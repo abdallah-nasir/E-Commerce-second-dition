@@ -493,9 +493,9 @@ def make_payment_option(request):
         if payment != None:
             order.payments=str(payment)
             order.save()  
-            if order.payments == None or order.address == None or order.cart == None:
+            if order.payments == None or order.address == None or order.cart == None or order.address == None:
                 print("none order")   
-                messages.error(request,"please complete your order information")
+                messages.error(request,"please complete your order information")  
                 return redirect(reverse("home:order",kwargs={"id":order.cart.id}))
             else:
                 return (redirect(reverse("home:order_confirm",kwargs={"id":order.id})))
@@ -762,9 +762,10 @@ def coupon(request):
                 print(order.coupon)
                 total=order.price - (coupon.value/100)*order.price
                 order.price=total
+                order.price= order.order_total()
                 order.coupon=coupon
                 order.save()  
-                print("discount") 
+                print("discount")   
             else:
                 messages.error(request,"sorry you already have a coupon")
                 return redirect(reverse("home:order",kwargs={"id":order.cart.id}))
@@ -1049,14 +1050,17 @@ def order_track(request,slug):
     return render(request,"order_track.html",context)
 
 @login_required()
-def manage_order(request,slug):
+def manage_order(request,slug,id):
     profile,created=Profile.objects.get_or_create(user=request.user)
     try:
-        my_order=Order.objects.get(user=request.user,ordered=True,delivered=True) #user=request.user,ordered=True,delivered=True,
+        my_order=Order.objects.get(user=request.user,ordered=True,delivered=True,id=id) #user=request.user,ordered=True,delivered=True,
+        canceled_order=Order.objects.filter(ordered=True,delivered=True,user=request.user,statue="canceled").count()
+        order=Order.objects.filter(ordered=True,delivered=True,user=request.user).exclude(statue="canceled").count()
+
     except:
         return redirect(reverse("home:empty"))    
 
-    context={"order":my_order}
+    context={"order":my_order,"canceled":canceled_order,"orders":order}
     return render(request,'manage_order.html',context)
 @login_required()
 def canceled_order(request,slug):

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 <style type="text/css">
 #paypal-button-container{
@@ -35,10 +35,10 @@ iframe {
                             <div class="breadcrumb__wrap">
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'home:order' id=cart.id %}">Order Placement</a></li>
+                                        <a href="{% url 'home:order' id=cart.id %}">{% translate 'Order Placement' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -64,7 +64,7 @@ iframe {
                             <div class="row">
                                 
                                 <div class="col-lg-12">
-                                    <h1 class="checkout-f__h1" style="text-align:center;">ORDER SUMMARY</h1>
+                                    <h1 class="checkout-f__h1" style="text-align:center;">{% translate 'ORDER SUMMARY' %}</h1>
 
                                     <!--====== Order Summary ======-->
                                     <div class="o-summary">
@@ -84,9 +84,9 @@ iframe {
 
                                                                 <a href="{% url 'home:this_product' id=i.products.id %}">{{i.products.name|title}}</a></span>
 
-                                                            <span class="o-card__quantity">Quantity x {{i.quantity}}</span>
+                                                            <span class="o-card__quantity">{% translate 'Quantity' %} x {{i.quantity}}</span>
 
-                                                            <span class="o-card__price">${{i.discount}}</span></div>
+                                                            <span class="o-card__price">${{i.product_price_individual}}</span></div>
                                                     </div>
 
                                                    
@@ -96,10 +96,10 @@ iframe {
                                         </div>
                                         <div class="o-summary__section u-s-m-b-30">
                                             <div class="o-summary__box">
-                                                <h1 class="checkout-f__h1">SHIPPING & BILLING</h1>
+                                                <h1 class="checkout-f__h1">{% translate 'SHIPPING & BILLING' %}</h1>
                                                 <div class="ship-b">
 
-                                                    <span class="ship-b__text">Ship to:</span>
+                                                    <span class="ship-b__text">{% translate 'Ship to:' %}</span>
                                                     <div class="ship-b__box u-s-m-b-10">
                                                         <p class="ship-b__p">{{order.address.street}}-{{order.address.city}} {{order.address.phone}}</p>
 
@@ -117,20 +117,20 @@ iframe {
                                                 <table class="o-summary__table">
                                                     <tbody>
                                                         <tr>
-                                                            <td>SUBTOTAL</td>
+                                                            <td>{% translate 'SUBTOTAL' %}</td>
                                                             
                                                             <td>${{order.cart.before_discount}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>SHIPPING</td>
+                                                            <td>{% translate 'SHIPPING' %}</td>
                                                             <td>${{order.cart.order_shipping}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>TAX</td>
+                                                            <td>{% translate 'TAX' %}</td>
                                                             <td>$0.00</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>DISCOUNT</td>
+                                                            <td>{% translate 'DISCOUNT' %}</td>
                                                             {% if order.coupon %}
                                                             <td>%{{order.coupon.value}}</td>
                                                             {% else %}
@@ -140,8 +140,8 @@ iframe {
                                                         </tr>
                                                      
                                                         <tr>
-                                                            <td>GRAND TOTAL</td>
-                                                            <td>${{order.cart.total_price}}</td>
+                                                            <td>{% translate 'GRAND TOTAL' %}</td>
+                                                            <td>${{order.price}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -149,10 +149,10 @@ iframe {
                                         </div>
                                         <div class="o-summary__section u-s-m-b-30">
                                             <div class="o-summary__box">
-                                                <h1 class="checkout-f__h1">PAYMENT INFORMATION</h1>
+                                                <h1 class="checkout-f__h1">{% translate 'PAYMENT INFORMATION' %}</h1>
                                                 <div class="ship-b">
 
-                                                    <span class="ship-b__text">Pay with:</span>
+                                                    <span class="ship-b__text">{% translate 'Pay with:' %}</span>
                                                     <div class="ship-b__box u-s-m-b-10">
                                                         <p class="ship-b__p">{{order.payments.upper}}</p>
 
@@ -163,7 +163,7 @@ iframe {
                                                         <div id="paypal-button-container"></div>
                                                         
                                                         {% elif order.payments == "Cash on Delivery" %}
-                                                        <button class="btn btn--e-brand-b-2" type="submit">PLACE ORDER</button>
+                                                        <button class="btn btn--e-brand-b-2" type="submit">{% translate 'PLACE ORDER' %}</button>
                                                         {% elif order.payments == "Credit / Debit Card" %}
                                                        
                                                         <iframe style="    display: block  !important;      

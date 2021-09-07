@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
         <!--====== App Content ======-->
@@ -15,10 +16,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'home:profile_account' slug=request.user %}">My Account</a></li>
+                                        <a href="{% url 'home:profile_account' slug=request.user %}">{% translate 'My Account' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -42,20 +43,20 @@
                                     <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                         <div class="dash__pad-1">
 
-                                            <span class="dash__text u-s-m-b-16">Hello, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
+                                            <span class="dash__text u-s-m-b-16">{% translate 'Hello' %}, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
                                             <ul class="dash__f-list">
                                                 <li>
 
-                                                    <a  href="{% url 'home:profile' slug=profile.user %}">Manage My Account</a></li>
+                                                    <a class="dash-active" href="{% url 'home:profile' slug=profile.user %}">{% translate 'Manage My Account' %}</a></li>
                                                 <li>
 
-                                                    <a class="dash-active" href="{% url 'home:profile_account' slug=profile.user %}">My Profile</a></li>
+                                                    <a href="{% url 'home:profile_account' slug=profile.user %}">{% translate 'My Profile' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:address' slug=profile.user %}">Address Book</a></li>
+                                                    <a href="{% url 'home:address' slug=profile.user %}">{% translate 'Address Book' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:order_track' slug=profile.user %}">Track Order</a></li>
+                                                    <a href="{% url 'home:order_track' slug=profile.user %}">{% translate 'Track Order' %}</a></li>
                                                 <!-- <li>
 
                                                     <a href="{%url 'home:order_track' slug=profile.user %}">My Orders</a></li> -->
@@ -64,7 +65,7 @@
                                                     <a href="dash-payment-option.html">My Payment Options</a></li> -->
                                                 <li> 
 
-                                                    <a href="{% url 'home:canceled_order' slug=profile.user %}">My Returns & Cancellations</a></li>
+                                                    <a href="{% url 'home:canceled_order' slug=profile.user %}">{% translate 'My Returns & Cancellations' %}</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -78,7 +79,7 @@
 
                                                         <span class="dash__w-text">{{order}}</span>
 
-                                                        <span class="dash__w-name">Orders Placed</span></div>
+                                                        <span class="dash__w-name">{% translate 'Orders Placed' %}</span></div>
                                                 </li>
                                                 <li>
                                                     <div class="dash__w-wrap">
@@ -87,7 +88,7 @@
 
                                                         <span class="dash__w-text">{{canceled}}</span>
 
-                                                        <span class="dash__w-name">Cancel Orders</span></div>
+                                                        <span class="dash__w-name">{% translate 'Cancel Orders' %}</span></div>
                                                 </li>
                                                 <!-- <li>
                                                     <div class="dash__w-wrap">
@@ -101,42 +102,17 @@
                                             </ul>
                                         </div>
                                     </div>
-                                                                               <!--====== Unsubscribe or Subscribe Newsletter ======-->
-        <div class="modal fade" id="dash-newsletter">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal--shadow">
-                    <div class="modal-body">
-                        <form class="d-modal__form">
-                            <div class="u-s-m-b-15">
-                                <h1 class="gl-modal-h1">Newsletter Subscription</h1>
-
-                                <span class="gl-modal-text">I have read and understood</span>
-
-                                <a class="d_modal__link" href="/">Ludus Privacy Policy</a>
-                            </div>
-                            <div class="gl-modal-btn-group">
-
-                                <button class="btn btn--e-brand-b-2" type="submit">SUBSCRIBE</button>
-
-                                <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">CANCEL</button></div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--====== Unsubscribe or Subscribe Newsletter ======-->
                                     <!--====== End - Dashboard Features ======-->
                                 </div>
                                 <div class="col-lg-9 col-md-12">
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div class="dash__pad-2">
-                                            <h1 class="dash__h1 u-s-m-b-14">Edit Profile</h1>
+                                            <h1 class="dash__h1 u-s-m-b-14">{% translate 'Edit Profile' %}</h1>
 
-                                            <span class="dash__text u-s-m-b-30">Looks like you haven't update your profile</span>
+                                            <span class="dash__text u-s-m-b-30">{% translate "Looks like you haven't update your profile" %}</span>
                                             <div class="dash__link dash__link--secondary u-s-m-b-30">
 
-                                                <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
+                                                <a data-modal="modal" data-modal-id="#dash-newsletter">{% translate 'Subscribe Newsletter' %}</a></div>
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <form class="dash-edit-p" method='POST'>
@@ -146,12 +122,12 @@
                                                    <div class="gl-inline">
                                                     <div class="u-s-m-b-30">
 
-                                                                <label class="gl-label" for="reg-fname">FIRST NAME *</label>
+                                                                <label class="gl-label" for="reg-fname">{% translate 'FIRST NAME' %} *</label>
 
                                                                 <input class="input-text input-text--primary-style" name="first_name" type="text" id="reg-fname" placeholder="{{profile.user.first_name|title}}" required></div>
                                                             <div class="u-s-m-b-30">
 
-                                                                <label class="gl-label" for="reg-lname">LAST NAME *</label>
+                                                                <label class="gl-label" for="reg-lname">{% translate 'LAST NAME' %} *</label>
 
                                                                 <input class="input-text input-text--primary-style" name="last_name" type="text" id="reg-lname" placeholder="{{profile.user.last_name|title}}" required></div>
                                                         </div>
@@ -159,26 +135,26 @@
                                                             <div class="u-s-m-b-30">
 
 
-                                                                <span class="gl-label">BIRTHDAY</span>
+                                                                <span class="gl-label">{% translate 'BIRTHDAY' %}</span>
                                                                 <div class="gl-dob">
                                                                     <select  name="birthday_month" class="select-box select-box--primary-style" required>
-                                                                        <option selected>Month</option>
-                                                                        <option value="01">January</option>
-                                                                        <option value="02">February</option>
-                                                                        <option value="03">March</option>
-                                                                        <option value="04">April</option>
-                                                                        <option value="05">May</option>
-                                                                        <option value="06">June</option>
-                                                                        <option value="07">July</option>
-                                                                        <option value="08">August</option>
-                                                                        <option value="09">September</option>
-                                                                        <option value="10">October</option>
-                                                                        <option value="11">November</option>
-                                                                        <option value="12">December</option>
+                                                                        <option selected>{% translate 'Month' %}</option>
+                                                                        <option value="01">{% translate 'January' %}</option>
+                                                                        <option value="02">{% translate 'February' %}</option>
+                                                                        <option value="03">{% translate 'March' %}</option>
+                                                                        <option value="04">{% translate 'April' %}</option>
+                                                                        <option value="05">{% translate 'May' %}</option>
+                                                                        <option value="06">{% translate 'June' %}</option>
+                                                                        <option value="07">{% translate 'July' %}</option>
+                                                                        <option value="08">{% translate 'August' %}</option>
+                                                                        <option value="09">{% translate 'September' %}</option>
+                                                                        <option value="10">{% translate 'October' %}</option>
+                                                                        <option value="11">{% translate 'November' %}</option>
+                                                                        <option value="12">{% translate 'December' %}</option>
                                                                     </select>
                                                                     
                                                                    <select  name="birthday_day" class="select-box select-box--primary-style" required>
-                                                                        <option selected>Day</option>
+                                                                        <option selected>{% translate 'Day' %}</option>
                                                                         {% with ''|center:31 as range %}
                                                                        {% for _ in range %}
                                                                     <option value="{{forloop.counter}}" >{{forloop.counter}}</option>
@@ -186,7 +162,7 @@
                                                                       {%endwith%} 
                                                                                  
                                                                     </select><select  name="birthday_year" class="select-box select-box--primary-style" required>
-                                                                        <option selected>Year</option>
+                                                                        <option selected>{% translate 'Year' %}</option>
                                                                         {% with ''|center:10 as range %}
                                                                         {% for _ in range %}
                                                                         {% if forloop.counter0 < 10 %}
@@ -211,16 +187,16 @@
                                                             </div>
                                                             <div class="u-s-m-b-30">
 
-                                                                <label class="gl-label" for="gender">GENDER</label>
+                                                                <label class="gl-label" for="gender">{% translate 'GENDER' %}</label>
                                                                 <select name="gender" class="select-box select-box--primary-style u-w-100" id="gender" required>
-                                                                    <option selected>Select</option>
-                                                                    <option value="Male">Male</option>
-                                                                    <option value="Female">Female</option>
+                                                                    <option selected>{% translate 'Select' %}</option>
+                                                                    <option value="Male">{% translate 'Male' %}</option>
+                                                                    <option value="Female">{% translate 'Female' %}</option>
                                                                 </select></div>
                                                         </div>
                                                         <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
-                                                                <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+                                                                <h2 class="dash__h2 u-s-m-b-8">{% translate 'E-mail' %}</h2>
 
                                                                 <span class="dash__text">{{profile.user.email}}</span>
                                                                 <!-- <div class="dash__link dash__link--secondary">
@@ -228,9 +204,9 @@
                                                                     <a href="#">Change</a></div> -->
                                                             </div>
                                                             <div class="u-s-m-b-30">
-                                                                <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
+                                                                <h2 class="dash__h2 u-s-m-b-8">{% translate 'Phone' %}</h2>
 
-                                                                <span class="dash__text">Please enter your mobile</span>
+                                                                <span class="dash__text">{% translate 'Please enter your mobile' %}</span>
                                                                 <div class="dash__link dash__link--secondary">
 
                                                                     <input name="phone" class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="{{profile.phone}}" required>
@@ -238,7 +214,7 @@
                                                             </div>
                                                         </div> 
 
-                                                        <button class="btn btn--e-brand-b-2" type="submit">SAVE</button>
+                                                        <button class="btn btn--e-brand-b-2" type="submit">{% translate 'SAVE' %}</button>
                                                     </form>
                                                 </div>
                                             </div>

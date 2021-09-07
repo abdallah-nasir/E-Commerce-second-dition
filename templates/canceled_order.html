@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 <style type="text/css">
 .badge--canceled{
@@ -22,10 +22,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'home:canceled_order' slug=profile.user %}">My Returns & Cancellations</a></li>
+                                        <a href="{% url 'home:canceled_order' slug=profile.user %}">{% translate 'My Returns & Cancellations' %}</a></li>
                                     </ul>
                             </div>
                         </div>
@@ -49,20 +49,20 @@
                                     <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                         <div class="dash__pad-1">
 
-                                            <span class="dash__text u-s-m-b-16">Hello, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
+                                            <span class="dash__text u-s-m-b-16">{% translate 'Hello' %}, {{request.user.first_name|title}} {{request.user.last_name|title}}</span>
                                             <ul class="dash__f-list">
                                                 <li>
 
-                                                    <a  href="{% url 'home:profile' slug=profile.user %}">Manage My Account</a></li>
+                                                    <a class="dash-active" href="{% url 'home:profile' slug=profile.user %}">{% translate 'Manage My Account' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:profile_account' slug=profile.user %}">My Profile</a></li>
+                                                    <a href="{% url 'home:profile_account' slug=profile.user %}">{% translate 'My Profile' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:address' slug=profile.user %}">Address Book</a></li>
+                                                    <a href="{% url 'home:address' slug=profile.user %}">{% translate 'Address Book' %}</a></li>
                                                 <li>
 
-                                                    <a href="{% url 'home:order_track' slug=profile.user %}">Track Order</a></li>
+                                                    <a href="{% url 'home:order_track' slug=profile.user %}">{% translate 'Track Order' %}</a></li>
                                                 <!-- <li>
 
                                                     <a href="{%url 'home:order_track' slug=profile.user %}">My Orders</a></li> -->
@@ -71,7 +71,7 @@
                                                     <a href="dash-payment-option.html">My Payment Options</a></li> -->
                                                 <li> 
 
-                                                    <a class="dash-active" href="{% url 'home:canceled_order' slug=profile.user %}">My Returns & Cancellations</a></li>
+                                                    <a href="{% url 'home:canceled_order' slug=profile.user %}">{% translate 'My Returns & Cancellations' %}</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
 
                                                         <span class="dash__w-text">{{order}}</span>
 
-                                                        <span class="dash__w-name">Orders Placed</span></div>
+                                                        <span class="dash__w-name">{% translate 'Orders Placed' %}</span></div>
                                                 </li>
                                                 <li>
                                                     <div class="dash__w-wrap">
@@ -94,7 +94,7 @@
 
                                                         <span class="dash__w-text">{{canceled}}</span>
 
-                                                        <span class="dash__w-name">Cancel Orders</span></div>
+                                                        <span class="dash__w-name">{% translate 'Cancel Orders' %}</span></div>
                                                 </li>
                                                 <!-- <li>
                                                     <div class="dash__w-wrap">
@@ -114,9 +114,9 @@
                                    
                                     <div id="custom-id" class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2 ">
-                                            <h1 class="dash__h1 u-s-m-b-14">My Returns & Cancellations</h1>
+                                            <h1 class="dash__h1 u-s-m-b-14">{% translate 'My Returns & Cancellations' %}</h1>
 
-                                            <span class="dash__text u-s-m-b-30">Here you can see all products that have been canceled.</span>
+                                            <span class="dash__text u-s-m-b-30">{% translate 'Here you can see all products that have been canceled' %}.</span>
                                             <!-- <form class="m-order u-s-m-b-30">
                                                 <div class="m-order__select-wrapper">
 
@@ -129,14 +129,15 @@
                                                         <option>All Orders</option>
                                                     </select></div>
                                             </form> -->
+                                            {% for i in my_order %}
                                             <div class="m-order__list">
-                                                {% for i in my_order %}
+                                               
                                                 <div class="m-order__get">
                                                     <div class="manage-o__header u-s-m-b-30">
                                                         <div class="dash-l-r">
                                                             <div>
-                                                                <div class="manage-o__text-2 u-c-secondary">Order #{{i.track_number}}</div>
-                                                                <div class="manage-o__text u-c-silver">Placed on {{i.order_date}}</div>
+                                                                <div class="manage-o__text-2 u-c-secondary">{% translate 'Order' %} #{{i.track_number}}</div>
+                                                                <div class="manage-o__text u-c-silver">{% translate 'Placed on' %} {{i.order_date}}</div>
                                                             </div>
                                                             <div>
                                                                 <div class="dash__link dash__link--brand">
@@ -151,7 +152,7 @@
 
                                                             <div class="description__img-wrap">
 
-                                                                <img class="u-img-fluid" src="{{b.products.image.first.image.url}}" alt=""></div>
+                                                                <img class="u-img-fluid" src="{{b.products.image.first.image}}" alt=""></div>
                                                             <div class="description-title">{{b.products.name|title}}</div>
                                                         </div>
                                                         <div class="description__info-wrap">
@@ -160,21 +161,24 @@
                                                                 <span class="manage-o__badge badge--{{i.statue}}">{{i.statue}}</span></div>
                                                             <div>
 
-                                                                <span class="manage-o__text-2 u-c-silver">Quantity:
+                                                                <span class="manage-o__text-2 u-c-silver">{% translate 'Quantity' %}:
 
                                                                     <span class="manage-o__text-2 u-c-secondary">{{b.quantity}}</span></span></div>
                                                             <div>
 
-                                                                <span class="manage-o__text-2 u-c-silver">Total:
+                                                                <span class="manage-o__text-2 u-c-silver">{% translate 'Total' %}:
 
                                                                     <span class="manage-o__text-2 u-c-secondary">${{b.discount}}</span></span></div>
                                                         </div>
                                                     </div>
+                                                    <br>
+                                                    <br>
                                                     {% endfor %}
                                                 </div>
-                                                {% endfor %}
+                                               
                                             </div>
                                         </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
 

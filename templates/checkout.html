@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 <style type="text/css">
 #place{
@@ -23,10 +23,10 @@
                             <div class="breadcrumb__wrap">
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'home:order' id=cart.id %}">Checkout</a></li>
+                                        <a href="{% url 'home:order' id=cart.id %}">{% translate 'Checkout' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -91,13 +91,13 @@
                                     </div>  -->
                                     <div class="msg">
 
-                                        <span class="msg__text">Have a coupon?
+                                        <span class="msg__text">{% translate 'Have a coupon?' %}
 
-                                            <a class="gl-link" href="#have-coupon" data-toggle="collapse">Click Here to enter your code</a></span>
+                                            <a class="gl-link" href="#have-coupon" data-toggle="collapse">{% translate 'Click Here to enter your code' %}</a></span>
                                         <div class="collapse" id="have-coupon" data-parent="#checkout-msg-group">
                                             <div class="c-f u-s-m-b-16">
 
-                                                <span class="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
+                                                <span class="gl-text u-s-m-b-16">{% translate 'Enter your coupon code if you have one' %}.</span>
                                                 <form method="POST" action="{% url 'home:coupon' %}" class="c-f__form">
                                                 {% csrf_token %}
                                                     <div class="u-s-m-b-16">
@@ -105,16 +105,16 @@
 
                                                             <label for="coupon"></label>
 
-                                                            <input class="input-text input-text--primary-style" name="coupon" type="text" id="coupon" placeholder="Coupon Code" required {% if order.coupon %}disabled {% endif %}>
+                                                            <input class="input-text input-text--primary-style" name="coupon" type="text" id="coupon" placeholder="{% translate 'Coupon Code' %}" required {% if order.coupon %}disabled {% endif %}>
                                                             {% if order.coupon %}
-                                                             <p>COUPON [{{order.coupon.coupon|upper}}] APPLIED</p>
+                                                             <p> {%  translate 'COUPON' %} [{{order.coupon.coupon|upper}}] {% translate 'APPLIED' %}</p>
                                                              {% endif %}
                                                             </div>
                                                             
                                                            
                                                         <div class="u-s-m-b-15">
 
-                                                            <button class="btn btn--e-transparent-brand-b-2" type="submit"  {% if order.coupon %}disabled {% endif %}>APPLY</button></div>
+                                                            <button class="btn btn--e-transparent-brand-b-2" type="submit"  {% if order.coupon %}disabled {% endif %}>{% translate 'APPLY' %}</button></div>
                                                     </div>
                                                 </form>
                                             </div>
@@ -139,7 +139,7 @@
                         <div class="checkout-f">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <h1 class="checkout-f__h1">DELIVERY INFORMATION</h1>
+                                    <h1 class="checkout-f__h1">{% translate 'DELIVERY INFORMATION' %}</h1>
                                     <form method="POST" class="checkout-f__delivery">
                                        {% csrf_token %}
                                         <div class="u-s-m-b-30">
@@ -151,7 +151,7 @@
                                                     <input type="checkbox" name="default" id="get-address">
                                                     <div class="check-box__state check-box__state--primary">
 
-                                                        <label class="check-box__label" for="get-address">Use default shipping and billing address from account</label></div>
+                                                        <label class="check-box__label" for="get-address">{% translate 'Use default shipping and billing address from account' %}</label></div>
                                                 </div>
                                                 <!--====== End - Check Box ======-->
                                             </div>
@@ -161,8 +161,8 @@
 
                                                             <!--====== Select Box ======-->
             
-                                                            <label class="gl-label" for="billing-country">COUNTRY *</label><select name="country" class="select-box select-box--primary-style" id="billing-country" data-bill="" required>
-                                                                <option selected value="">Choose Country</option>
+                                                            <label class="gl-label" for="billing-country">{% translate 'COUNTRY' %} *</label><select name="country" class="select-box select-box--primary-style" id="billing-country" data-bill="" required>
+                                                                <option selected value="">{% translate 'Choose Country' %}</option>
                                                                 {% for i in countries %}
                                                                 <option  value="{{i.id}}">{{i.name|title}}</option>
 
@@ -175,8 +175,8 @@
             
                                                             <!--====== Select Box ======-->
             
-                                                            <label class="gl-label" for="billing-state">REGION *</label><select name="region" class="select-box select-box--primary-style" id="billing-region" data-bill="" required>
-                                                                <option selected value="">Choose Region</option>
+                                                            <label class="gl-label" for="billing-state">{% translate 'REGION' %} *</label><select name="region" class="select-box select-box--primary-style" id="billing-region" data-bill="" required>
+                                                                <option selected value="">{% translate 'Choose Region' %}</option>
                                                                 
                                                             </select>
                                                             <!--====== End - Select Box ======-->
@@ -189,8 +189,8 @@
             
                                                             <!--====== Select Box ======-->
             
-                                                            <label class="gl-label" for="billing-state">CITY *</label><select name="city" class="select-box select-box--primary-style" id="billing-state" data-bill="" required>
-                                                                <option selected value="">Choose State/Province</option>
+                                                            <label class="gl-label" for="billing-state">{% translate 'CITY' %} *</label><select name="city" class="select-box select-box--primary-style" id="billing-state" data-bill="" required>
+                                                                <option selected value="">{% translate 'Choose State/Province' %}</option>
                                                                 
                                                             </select>
                                                             <!--====== End - Select Box ======-->
@@ -200,7 +200,7 @@
                                             <!--====== PHONE ======-->
                                             <div class="u-s-m-b-15">
 
-                                                <label class="gl-label" for="billing-phone">PHONE *</label>
+                                                <label class="gl-label" for="billing-phone">{% translate 'PHONE' %} *</label>
 
                                                 <input name="phone" class="input-text input-text--primary-style" type="number" id="billing-phone" data-bill="" required></div>
                                             <!--====== End - PHONE ======-->
@@ -218,17 +218,17 @@
                                             <!--====== Street Address ======-->
                                             <div class="u-s-m-b-15">
 
-                                                <label class="gl-label" for="billing-street">STREET ADDRESS *</label>
+                                                <label class="gl-label" for="billing-street">{% translate 'STREET ADDRESS' %} *</label>
 
-                                                <input name="street" class="input-text input-text--primary-style" type="text" id="billing-street" placeholder="House name and street name" data-bill=""required>
+                                                <input name="street" class="input-text input-text--primary-style" type="text" id="billing-street" placeholder="{% translate 'street name' %}" data-bill=""required>
                                             </div>
 
                                             <!--====== ZIP/POSTAL ======-->
                                             <div class="u-s-m-b-15">
 
-                                                <label class="gl-label" for="billing-zip">ZIP/POSTAL CODE *</label>
+                                                <label class="gl-label" for="billing-zip">{% translate 'ZIP/POSTAL CODE' %} *</label>
 
-                                                <input name="zip" class="input-text input-text--primary-style" type="number" id="billing-zip" placeholder="Zip/Postal Code" data-bill="" required></div>
+                                                <input name="zip" class="input-text input-text--primary-style" type="number" id="billing-zip" placeholder="{% translate 'Zip/Postal Code' %}" data-bill="" required></div>
                                             <!--====== End - ZIP/POSTAL ======-->
                                             <div class="u-s-m-b-10">
 
@@ -238,7 +238,7 @@
                                                     <input name="primary" type="checkbox" id="make-default-address" data-bill="">
                                                     <div class="check-box__state check-box__state--primary">
 
-                                                        <label class="check-box__label" for="make-default-address">Make default shipping and billing address</label></div>
+                                                        <label class="check-box__label" for="make-default-address">{% translate 'Make default shipping and billing address' %}</label></div>
                                                 </div>
                                                 <!--====== End - Check Box ======-->
                                             </div>
@@ -258,16 +258,16 @@
                                            </div>  -->
                                             <div class="u-s-m-b-10">
 
-                                                <label class="gl-label" for="order-note">ORDER NOTE</label>
+                                                <label class="gl-label" for="order-note">{% translate 'ORDER NOTE' %}</label>
                                                 <textarea name="note" class="text-area text-area--primary-style" id="order-note"></textarea></div>
                                             <div>
 
-                                                <button class="btn btn--e-transparent-brand-b-2" type="submit">SAVE</button></div>
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit">{% translate 'SAVE' %}</button></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="col-lg-6">
-                                    <h1 class="checkout-f__h1">ORDER SUMMARY</h1>
+                                    <h1 class="checkout-f__h1">{% translate 'ORDER SUMMARY' %}</h1>
 
                                     <!--====== Order Summary ======-->
                                     <div class="o-summary">
@@ -287,9 +287,9 @@
 
                                                                 <a href="{% url 'home:this_product' id=i.products.id %}">{{i.products.name|title}}</a></span>
 
-                                                            <span class="o-card__quantity">Quantity x {{i.quantity}}</span>
+                                                            <span class="o-card__quantity">{% translate 'Quantity' %} x {{i.quantity}}</span>
 
-                                                            <span class="o-card__price">${{i.discount}}</span></div>
+                                                            <span class="o-card__price">${{i.product_price_individual}}</span></div>
                                                     </div>
 
                                                     <!-- <a class="o-card__del far fa-trash-alt" name="id" href='{% url "home:cart_remove"  %}'></a> -->
@@ -299,14 +299,14 @@
                                         </div>
                                         <div class="o-summary__section u-s-m-b-30">
                                             <div class="o-summary__box">
-                                                <h1 class="checkout-f__h1">SHIPPING & BILLING</h1>
+                                                <h1 class="checkout-f__h1">{% translate 'SHIPPING & BILLING' %}</h1>
                                                 <div class="ship-b">
 
-                                                    <span class="ship-b__text">Ship to:</span>
+                                                    <span class="ship-b__text">{% translate 'Ship to:' %}</span>
                                                     <div class="ship-b__box u-s-m-b-10">
                                                         <p class="ship-b__p">{{my_address.street}}-{{my_address.city}} {{my_address.country|upper}} {{my_address.phone}}</p>
 
-                                                        <a class="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a>
+                                                        <a class="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">{% translate 'Edit' %}</a>
                                                     </div>
                                                     <!-- <div class="ship-b__box">
 
@@ -321,20 +321,20 @@
                                                 <table class="o-summary__table">
                                                     <tbody>
                                                         <tr>
-                                                            <td>SUBTOTAL</td>
+                                                            <td>{% translate 'SUBTOTAL' %}</td>
                                                             
                                                             <td>${{order.cart.before_discount}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>SHIPPING</td>
+                                                            <td>{% translate 'SHIPPING' %}</td>
                                                             <td>${{order.cart.order_shipping}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>TAX</td>
+                                                            <td>{% translate 'TAX' %}</td>
                                                             <td>$0.00</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>DISCOUNT</td>
+                                                            <td>{% translate 'DISCOUNT' %}</td>
                                                             {% if order.coupon %}
                                                             <td>%{{order.coupon.value}}</td>
                                                             {% else %}
@@ -344,8 +344,8 @@
                                                         </tr>
                                                      
                                                         <tr>
-                                                            <td>GRAND TOTAL</td>
-                                                            <td>${{order.order_total}}</td>
+                                                            <td>{% translate 'GRAND TOTAL' %}</td>
+                                                            <td>${{order.price}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -353,7 +353,7 @@
                                         </div>
                                         <div class="o-summary__section u-s-m-b-30">
                                             <div class="o-summary__box">
-                                                <h1 class="checkout-f__h1">PAYMENT INFORMATION</h1>
+                                                <h1 class="checkout-f__h1">{% translate 'PAYMENT INFORMATION' %}</h1>
                                                 <form method='POST'  id="cash_form" action="{%  url 'home:make_payment_option' %}" class="checkout-f__payment">
                                                     {% csrf_token %}
                                                     <div class="u-s-m-b-10">
@@ -364,11 +364,11 @@
                                                             <input type="radio" id="cash-on-delivery" value="Cash on Delivery" name="payment" required>
                                                             <div class="radio-box__state radio-box__state--primary">
 
-                                                                <label class="radio-box__label" for="cash-on-delivery">Cash on Delivery</label></div>
+                                                                <label class="radio-box__label" for="cash-on-delivery">{% translate 'Cash on Delivery' %}</label></div>
                                                         </div>
                                                         <!--====== End - Radio Box ======-->
 
-                                                        <span class="gl-text u-s-m-t-6">Pay Upon Cash on delivery. (This service is only available for some countries)</span>
+                                                        <span class="gl-text u-s-m-t-6">{% translate 'Pay Upon Cash on delivery. (This service is only available for some countries)' %}</span>
                                                     </div>
                                                     
                                                     <div class="u-s-m-b-10">
@@ -378,10 +378,10 @@
                                                             <input type="radio" id="pay-with-card" value="Credit / Debit Card" name="payment" required>
                                                             <div class="radio-box__state radio-box__state--primary">
 
-                                                                <label class="radio-box__label" for="pay-with-card">Pay With Credit / Debit Card</label></div>
+                                                                <label class="radio-box__label" for="pay-with-card">{% translate 'Pay With Credit / Debit Card' %}</label></div>
                                                         </div>
 
-                                                        <span class="gl-text u-s-m-t-6">International Credit Cards must be eligible for use within the United States.</span>
+                                                        <span class="gl-text u-s-m-t-6">{% translate 'International Credit Cards must be eligible for use within the United States' %}.</span>
                                                     </div>
                                                     <div class="u-s-m-b-10">
 
@@ -391,11 +391,11 @@
                                                             <input type="radio" id="pay-pal" value="PayPal" name="payment" required>
                                                             <div class="radio-box__state radio-box__state--primary">
 
-                                                                <label class="radio-box__label" for="pay-pal">Pay Pal</label></div>
+                                                                <label class="radio-box__label" for="pay-pal">{% translate 'Pay Pal' %}</label></div>
                                                         </div>
                                                         <!--====== End - Radio Box ======-->
 
-                                                        <span class="gl-text u-s-m-t-6">When you click "Place Order" below we'll take you to Paypal's site to set up your billing information.</span>
+                                                        <span class="gl-text u-s-m-t-6">{% translate "When you click 'Place Order' below we'll take you to Paypal's site to set up your billing information" %}.</span>
                                                     </div>
                                                     <div class="u-s-m-b-15">
 
@@ -405,17 +405,17 @@
                                                             <input type="checkbox" id="term-and-condition">
                                                             <div class="check-box__state check-box__state--primary">
 
-                                                                <label class="check-box__label" for="term-and-condition">I consent to the</label></div>
+                                                                <label class="check-box__label" for="term-and-condition">{% translate 'I consent to the' %}</label></div>
                                                         </div>
                                                         <!--====== End - Check Box ======-->
 
-                                                        <a class="gl-link">Terms of Service.</a>
+                                                        <a class="gl-link">{% translate 'Terms of Service' %}.</a>
                                                     </div>
                                                     <div>
                                                             {% if order.address %}
-                                                        <button class="btn btn--e-brand-b-2" type="submit">PLACE ORDER</button></div>
+                                                        <button class="btn btn--e-brand-b-2" type="submit">{% translate 'PLACE ORDER' %}</button></div>
                                                         {% else %}
-                                                        <button id="place" class="btn btn--e-brand-b-2" disabled>Please Enter Your Address </button></div>
+                                                        <button id="place" class="btn btn--e-brand-b-2" disabled>{% translate 'Please Enter Your Address' %} </button></div>
 
                                                         {% endif %}
                                                     </div>
@@ -449,10 +449,10 @@
                             <div class="checkout-modal2">
                                 <div class="u-s-m-b-30">
                                     <div class="dash-l-r">
-                                        <h1 class="gl-modal-h1">Shipping Address</h1>
+                                        <h1 class="gl-modal-h1">{% translate 'Shipping Address' %}</h1>
                                         <div class="dash__link dash__link--brand">
     
-                                            <a data-modal="modal" data-modal-id="#add-ship-address" data-dismiss="modal">Add new Address</a></div>
+                                            <a data-modal="modal" data-modal-id="#add-ship-address" data-dismiss="modal">{% translate 'Add new Address' %}</a></div>
                                     </div>
                                 </div>
                                 <form method="POST" action="{% url 'home:make_primary'  %}" class="checkout-modal2__form">
@@ -461,12 +461,12 @@
                                         <table class="dash__table-2">
                                             <thead>
                                                 <tr>
-                                                    <th>Action</th>
-                                                    <th>Full Name</th>
-                                                    <th>Address</th>
+                                                    <th>{% translate 'Action' %}</th>
+                                                    <th>{% translate 'Full Name' %}</th>
+                                                    <th>{% translate 'Address' %}</th>
                                                    
-                                                    <th>Phone Number</th>
-                                                    <th>Status</th>
+                                                    <th>{% translate 'Phone Number' %}</th>
+                                                    <th>{% translate 'Status' %}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -490,7 +490,7 @@
                                                     <td>{{i.phone}}</td>
                                                     <td>
                                                         {% if i.primary %}
-                                                        <div class="gl-text">Default Shipping Address</div>
+                                                        <div class="gl-text">{% translate 'Default Shipping Address' %}</div>
                                                     {% else %}
                                                     <div class="gl-text"></div>
 
@@ -503,9 +503,9 @@
                                     </div>
                                     <div class="gl-modal-btn-group">
     
-                                        <button class="btn btn--e-brand-b-2" type="submit">SAVE</button>
+                                        <button class="btn btn--e-brand-b-2" type="submit">{% translate 'SAVE' %}</button>
     
-                                        <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">CANCEL</button></div>
+                                        <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">{% translate 'CANCEL' %}</button></div>
                                 </form>
                             </div>
                         </div>
@@ -524,14 +524,14 @@
                             <form method='POST' action="{%  url 'home:make_new_address' %}" class="checkout-modal1__form">
                                 {% csrf_token %}
                                 <div class="u-s-m-b-30">
-                                    <h1 class="gl-modal-h1">Add new Shipping Address</h1>
+                                    <h1 class="gl-modal-h1">{% translate 'Add new Shipping Address' %}</h1>
                                 </div>
                                 <div class="gl-inline">
                                     <div class="u-s-m-b-30">
 
                                         <!--====== Select Box ======-->
 
-                                        <label class="gl-label" for="address-country">COUNTRY *</label><select name="country" class="select-box select-box--primary-style" id="billing-country-2" required>
+                                        <label class="gl-label" for="address-country">{% translate 'COUNTRY' %}*</label><select name="country" class="select-box select-box--primary-style" id="billing-country-2" required>
                                            {% for i in countries %}
                                            <option  value="{{i.id}}">{{i.name|title}}</option>
 
@@ -543,8 +543,8 @@
 
                                         <!--====== Select Box ======-->
 
-                                        <label class="gl-label" for="address-state">REGION *</label><select name="region" class="select-box select-box--primary-style" id="billing-region-2" required>
-                                            <option selected value="">Choose Region</option>
+                                        <label class="gl-label" for="address-state">{% translate 'REGION' %} *</label><select name="region" class="select-box select-box--primary-style" id="billing-region-2" required>
+                                            <option selected value="">{% translate 'Choose Region' %}</option>
                                             
                                         </select>
                                         <!--====== End - Select Box ======-->
@@ -553,8 +553,8 @@
 
                                         <!--====== Select Box ======-->
 
-                                        <label class="gl-label" for="address-state">CITY *</label><select name="city" class="select-box select-box--primary-style" id="billing-state-2" required>
-                                            <option selected value="">Choose State/Province</option>
+                                        <label class="gl-label" for="address-state">{% translate 'CITY' %} *</label><select name="city" class="select-box select-box--primary-style" id="billing-state-2" required>
+                                            <option selected value="">{% translate 'Choose State/Province' %}</option>
                                             
                                         </select>
                                         <!--====== End - Select Box ======-->
@@ -575,14 +575,14 @@
                                 <div class="gl-inline">
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-phone">PHONE *</label>
+                                        <label class="gl-label" for="address-phone">{% translate 'PHONE' %} *</label>
 
                                         <input class="input-text input-text--primary-style" name="phone" type="number" id="address-phone" required></div>
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-street">STREET ADDRESS *</label>
+                                        <label class="gl-label" for="address-street">{% translate 'STREET ADDRESS' %} *</label>
 
-                                        <input class="input-text input-text--primary-style" name="street" type="text" id="address-street" placeholder="House Name and Street" required></div>
+                                        <input class="input-text input-text--primary-style" name="street" type="text" id="address-street" placeholder="{% translate 'Street Name' %}" required></div>
                                 </div>
                                 
                                 <div class="gl-inline">
@@ -593,15 +593,15 @@
                                         <input class="input-text input-text--primary-style" type="text" id="address-city"></div> -->
                                     <div class="u-s-m-b-30">
 
-                                        <label class="gl-label" for="address-street">ZIP/POSTAL CODE *</label>
+                                        <label class="gl-label" for="address-street">{% translate 'ZIP/POSTAL CODE' %} *</label>
 
-                                        <input name="zip" class="input-text input-text--primary-style" type="number" id="address-postal" placeholder="Zip/Postal Code" required></div>
+                                        <input name="zip" class="input-text input-text--primary-style" type="number" id="address-postal" placeholder="{% translate 'Zip/Postal Code' %}" required></div>
                                 </div>
                                 <div class="gl-modal-btn-group">
 
-                                    <button class="btn btn--e-brand-b-2" type="submit">SAVE</button>
+                                    <button class="btn btn--e-brand-b-2" type="submit">{% translate 'SAVE' %}</button>
 
-                                    <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">CANCEL</button></div>
+                                    <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">{% translate 'CANCEL' %}</button></div>
                             </form>
                         </div>
                     </div>
@@ -695,8 +695,8 @@
                     },
                     success: function (data) {   // `data` is from `get_topics_ajax` view function
                        
-                        let html_data2="<option value=''>Choose Region</option>";
-                        let html_data1="<option value=''>Choose State/Province</option>";
+                        let html_data2="<option value=''>{% translate 'Choose Region' %}</option>";
+                        let html_data1="<option value=''>{% translate 'Choose State/Province' %}</option>";
                         data.forEach(function (data) {
                             html_data2 += `
                             <option value='${data.id}'>${data.name}</option>
@@ -721,7 +721,7 @@
                     },
                     success: function (data) {   // `data` is from `get_topics_ajax` view function
                        
-                        let html_data2="<option value=''>Choose State/Province</option>";
+                        let html_data2="<option value=''>{% translate 'Choose State/Province' %}</option>";
                         
                         data.forEach(function (data) {
                             html_data2 += `
@@ -745,8 +745,8 @@
                     },
                     success: function (data) {   // `data` is from `get_topics_ajax` view function
                        
-                        let html_data2="<option value=''>Choose Region</option>";
-                        let html_data1="<option value=''>Choose State/Province</option>";
+                        let html_data2="<option value=''>{% translate 'Choose Region' %}</option>";
+                        let html_data1="<option value=''>{% translate 'Choose State/Province' %}</option>";
                         data.forEach(function (data) {
                             html_data2 += `
                             <option value='${data.id}'>${data.name}</option>
@@ -771,7 +771,7 @@
                     },
                     success: function (data) {   // `data` is from `get_topics_ajax` view function
                        
-                        let html_data2="<option value=''>Choose State/Province</option>";
+                        let html_data2="<option value=''>{% translate 'Choose State/Province' %}</option>";
                         
                         data.forEach(function (data) {
                             html_data2 += `

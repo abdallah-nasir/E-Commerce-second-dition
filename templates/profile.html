@@ -209,7 +209,7 @@
                                                                 <span>${{i.price}}</span>
                                                                 <div class="dash__link dash__link--brand">
 
-                                                                    <a href="{% url 'home:manage_order' slug=i.user %}">{% translate 'MANAGE' %}</a></div>
+                                                                    <a href="{% url 'home:manage_order' slug=i.user id=i.id %}">{% translate 'MANAGE' %}</a></div>
                                                             </div>
                                                         </td>
                                                     </tr>
