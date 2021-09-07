@@ -426,13 +426,16 @@ def cart(request):
 def shipping_cost(request,id):  
     cart=Cart.objects.get(id=id)
     price=cart.price
-    country=request.POST.get("country")
+    country=request.POST.get("country")   
+    print(country)
     try:
-        shipping=Shipping.objects.get(id=country)
+        country=Country.objects.get(id=country)
+        shipping=Shipping.objects.get(country=country.name)
+        cart.shipping=shipping
+        cart.save()
     except: 
-        pass
-    cart.shipping=shipping
-    cart.save()
+        pass    
+
     return redirect(reverse("home:cart"))
   
 def empty(request):
@@ -1661,7 +1664,7 @@ def cart_quantity_add(request):
         print("passed")
         messages.error(request,"invalid data")
         return redirect(reverse("home:cart"))
-    if product_cart.quantity >= 10:
+    if product_cart.quantity >= 10:  
         messages.error(request,"you have reached the maximum quantity")
         return redirect(reverse("home:cart"))
     if request.user.is_authenticated:
@@ -1672,9 +1675,10 @@ def cart_quantity_add(request):
         print("ajax")
         product_cart.quantity +=1
         product_cart.save()
-        data={"id":product_cart.id,"total":cart.before_discount(),"price":product_cart.product_price_individual(),"quantity":product_cart.quantity}
+        print(cart.before_discount())
+        data={"id":product_cart.id,"total":cart.before_discount(),"price":product_cart.product_price_individual(),"quantity":product_cart.quantity,"subtotal":cart.before_discount(),"shipping":cart.shipping_price()}
         # response_content=product_cart
-        return JsonResponse(data)   
+        return JsonResponse(data)     
     return redirect(reverse("home:cart"))
     
 def cart_quantity_remove(request):
@@ -1689,14 +1693,14 @@ def cart_quantity_remove(request):
         return redirect(reverse("home:cart"))
     if request.user.is_authenticated:
         cart=Cart.objects.filter(user=request.user,ordered=True,delivered=False).latest("modified_date")
-    else:
+    else:      
         cart=Cart.objects.filter(device=device,ordered=True,delivered=False).latest("modified_date")
     if request.is_ajax():
         product_cart.quantity -=1
         product_cart.save()
         if product_cart.quantity <= 0:
             product_cart.delete()
-        data={"id":product_cart.id,"total":cart.before_discount(),"price":product_cart.product_price_individual(),"quantity":product_cart.quantity}
+        data={"id":product_cart.id,"total":cart.before_discount(),"price":product_cart.product_price_individual(),"subtotal":cart.before_discount(),"quantity":product_cart.quantity,"shipping":cart.shipping_price()}
         return JsonResponse(data)   
 
     return redirect(reverse("home:cart"))

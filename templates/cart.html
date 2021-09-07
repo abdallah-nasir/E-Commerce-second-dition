@@ -250,7 +250,7 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td>{% translate "SUBTOTAL" %}</td>
-                                                                <td>${{cart.before_discount}}</td>
+                                                                <td id="subtotal">${{cart.before_discount}}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>{% translate "SHIPPING" %}</td>
@@ -263,7 +263,7 @@
                                                           
                                                             <tr>
                                                                 <td>{% translate "GRAND TOTAL" %}</td>
-                                                            <td>${{cart.shipping_price}}</td>
+                                                            <td id="shipping">${{cart.shipping_price}}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -303,8 +303,8 @@
                 },
                 success: function (data) {   // `data` is from `get_topics_ajax` view function
                    
-                    let html_data2="<option value=''>Choose Region</option>";
-                    let html_data1="<option value=''>Choose State/Province</option>";
+                    let html_data2="<option value=''>{% translate 'Choose Region' %}</option>";
+                    let html_data1="<option value=''>{% translate 'Choose State/Province' %}</option>";
                     data.forEach(function (data) {
                         html_data2 += `
                         <option value='${data.id}'>${data.name}</option>
@@ -329,7 +329,7 @@ $("#shipping-region").change(function () {
                 },
                 success: function (data) {   // `data` is from `get_topics_ajax` view function
                    
-                    let html_data2="<option value=''>Choose State/Province</option>";
+                    let html_data2="<option value=''>{% translate 'Choose State/Province' %}</option>";
                     
                     data.forEach(function (data) {
                         html_data2 += `
@@ -370,7 +370,11 @@ $(document).on('click',"#add-to-cart",function(){
                     let html_data2 = `
                $ ${res.total}
                 `
-                    $("#cart-total").html(html_data2);
+                $("#cart-total").html(html_data2);
+                let html_data3 = ` $ ${res.shipping}`
+                $("#shipping").html(html_data3);
+                let html_data4 = ` $ ${res.subtotal}`
+                $("#subtotal").html(html_data4);
                     _vm.attr('disabled',false);
 
                     
@@ -407,6 +411,10 @@ $(document).on('click',"#remove-from-cart",function(){
                $ ${res.total}
                 `
                     $("#cart-total").html(html_data2);
+                    let html_data3 = ` $ ${res.shipping}`
+                $("#shipping").html(html_data3);
+                let html_data4 = ` $ ${res.subtotal}`
+                $("#subtotal").html(html_data4);
                     _vm.attr('disabled',false);
                 }
             });
