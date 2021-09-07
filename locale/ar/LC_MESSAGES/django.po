@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-07 02:08+0200\n"
-"PO-Revision-Date: 2021-09-07 02:09+0205\n"
+"POT-Creation-Date: 2021-09-07 16:25+0200\n"
+"PO-Revision-Date: 2021-09-07 16:29+0205\n"
 "Last-Translator: abdallah nasir <abdallah.nasir@ymail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,11 +27,13 @@ msgstr "الانجليزيه"
 msgid "Arabic"
 msgstr "العربيه"
 
-#: .\STORE\views.py:1891 .\templates\test.html:19
+#: .\STORE\views.py:1895 .\templates\test.html:19
 msgid "hello"
 msgstr "مرحبا"
 
-#: .\templates\about.html:19 .\templates\address_book.html:26
+#: .\templates\about.html:19 .\templates\account\login.html:20
+#: .\templates\account\password_reset.html:19
+#: .\templates\account\signup.html:20 .\templates\address_book.html:26
 #: .\templates\branch.html:393 .\templates\canceled_order.html:25
 #: .\templates\cart.html:34 .\templates\category.html:440
 #: .\templates\checkout.html:26 .\templates\contact.html:24
@@ -271,6 +273,75 @@ msgid ""
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 
+#: .\templates\account\login.html:23 .\templates\base.html:176
+msgid "Signin"
+msgstr "تسجيل الدخول"
+
+#: .\templates\account\login.html:42
+msgid "ALREADY REGISTERED?"
+msgstr "مسجل بالفعل؟"
+
+#: .\templates\account\login.html:58
+msgid "IAM NEW CUSTOMER"
+msgstr "مستخدم جديد"
+
+#: .\templates\account\login.html:60
+msgid ""
+"By creating an account with our store, you will be able to move through the "
+"checkout process faster, store shipping addresses, view and track your "
+"orders in your account and more"
+msgstr ""
+"من خلال إنشاء حساب في متجرنا ، ستتمكن من التنقل خلال عملية الخروج بشكل أسرع "
+"، وتخزين عناوين الشحن ، وعرض وتتبع طلباتك في حسابك والمزيد."
+
+#: .\templates\account\login.html:63 .\templates\account\signup.html:42
+msgid "CREATE AN ACCOUNT"
+msgstr "انشاء حساب"
+
+#: .\templates\account\login.html:64
+msgid "SIGN IN"
+msgstr "تسجيل الدخول"
+
+#: .\templates\account\login.html:66
+msgid "If you have an account with us, please log in"
+msgstr "إذا كان لديك حساب معنا ، يرجى تسجيل الدخول"
+
+#: .\templates\account\login.html:76
+msgid "Signin with Facebook"
+msgstr "التسجيل بواسطة فيسبوك"
+
+#: .\templates\account\login.html:81
+msgid "Signin with Google"
+msgstr "التسجيل يواسطه جوجل"
+
+#: .\templates\account\login.html:85
+msgid "Username / E-MAIL"
+msgstr "الايميل / اسم المستخدم"
+
+#: .\templates\account\login.html:87
+msgid "Username / Email"
+msgstr "الايميل / اسم المستخدم"
+
+#: .\templates\account\login.html:91 .\templates\account\signup.html:163
+msgid "PASSWORD"
+msgstr "كلمه السر"
+
+#: .\templates\account\login.html:93 .\templates\account\signup.html:165
+msgid "Enter Password"
+msgstr "أدخل كلمة المرور"
+
+#: .\templates\account\login.html:99
+msgid "Remember Me"
+msgstr ""
+
+#: .\templates\account\login.html:105 .\templates\socialaccount\signup.html:37
+msgid "LOGIN"
+msgstr "تسجيل الدخول"
+
+#: .\templates\account\login.html:108
+msgid "Lost Your Password?"
+msgstr "هل فقدت كلمة السر ؟"
+
 #: .\templates\account\logout.html:5 .\templates\account\logout.html:23
 #: .\templates\account\logout.html:32
 msgid "Sign Out"
@@ -340,6 +411,46 @@ msgstr ""
 msgid "Forgot Password ?"
 msgstr ""
 
+#: .\templates\account\password_reset.html:22
+msgid "Reset"
+msgstr "استرجاع كلمه السر"
+
+#: .\templates\account\password_reset.html:41
+#| msgid "CONFIRM PASSWORD"
+msgid "FORGOT PASSWORD?"
+msgstr "نسيت كلمه السر ؟"
+
+#: .\templates\account\password_reset.html:57
+#| msgid "PASSWORD"
+msgid "PASSWORD RESET"
+msgstr "استرجاع كلمه السر"
+
+#: .\templates\account\password_reset.html:59
+msgid ""
+"Enter your email or username below and we will send you a link to reset your"
+" password"
+msgstr ""
+"أدخل بريدك الإلكتروني أو اسم المستخدم أدناه وسنرسل لك رابطًا لإعادة تعيين "
+"كلمة المرور الخاصة بك."
+
+#: .\templates\account\password_reset.html:65
+msgid "E-MAIL "
+msgstr "الايميل الخاص بك"
+
+#: .\templates\account\password_reset.html:67
+#: .\templates\account\signup.html:159
+msgid "Enter E-mail"
+msgstr "أدخل البريد الإلكتروني"
+
+#: .\templates\account\password_reset.html:70
+#: .\templates\this_product.html:602
+msgid "SUBMIT"
+msgstr "تاكيد"
+
+#: .\templates\account\password_reset.html:73
+msgid "Back to Login"
+msgstr "العوده لصفحه تسجيل الدخول"
+
 #: .\templates\account\password_reset_done.html:6
 #: .\templates\account\password_reset_done.html:16
 msgid "Password Reset"
@@ -373,6 +484,159 @@ msgstr ""
 #: .\templates\account\password_set.html:13
 msgid "Set Password"
 msgstr ""
+
+#: .\templates\account\signup.html:23 .\templates\base.html:171
+#: .\templates\socialaccount\signup.html:5
+msgid "Signup"
+msgstr "التسجيل"
+
+#: .\templates\account\signup.html:58
+#, fuzzy
+#| msgid "PAYMENT INFORMATION"
+msgid "PERSONAL INFORMATION"
+msgstr "معلومات الدفع"
+
+#: .\templates\account\signup.html:71
+msgid "Signup with Facebook"
+msgstr "التسجيل بواسطة فيسبوك"
+
+#: .\templates\account\signup.html:76
+msgid "Signup with Google"
+msgstr "التسجيل يواسطه جوجل"
+
+#: .\templates\account\signup.html:80 .\templates\profile_edit.html:125
+msgid "FIRST NAME"
+msgstr "الاسم الاول"
+
+#: .\templates\account\signup.html:82
+msgid "First Name"
+msgstr "الاسم الاول"
+
+#: .\templates\account\signup.html:85 .\templates\profile_edit.html:130
+msgid "LAST NAME"
+msgstr "الاسم الاخير"
+
+#: .\templates\account\signup.html:87
+msgid "Last Name"
+msgstr "الاسم الاخير"
+
+#: .\templates\account\signup.html:94 .\templates\profile_edit.html:138
+msgid "BIRTHDAY"
+msgstr "تاريخ ميلادك"
+
+#: .\templates\account\signup.html:96 .\templates\profile_edit.html:141
+msgid "Month"
+msgstr "الشهر"
+
+#: .\templates\account\signup.html:97 .\templates\profile_edit.html:142
+msgid "January"
+msgstr ""
+
+#: .\templates\account\signup.html:98 .\templates\profile_edit.html:143
+msgid "February"
+msgstr ""
+
+#: .\templates\account\signup.html:99 .\templates\profile_edit.html:144
+#, fuzzy
+#| msgid "Search"
+msgid "March"
+msgstr "البحث"
+
+#: .\templates\account\signup.html:100 .\templates\profile_edit.html:145
+msgid "April"
+msgstr ""
+
+#: .\templates\account\signup.html:101 .\templates\profile_edit.html:146
+#, fuzzy
+#| msgid "Max"
+msgid "May"
+msgstr "اعلي سعر"
+
+#: .\templates\account\signup.html:102 .\templates\profile_edit.html:147
+msgid "June"
+msgstr ""
+
+#: .\templates\account\signup.html:103 .\templates\profile_edit.html:148
+msgid "July"
+msgstr ""
+
+#: .\templates\account\signup.html:104 .\templates\profile_edit.html:149
+msgid "August"
+msgstr ""
+
+#: .\templates\account\signup.html:105 .\templates\profile_edit.html:150
+msgid "September"
+msgstr ""
+
+#: .\templates\account\signup.html:106 .\templates\profile_edit.html:151
+msgid "October"
+msgstr ""
+
+#: .\templates\account\signup.html:107 .\templates\profile_edit.html:152
+#, fuzzy
+#| msgid "Phone Number"
+msgid "November"
+msgstr "رقم الهاتف"
+
+#: .\templates\account\signup.html:108 .\templates\profile_edit.html:153
+msgid "December"
+msgstr ""
+
+#: .\templates\account\signup.html:110 .\templates\profile_edit.html:157
+msgid "Day"
+msgstr "اليوم"
+
+#: .\templates\account\signup.html:117 .\templates\profile_edit.html:165
+msgid "Year"
+msgstr "السنة"
+
+#: .\templates\account\signup.html:143 .\templates\profile_edit.html:190
+msgid "GENDER"
+msgstr "الجنس"
+
+#: .\templates\account\signup.html:144 .\templates\profile_edit.html:192
+msgid "Select"
+msgstr "اختيار"
+
+#: .\templates\account\signup.html:145 .\templates\base.html:623
+#: .\templates\profile_edit.html:193
+msgid "Male"
+msgstr "ذكر"
+
+#: .\templates\account\signup.html:146 .\templates\base.html:630
+#: .\templates\profile_edit.html:194
+msgid "Female"
+msgstr "انثي"
+
+#: .\templates\account\signup.html:151 .\templates\address_book.html:253
+#: .\templates\checkout.html:203 .\templates\checkout.html:578
+msgid "PHONE"
+msgstr "رقم الهاتف"
+
+#: .\templates\account\signup.html:153 .\templates\address_book.html:139
+#: .\templates\checkout.html:468
+msgid "Phone Number"
+msgstr "رقم الهاتف"
+
+#: .\templates\account\signup.html:157
+msgid "E-MAIL"
+msgstr ""
+
+#: .\templates\account\signup.html:168
+msgid "CONFIRM PASSWORD"
+msgstr "تأكيد كلمة المرور"
+
+#: .\templates\account\signup.html:170
+msgid "Password again"
+msgstr "تأكيد كلمة المرور"
+
+#: .\templates\account\signup.html:177
+msgid "CREATE"
+msgstr "انشاء"
+
+#: .\templates\account\signup.html:179
+msgid "Return to Store"
+msgstr "العودة إلى المتجر"
 
 #: .\templates\account\signup_closed.html:5
 #: .\templates\account\signup_closed.html:8
@@ -499,10 +763,6 @@ msgstr "الاسم بالكامل"
 msgid "Address"
 msgstr "العنوان"
 
-#: .\templates\address_book.html:139 .\templates\checkout.html:468
-msgid "Phone Number"
-msgstr "رقم الهاتف"
-
 #: .\templates\address_book.html:140 .\templates\checkout.html:469
 msgid "Status"
 msgstr "الحالة"
@@ -545,11 +805,6 @@ msgstr "المدينه"
 msgid "STREET ADDRESS"
 msgstr "عنوان الشارع"
 
-#: .\templates\address_book.html:253 .\templates\checkout.html:203
-#: .\templates\checkout.html:578
-msgid "PHONE"
-msgstr "رقم الهاتف"
-
 #: .\templates\address_book.html:267 .\templates\cart.html:225
 #: .\templates\checkout.html:229 .\templates\checkout.html:596
 msgid "ZIP/POSTAL CODE"
@@ -567,13 +822,15 @@ msgid "CANCEL"
 msgstr "الغاء"
 
 #: .\templates\address_book.html:299 .\templates\cart.html:208
-#: .\templates\checkout.html:179 .\templates\checkout.html:547
-#: .\templates\checkout.html:698 .\templates\checkout.html:748
+#: .\templates\cart.html:306 .\templates\checkout.html:179
+#: .\templates\checkout.html:547 .\templates\checkout.html:698
+#: .\templates\checkout.html:748
 msgid "Choose Region"
 msgstr "اختر منطقه"
 
 #: .\templates\address_book.html:300 .\templates\address_book.html:325
-#: .\templates\cart.html:218 .\templates\checkout.html:193
+#: .\templates\cart.html:218 .\templates\cart.html:307
+#: .\templates\cart.html:332 .\templates\checkout.html:193
 #: .\templates\checkout.html:557 .\templates\checkout.html:699
 #: .\templates\checkout.html:724 .\templates\checkout.html:749
 #: .\templates\checkout.html:774
@@ -597,14 +854,6 @@ msgstr "الحساب"
 #: .\templates\base.html:164
 msgid "Signout"
 msgstr "تسجيل الخروج"
-
-#: .\templates\base.html:171 .\templates\socialaccount\signup.html:5
-msgid "Signup"
-msgstr "التسجيل"
-
-#: .\templates\base.html:176
-msgid "Signin"
-msgstr "تسجيل الدخول"
 
 #: .\templates\base.html:193
 msgid "Language"
@@ -730,14 +979,6 @@ msgstr "المخزن"
 #: .\templates\base.html:615
 msgid "Join our Newsletter"
 msgstr "انضم الي البريد الخاصه بنا "
-
-#: .\templates\base.html:623 .\templates\profile_edit.html:193
-msgid "Male"
-msgstr "ذكر"
-
-#: .\templates\base.html:630 .\templates\profile_edit.html:194
-msgid "Female"
-msgstr "انثي"
 
 #: .\templates\base.html:637
 msgid "Enter your Email"
@@ -1416,12 +1657,7 @@ msgstr "تسوق الان"
 msgid "Find Top Brands"
 msgstr "ابحث عن افضل البراندات"
 
-#: .\templates\home.html:65
-#, python-format
-msgid "10%% Off On Electronic"
-msgstr " خصم 10٪ على الإلكترونيات"
-
-#: .\templates\home.html:86
+#: .\templates\home.html:65 .\templates\home.html:86
 #, python-format
 msgid "10%% Off On Electronics"
 msgstr "خصم 10٪ على الإلكترونيات"
@@ -1779,7 +2015,6 @@ msgid "Phone"
 msgstr "الهاتف"
 
 #: .\templates\profile_account.html:131 .\templates\profile_edit.html:209
-#| msgid "Please Enter Your Address"
 msgid "Please enter your mobile"
 msgstr "الرجاء إدخال رقم الهاتف"
 
@@ -1798,93 +2033,6 @@ msgstr "تعديل البروفايل"
 #: .\templates\profile_edit.html:112
 msgid "Looks like you haven't update your profile"
 msgstr "انظر إلى جميع المعلومات الخاصة بك ، يمكنك تعديل ملفك الخاص بك"
-
-#: .\templates\profile_edit.html:125
-msgid "FIRST NAME"
-msgstr "الاسم الاول"
-
-#: .\templates\profile_edit.html:130
-msgid "LAST NAME"
-msgstr "الاسم الاخير"
-
-#: .\templates\profile_edit.html:138
-msgid "BIRTHDAY"
-msgstr "تاريخ ميلادك"
-
-#: .\templates\profile_edit.html:141
-msgid "Month"
-msgstr "الشهر"
-
-#: .\templates\profile_edit.html:142
-msgid "January"
-msgstr ""
-
-#: .\templates\profile_edit.html:143
-msgid "February"
-msgstr ""
-
-#: .\templates\profile_edit.html:144
-#, fuzzy
-#| msgid "Search"
-msgid "March"
-msgstr "البحث"
-
-#: .\templates\profile_edit.html:145
-msgid "April"
-msgstr ""
-
-#: .\templates\profile_edit.html:146
-#, fuzzy
-#| msgid "Max"
-msgid "May"
-msgstr "اعلي سعر"
-
-#: .\templates\profile_edit.html:147
-msgid "June"
-msgstr ""
-
-#: .\templates\profile_edit.html:148
-msgid "July"
-msgstr ""
-
-#: .\templates\profile_edit.html:149
-msgid "August"
-msgstr ""
-
-#: .\templates\profile_edit.html:150
-msgid "September"
-msgstr ""
-
-#: .\templates\profile_edit.html:151
-msgid "October"
-msgstr ""
-
-#: .\templates\profile_edit.html:152
-#, fuzzy
-#| msgid "Phone Number"
-msgid "November"
-msgstr "رقم الهاتف"
-
-#: .\templates\profile_edit.html:153
-msgid "December"
-msgstr ""
-
-#: .\templates\profile_edit.html:157
-#| msgid "Max"
-msgid "Day"
-msgstr "اليوم"
-
-#: .\templates\profile_edit.html:165
-msgid "Year"
-msgstr "السنة"
-
-#: .\templates\profile_edit.html:190
-msgid "GENDER"
-msgstr "الجنس"
-
-#: .\templates\profile_edit.html:192
-msgid "Select"
-msgstr "اختيار"
 
 #: .\templates\socialaccount\authentication_error.html:5
 #: .\templates\socialaccount\authentication_error.html:8
@@ -1952,10 +2100,6 @@ msgid ""
 "        %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
 
-#: .\templates\socialaccount\signup.html:37
-msgid "LOGIN"
-msgstr "تسجيل الدخول"
-
 #: .\templates\this_product.html:71
 msgid "Click for larger zoom"
 msgstr "أضغط لتكبير الصوره"
@@ -2016,10 +2160,6 @@ msgstr "اضافه تعليق"
 msgid "YOUR REVIEW"
 msgstr "تعليقك "
 
-#: .\templates\this_product.html:602
-msgid "SUBMIT"
-msgstr "تاكيد"
-
 #: .\templates\this_product.html:624
 msgid "CUSTOMER ALSO VIEWED"
 msgstr "شاهد الزوار أيضًا"
@@ -2053,6 +2193,14 @@ msgstr "ازالة"
 #: .\templates\wishlist.html:102
 msgid "CLEAR WISHLIST"
 msgstr "حذف المنتجات المفضلة"
+
+#, fuzzy
+#~ msgid "CREATE AN ACCOUN"
+#~ msgstr "انشاء حساب"
+
+#, python-format
+#~ msgid "10%% Off On Electronic"
+#~ msgstr " خصم 10٪ على الإلكترونيات"
 
 #~ msgid "Subtotal"
 #~ msgstr "السعر"

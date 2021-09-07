@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-07 02:08+0200\n"
+"POT-Creation-Date: 2021-09-07 16:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +26,13 @@ msgstr ""
 msgid "Arabic"
 msgstr ""
 
-#: .\STORE\views.py:1891 .\templates\test.html:19
+#: .\STORE\views.py:1895 .\templates\test.html:19
 msgid "hello"
 msgstr ""
 
-#: .\templates\about.html:19 .\templates\address_book.html:26
+#: .\templates\about.html:19 .\templates\account\login.html:20
+#: .\templates\account\password_reset.html:19
+#: .\templates\account\signup.html:20 .\templates\address_book.html:26
 #: .\templates\branch.html:393 .\templates\canceled_order.html:25
 #: .\templates\cart.html:34 .\templates\category.html:440
 #: .\templates\checkout.html:26 .\templates\contact.html:24
@@ -265,6 +267,73 @@ msgid ""
 "\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 
+#: .\templates\account\login.html:23 .\templates\base.html:176
+msgid "Signin"
+msgstr ""
+
+#: .\templates\account\login.html:42
+msgid "ALREADY REGISTERED?"
+msgstr ""
+
+#: .\templates\account\login.html:58
+msgid "IAM NEW CUSTOMER"
+msgstr ""
+
+#: .\templates\account\login.html:60
+msgid ""
+"By creating an account with our store, you will be able to move through the "
+"checkout process faster, store shipping addresses, view and track your "
+"orders in your account and more"
+msgstr ""
+
+#: .\templates\account\login.html:63 .\templates\account\signup.html:42
+msgid "CREATE AN ACCOUNT"
+msgstr ""
+
+#: .\templates\account\login.html:64
+msgid "SIGN IN"
+msgstr ""
+
+#: .\templates\account\login.html:66
+msgid "If you have an account with us, please log in"
+msgstr ""
+
+#: .\templates\account\login.html:76
+msgid "Signin with Facebook"
+msgstr ""
+
+#: .\templates\account\login.html:81
+msgid "Signin with Google"
+msgstr ""
+
+#: .\templates\account\login.html:85
+msgid "Username / E-MAIL"
+msgstr ""
+
+#: .\templates\account\login.html:87
+msgid "Username / Email"
+msgstr ""
+
+#: .\templates\account\login.html:91 .\templates\account\signup.html:163
+msgid "PASSWORD"
+msgstr ""
+
+#: .\templates\account\login.html:93 .\templates\account\signup.html:165
+msgid "Enter Password"
+msgstr ""
+
+#: .\templates\account\login.html:99
+msgid "Remember Me"
+msgstr ""
+
+#: .\templates\account\login.html:105 .\templates\socialaccount\signup.html:37
+msgid "LOGIN"
+msgstr ""
+
+#: .\templates\account\login.html:108
+msgid "Lost Your Password?"
+msgstr ""
+
 #: .\templates\account\logout.html:5 .\templates\account\logout.html:23
 #: .\templates\account\logout.html:32
 msgid "Sign Out"
@@ -334,6 +403,41 @@ msgstr ""
 msgid "Forgot Password ?"
 msgstr ""
 
+#: .\templates\account\password_reset.html:22
+msgid "Reset"
+msgstr ""
+
+#: .\templates\account\password_reset.html:41
+msgid "FORGOT PASSWORD?"
+msgstr ""
+
+#: .\templates\account\password_reset.html:57
+msgid "PASSWORD RESET"
+msgstr ""
+
+#: .\templates\account\password_reset.html:59
+msgid ""
+"Enter your email or username below and we will send you a link to reset your "
+"password"
+msgstr ""
+
+#: .\templates\account\password_reset.html:65
+msgid "E-MAIL "
+msgstr ""
+
+#: .\templates\account\password_reset.html:67
+#: .\templates\account\signup.html:159
+msgid "Enter E-mail"
+msgstr ""
+
+#: .\templates\account\password_reset.html:70 .\templates\this_product.html:602
+msgid "SUBMIT"
+msgstr ""
+
+#: .\templates\account\password_reset.html:73
+msgid "Back to Login"
+msgstr ""
+
 #: .\templates\account\password_reset_done.html:6
 #: .\templates\account\password_reset_done.html:16
 msgid "Password Reset"
@@ -366,6 +470,151 @@ msgstr ""
 #: .\templates\account\password_set.html:8
 #: .\templates\account\password_set.html:13
 msgid "Set Password"
+msgstr ""
+
+#: .\templates\account\signup.html:23 .\templates\base.html:171
+#: .\templates\socialaccount\signup.html:5
+msgid "Signup"
+msgstr ""
+
+#: .\templates\account\signup.html:58
+msgid "PERSONAL INFORMATION"
+msgstr ""
+
+#: .\templates\account\signup.html:71
+msgid "Signup with Facebook"
+msgstr ""
+
+#: .\templates\account\signup.html:76
+msgid "Signup with Google"
+msgstr ""
+
+#: .\templates\account\signup.html:80 .\templates\profile_edit.html:125
+msgid "FIRST NAME"
+msgstr ""
+
+#: .\templates\account\signup.html:82
+msgid "First Name"
+msgstr ""
+
+#: .\templates\account\signup.html:85 .\templates\profile_edit.html:130
+msgid "LAST NAME"
+msgstr ""
+
+#: .\templates\account\signup.html:87
+msgid "Last Name"
+msgstr ""
+
+#: .\templates\account\signup.html:94 .\templates\profile_edit.html:138
+msgid "BIRTHDAY"
+msgstr ""
+
+#: .\templates\account\signup.html:96 .\templates\profile_edit.html:141
+msgid "Month"
+msgstr ""
+
+#: .\templates\account\signup.html:97 .\templates\profile_edit.html:142
+msgid "January"
+msgstr ""
+
+#: .\templates\account\signup.html:98 .\templates\profile_edit.html:143
+msgid "February"
+msgstr ""
+
+#: .\templates\account\signup.html:99 .\templates\profile_edit.html:144
+msgid "March"
+msgstr ""
+
+#: .\templates\account\signup.html:100 .\templates\profile_edit.html:145
+msgid "April"
+msgstr ""
+
+#: .\templates\account\signup.html:101 .\templates\profile_edit.html:146
+msgid "May"
+msgstr ""
+
+#: .\templates\account\signup.html:102 .\templates\profile_edit.html:147
+msgid "June"
+msgstr ""
+
+#: .\templates\account\signup.html:103 .\templates\profile_edit.html:148
+msgid "July"
+msgstr ""
+
+#: .\templates\account\signup.html:104 .\templates\profile_edit.html:149
+msgid "August"
+msgstr ""
+
+#: .\templates\account\signup.html:105 .\templates\profile_edit.html:150
+msgid "September"
+msgstr ""
+
+#: .\templates\account\signup.html:106 .\templates\profile_edit.html:151
+msgid "October"
+msgstr ""
+
+#: .\templates\account\signup.html:107 .\templates\profile_edit.html:152
+msgid "November"
+msgstr ""
+
+#: .\templates\account\signup.html:108 .\templates\profile_edit.html:153
+msgid "December"
+msgstr ""
+
+#: .\templates\account\signup.html:110 .\templates\profile_edit.html:157
+msgid "Day"
+msgstr ""
+
+#: .\templates\account\signup.html:117 .\templates\profile_edit.html:165
+msgid "Year"
+msgstr ""
+
+#: .\templates\account\signup.html:143 .\templates\profile_edit.html:190
+msgid "GENDER"
+msgstr ""
+
+#: .\templates\account\signup.html:144 .\templates\profile_edit.html:192
+msgid "Select"
+msgstr ""
+
+#: .\templates\account\signup.html:145 .\templates\base.html:623
+#: .\templates\profile_edit.html:193
+msgid "Male"
+msgstr ""
+
+#: .\templates\account\signup.html:146 .\templates\base.html:630
+#: .\templates\profile_edit.html:194
+msgid "Female"
+msgstr ""
+
+#: .\templates\account\signup.html:151 .\templates\address_book.html:253
+#: .\templates\checkout.html:203 .\templates\checkout.html:578
+msgid "PHONE"
+msgstr ""
+
+#: .\templates\account\signup.html:153 .\templates\address_book.html:139
+#: .\templates\checkout.html:468
+msgid "Phone Number"
+msgstr ""
+
+#: .\templates\account\signup.html:157
+msgid "E-MAIL"
+msgstr ""
+
+#: .\templates\account\signup.html:168
+msgid "CONFIRM PASSWORD"
+msgstr ""
+
+#: .\templates\account\signup.html:170
+msgid "Password again"
+msgstr ""
+
+#: .\templates\account\signup.html:177
+msgid "CREATE"
+msgstr ""
+
+#: .\templates\account\signup.html:179
+msgid "Return to Store"
 msgstr ""
 
 #: .\templates\account\signup_closed.html:5
@@ -493,10 +742,6 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: .\templates\address_book.html:139 .\templates\checkout.html:468
-msgid "Phone Number"
-msgstr ""
-
 #: .\templates\address_book.html:140 .\templates\checkout.html:469
 msgid "Status"
 msgstr ""
@@ -539,11 +784,6 @@ msgstr ""
 msgid "STREET ADDRESS"
 msgstr ""
 
-#: .\templates\address_book.html:253 .\templates\checkout.html:203
-#: .\templates\checkout.html:578
-msgid "PHONE"
-msgstr ""
-
 #: .\templates\address_book.html:267 .\templates\cart.html:225
 #: .\templates\checkout.html:229 .\templates\checkout.html:596
 msgid "ZIP/POSTAL CODE"
@@ -561,13 +801,15 @@ msgid "CANCEL"
 msgstr ""
 
 #: .\templates\address_book.html:299 .\templates\cart.html:208
-#: .\templates\checkout.html:179 .\templates\checkout.html:547
-#: .\templates\checkout.html:698 .\templates\checkout.html:748
+#: .\templates\cart.html:306 .\templates\checkout.html:179
+#: .\templates\checkout.html:547 .\templates\checkout.html:698
+#: .\templates\checkout.html:748
 msgid "Choose Region"
 msgstr ""
 
 #: .\templates\address_book.html:300 .\templates\address_book.html:325
-#: .\templates\cart.html:218 .\templates\checkout.html:193
+#: .\templates\cart.html:218 .\templates\cart.html:307
+#: .\templates\cart.html:332 .\templates\checkout.html:193
 #: .\templates\checkout.html:557 .\templates\checkout.html:699
 #: .\templates\checkout.html:724 .\templates\checkout.html:749
 #: .\templates\checkout.html:774
@@ -590,14 +832,6 @@ msgstr ""
 
 #: .\templates\base.html:164
 msgid "Signout"
-msgstr ""
-
-#: .\templates\base.html:171 .\templates\socialaccount\signup.html:5
-msgid "Signup"
-msgstr ""
-
-#: .\templates\base.html:176
-msgid "Signin"
 msgstr ""
 
 #: .\templates\base.html:193
@@ -723,14 +957,6 @@ msgstr ""
 
 #: .\templates\base.html:615
 msgid "Join our Newsletter"
-msgstr ""
-
-#: .\templates\base.html:623 .\templates\profile_edit.html:193
-msgid "Male"
-msgstr ""
-
-#: .\templates\base.html:630 .\templates\profile_edit.html:194
-msgid "Female"
 msgstr ""
 
 #: .\templates\base.html:637
@@ -1393,12 +1619,7 @@ msgstr ""
 msgid "Find Top Brands"
 msgstr ""
 
-#: .\templates\home.html:65
-#, python-format
-msgid "10%% Off On Electronic"
-msgstr ""
-
-#: .\templates\home.html:86
+#: .\templates\home.html:65 .\templates\home.html:86
 #, python-format
 msgid "10%% Off On Electronics"
 msgstr ""
@@ -1766,86 +1987,6 @@ msgstr ""
 msgid "Looks like you haven't update your profile"
 msgstr ""
 
-#: .\templates\profile_edit.html:125
-msgid "FIRST NAME"
-msgstr ""
-
-#: .\templates\profile_edit.html:130
-msgid "LAST NAME"
-msgstr ""
-
-#: .\templates\profile_edit.html:138
-msgid "BIRTHDAY"
-msgstr ""
-
-#: .\templates\profile_edit.html:141
-msgid "Month"
-msgstr ""
-
-#: .\templates\profile_edit.html:142
-msgid "January"
-msgstr ""
-
-#: .\templates\profile_edit.html:143
-msgid "February"
-msgstr ""
-
-#: .\templates\profile_edit.html:144
-msgid "March"
-msgstr ""
-
-#: .\templates\profile_edit.html:145
-msgid "April"
-msgstr ""
-
-#: .\templates\profile_edit.html:146
-msgid "May"
-msgstr ""
-
-#: .\templates\profile_edit.html:147
-msgid "June"
-msgstr ""
-
-#: .\templates\profile_edit.html:148
-msgid "July"
-msgstr ""
-
-#: .\templates\profile_edit.html:149
-msgid "August"
-msgstr ""
-
-#: .\templates\profile_edit.html:150
-msgid "September"
-msgstr ""
-
-#: .\templates\profile_edit.html:151
-msgid "October"
-msgstr ""
-
-#: .\templates\profile_edit.html:152
-msgid "November"
-msgstr ""
-
-#: .\templates\profile_edit.html:153
-msgid "December"
-msgstr ""
-
-#: .\templates\profile_edit.html:157
-msgid "Day"
-msgstr ""
-
-#: .\templates\profile_edit.html:165
-msgid "Year"
-msgstr ""
-
-#: .\templates\profile_edit.html:190
-msgid "GENDER"
-msgstr ""
-
-#: .\templates\profile_edit.html:192
-msgid "Select"
-msgstr ""
-
 #: .\templates\socialaccount\authentication_error.html:5
 #: .\templates\socialaccount\authentication_error.html:8
 msgid "Social Network Login Failure"
@@ -1912,10 +2053,6 @@ msgid ""
 "        %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
 
-#: .\templates\socialaccount\signup.html:37
-msgid "LOGIN"
-msgstr ""
-
 #: .\templates\this_product.html:71
 msgid "Click for larger zoom"
 msgstr ""
@@ -1974,10 +2111,6 @@ msgstr ""
 
 #: .\templates\this_product.html:584
 msgid "YOUR REVIEW"
-msgstr ""
-
-#: .\templates\this_product.html:602
-msgid "SUBMIT"
 msgstr ""
 
 #: .\templates\this_product.html:624

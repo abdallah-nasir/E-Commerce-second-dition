@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 {% load socialaccount %}
 {% block content %}
         <!--====== App Content ======-->
@@ -16,10 +17,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'account_login' %}">Signin</a></li>
+                                        <a href="{% url 'account_login' %}">{% translate 'Signin' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -38,7 +39,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary">ALREADY REGISTERED?</h1>
+                                    <h1 class="section__heading u-c-secondary">{% translate 'ALREADY REGISTERED?' %}</h1>
                                 </div>
                             </div>
                         </div>
@@ -54,15 +55,15 @@
                             <div class="col-lg-6 col-md-8 u-s-m-b-30">
                                 <div class="l-f-o">
                                     <div class="l-f-o__pad-box">
-                                        <h1 class="gl-h1">I'M NEW CUSTOMER</h1>
+                                        <h1 class="gl-h1">{% translate 'IAM NEW CUSTOMER' %}</h1>
 
-                                        <span class="gl-text u-s-m-b-30">By creating an account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more.</span>
+                                        <span class="gl-text u-s-m-b-30">{% translate 'By creating an account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more' %}.</span>
                                         <div class="u-s-m-b-15">
 
-                                            <a class="l-f-o__create-link btn--e-transparent-brand-b-2" href="{% url 'account_signup' %}">CREATE AN ACCOUNT</a></div>
-                                        <h1 class="gl-h1">SIGNIN</h1>
+                                            <a class="l-f-o__create-link btn--e-transparent-brand-b-2" href="{% url 'account_signup' %}">{% translate 'CREATE AN ACCOUNT' %}</a></div>
+                                        <h1 class="gl-h1">{% translate 'SIGN IN' %}</h1>
 
-                                        <span class="gl-text u-s-m-b-30">If you have an account with us, please log in.</span>
+                                        <span class="gl-text u-s-m-b-30">{% translate 'If you have an account with us, please log in' %}.</span>
                                          </form>   
                                           <form method="POST" class="l-f-o__form" action="{% url 'account_login' %}">
                                                 {% csrf_token %}
@@ -72,39 +73,39 @@
 
                                                     <a href="{%  provider_login_url 'facebook'  %}" class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
 
-                                                        <span>Signin with Facebook </span></a></div>
+                                                        <span>{% translate 'Signin with Facebook' %} </span></a></div>
                                                 <div class="u-s-m-b-15">
 
                                                     <a href="{%  provider_login_url 'google'  %}" class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
 
-                                                        <span>Signin with Google</span></a></div>
+                                                        <span>{% translate 'Signin with Google' %}</span></a></div>
                                             </div>
                                             <div class="u-s-m-b-30">
 
-                                                <label class="gl-label" for="login-email">E-MAIL *</label>
+                                                <label class="gl-label" for="login-email">{% translate 'Username / E-MAIL' %} *</label>
 
-                                                <input class="input-text input-text--primary-style" type="text" name="login" id="login-email" placeholder="Username / Email" required>
+                                                <input class="input-text input-text--primary-style" type="text" name="login" id="login-email" placeholder="{% translate 'Username / Email' %}" required>
                                             </div>
                                             <div class="u-s-m-b-30">
 
-                                                <label class="gl-label" for="login-password">PASSWORD *</label>
+                                                <label class="gl-label" for="login-password">{% translate 'PASSWORD' %} *</label>
 
-                                                <input class="input-text input-text--primary-style" name="password" type="password" id="login-password" placeholder="Enter Password" required></div>
+                                                <input class="input-text input-text--primary-style" name="password" type="password" id="login-password" placeholder="{% translate 'Enter Password' %}" required></div>
                                                 <div class="check-box">
 
                                                     <input type="checkbox" name="remember" id="remember-me">
                                                     <div class="check-box__state check-box__state--primary">
 
-                                                        <label class="check-box__label" for="remember-me">Remember Me</label></div>
+                                                        <label class="check-box__label" for="remember-me">{% translate 'Remember Me' %}</label></div>
                                                 </div>
                                                 <br>
                                                 <div class="gl-inline ">
                                                 <div class="u-s-m-b-30">
 
-                                                    <button class="btn btn--e-transparent-brand-b-2" type="submit">LOGIN</button></div>
+                                                    <button class="btn btn--e-transparent-brand-b-2" type="submit">{% translate 'LOGIN' %}</button></div>
                                                 <div class="u-s-m-b-30">
 
-                                                    <a class="gl-link" href="{% url 'account_reset_password' %}">Lost Your Password?</a></div>
+                                                    <a class="gl-link" href="{% url 'account_reset_password' %}">{% translate 'Lost Your Password?' %}</a></div>
                                             </div>
                                             <div class="u-s-m-b-30">
 

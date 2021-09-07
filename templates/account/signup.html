@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 {% load socialaccount %}
 {% block content %}
         <!--====== App Content ======-->
@@ -16,10 +17,10 @@
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="{% url 'home:home' %}">Home</a></li>
+                                        <a href="{% url 'home:home' %}">{% translate 'Home' %}</a></li>
                                     <li class="is-marked">
 
-                                        <a href="{% url 'account_signup' %}">Signup</a></li>
+                                        <a href="{% url 'account_signup' %}">{% translate 'Signup' %}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -38,7 +39,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary">CREATE AN ACCOUNT</h1>
+                                    <h1 class="section__heading u-c-secondary">{% translate 'CREATE AN ACCOUNT' %}</h1>
                                 </div>
                             </div>
                         </div>
@@ -54,9 +55,11 @@
                             <div class="col-lg-6 col-md-8 u-s-m-b-30">
                                 <div class="l-f-o">
                                     <div class="l-f-o__pad-box">
-                                        <h1 class="gl-h1">PERSONAL INFORMATION</h1>
+                                        <!-- <h1 class="gl-h1">{% translate 'PERSONAL INFORMATION' %}</h1> -->
                                         <form  id="signup_form" method="post" action="{% url 'account_signup' %}" class="l-f-o__form signup">
+                                           
                                             {% csrf_token %}
+                                          
                                            {% for i in form.errors %}
                                                 {{i}}
                                            {% endfor %}
@@ -65,53 +68,53 @@
 
                                                     <a href="{%  provider_login_url 'facebook'  %}" class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
 
-                                                        <span>Signup with Facebook</span></a></div>
+                                                        <span>{% translate 'Signup with Facebook' %}</span></a></div>
                                                 <div class="u-s-m-b-30">
 
                                                     <a  href="{%  provider_login_url 'google'  %}" class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
 
-                                                        <span>Signup with Google</span></a></div>
+                                                        <span>{% translate 'Signup with Google' %}</span></a></div>
                                             </div>
                                             <div class="u-s-m-b-30">
 
-                                                <label class="gl-label" for="reg-fname">FIRST NAME *</label>
+                                                <label class="gl-label" for="reg-fname">{% translate "FIRST NAME" %} *</label>
 
-                                                <input class="input-text input-text--primary-style" name="username" type="text" id="reg-fname" placeholder="First Name" required></div>
+                                                <input class="input-text input-text--primary-style" name="username" type="text" id="reg-fname" placeholder="{% translate 'First Name' %}" required></div>
                                             <div class="u-s-m-b-30">
 
-                                                <label class="gl-label" for="reg-lname">LAST NAME *</label>
+                                                <label class="gl-label" for="reg-lname">{% translate "LAST NAME" %} *</label>
 
-                                                <input class="input-text input-text--primary-style" type="text" name="last_name" id="reg-lname" placeholder="Last Name" required>
+                                                <input class="input-text input-text--primary-style" type="text" name="last_name" id="reg-lname" placeholder="{% translate 'Last Name' %}" required>
                                             </div>
                                             <div class="gl-inline">
                                                 <div class="u-s-m-b-30">
 
-                                                    <!--====== Date of Birth Select-Box ======-->
+                                                   
 
-                                                    <span class="gl-label">BIRTHDAY</span>
+                                                    <span class="gl-label">{% translate "BIRTHDAY" %}</span>
                                                     <div class="gl-dob"><select name="month" class="select-box select-box--primary-style" required>
-                                                        <option selected>Month</option>
-                                                        <option value="01">January</option>
-                                                        <option value="02">February</option>
-                                                        <option value="03">March</option>
-                                                        <option value="04">April</option>
-                                                        <option value="05">May</option>
-                                                        <option value="06">June</option>
-                                                        <option value="07">July</option>
-                                                        <option value="08">August</option>
-                                                        <option value="09">September</option>
-                                                        <option value="10">October</option>
-                                                        <option value="11">November</option>
-                                                        <option value="12">December</option>
+                                                        <option selected>{% translate "Month" %}</option>
+                                                        <option value="01">{% translate "January" %}</option>
+                                                        <option value="02">{% translate "February" %}</option>
+                                                        <option value="03">{% translate "March" %}</option>
+                                                        <option value="04">{% translate "April" %}</option>
+                                                        <option value="05">{% translate "May" %}</option>
+                                                        <option value="06">{% translate "June" %}</option>
+                                                        <option value="07">{% translate "July" %}</option>
+                                                        <option value="08">{% translate "August" %}</option>
+                                                        <option value="09">{% translate "September" %}</option>
+                                                        <option value="10">{% translate "October" %}</option>
+                                                        <option value="11">{% translate "November" %}</option>
+                                                        <option value="12">{% translate "December" %}</option>
                                                         </select><select name="day" class="select-box select-box--primary-style">
-                                                            <option selected>Day</option>
+                                                            <option selected>{% translate "Day" %}</option>
                                                             {% with ''|center:31 as range %}
                                                            {% for _ in range %}
                                                         <option value="{{forloop.counter}}" >{{forloop.counter}}</option>
                                                         {% endfor %}
                                                           {%endwith%} 
                                                         </select><select name="year" class="select-box select-box--primary-style">
-                                                            <option selected>Year</option>
+                                                            <option selected>{% translate "Year" %}</option>
                                                             {% with ''|center:10 as range %}
                                                             {% for _ in range %}
                                                             {% if forloop.counter0 < 10 %}
@@ -133,46 +136,47 @@
                                                           {%endwith%} 
 
                                                         </select></div>
-                                                    <!--====== End - Date of Birth Select-Box ======-->
+                                                   
                                                 </div>
                                                 <div class="u-s-m-b-30">
 
-                                                    <label class="gl-label" for="gender">GENDER</label><select name="gender" class="select-box select-box--primary-style u-w-100" id="gender" required>
-                                                        <option selected>Select</option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
+                                                    <label class="gl-label" for="gender">{% translate "GENDER" %}</label><select name="gender" class="select-box select-box--primary-style u-w-100" id="gender" required>
+                                                        <option selected>{% translate 'Select' %}</option>
+                                                        <option value="Male">{% translate "Male" %}</option>
+                                                        <option value="Female">{% translate "Female" %}</option>
                                                     </select></div>
                                             </div>
                                             <div class="u-s-m-b-30">
 
-                                                <label class="gl-label" for="reg-lname">PHONE *</label>
+                                                <label class="gl-label" for="reg-lname">{% translate "PHONE" %} *</label>
 
-                                                <input class="input-text input-text--primary-style" type="text" name="phone" id="reg-lname" placeholder="Phone Number" required>
+                                                <input class="input-text input-text--primary-style" type="text" name="phone" id="reg-lname" placeholder="{% translate 'Phone Number' %}" required>
                                             </div>
                                             <div class="u-s-m-b-30">
 
-                                                <label class="gl-label" for="reg-email">E-MAIL *</label>
+                                                <label class="gl-label" for="reg-email">{% translate "E-MAIL" %} *</label>
 
-                                                <input class="input-text input-text--primary-style" type="email" name="email" id="reg-email" placeholder="Enter E-mail" required>
+                                                <input class="input-text input-text--primary-style" type="email" name="email" id="reg-email" placeholder="{% translate 'Enter E-mail' %}" required>
                                             </div>
                                             <div class="u-s-m-b-30">
 
-                                                <label class="gl-label" for="reg-password">PASSWORD *</label>
+                                                <label class="gl-label" for="reg-password">{% translate "PASSWORD" %} *</label>
 
-                                                <input class="input-text input-text--primary-style" type="password" name="password1" id="reg-password1" placeholder="Enter Password" required></div>
+                                                <input class="input-text input-text--primary-style" type="password" name="password1" id="reg-password1" placeholder="{% translate 'Enter Password' %}" required></div>
                                                 <div class="u-s-m-b-30">
 
-                                                    <label class="gl-label" for="reg-password">PASSWORD *</label>
+                                                    <label class="gl-label" for="reg-password">{% translate "CONFIRM PASSWORD" %} *</label>
     
-                                                    <input class="input-text input-text--primary-style" type="password" name="password2" id="reg-password2" placeholder="Password again" required></div>
+                                                    <input class="input-text input-text--primary-style" type="password" name="password2" id="reg-password2" placeholder="{% translate 'Password again' %}" required>
+                                                </div>
                                                     {% if redirect_field_value %}
                                                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                                                     {% endif %}
                                                     <div class="u-s-m-b-15">
 
-                                                <button class="btn btn--e-transparent-brand-b-2" type="submit">CREATE</button></div>
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit">{% translate "CREATE" %}</button></div>
 
-                                            <a class="gl-link" href="{% url 'home:home' %}">Return to Store</a>
+                                            <a class="gl-link" href="{% url 'home:home' %}">{% translate "Return to Store" %}</a>
                                         </form>
                                     </div>
                                 </div>

@@ -112,8 +112,11 @@ class MyCustomSignupForm(SignupForm):
         # .save() returns a User object.
         user = super(MyCustomSignupForm, self).save(request)
         first_name=request.POST.get("username")
+        print(self.cleaned_data.get("last_name"))
         last_name=self.cleaned_data.get("last_name")
-        user.first_name=first_name      
+       
+        user.first_name=first_name  
+        
         user.last_name=last_name
         user.save()    
        
