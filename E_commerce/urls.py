@@ -31,7 +31,8 @@ urlpatterns += i18n_patterns(
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('allauth.urls')),    
     path("",include("STORE.urls",namespace="home")),
-    re_path('rosetta/', include('rosetta.urls'))
+    re_path('rosetta/', include('rosetta.urls')),
+    prefix_default_language=False
     )   
       
 if settings.DEBUG:
