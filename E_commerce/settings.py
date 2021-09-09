@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^yvdhx^w5$jah)-p!vbbqy5vf9qco&ge)p0m^nr_p%$=4&6i56'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 #TEMPLATE_DEBUG = DEBUG
 if DEBUG == False:
     TEMPLATE_DEBUG = DEBUG
@@ -86,7 +86,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'E_commerce.urls'
-# GDAL_LIBRARY_PATH= BASE_DIR/"test"
 TEMPLATES = [
     {  
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
