@@ -1881,8 +1881,7 @@ def quick_add(request,id):
 import csv   
 from django.utils.translation import gettext as _
 from django.utils.translation import get_language,activate,gettext
-from geopy.geocoders import Nominatim
-import geocoder
+
 def test(request):  
     my_list=[1,2,2]
     return render(request,"test.html",{"data":g.latlng})
