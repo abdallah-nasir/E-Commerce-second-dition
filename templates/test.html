@@ -15,16 +15,11 @@
                             <div class="col-lg-12 col-md-12 u-s-m-b-30">
                                 <div class="empty">
                                     <div class="empty__wrap">
+                                        <button onclick="getLocation()">Try It</button>
 
+                                        <p id="demo"></p>
                                         <span class="empty__big-text">{% translate 'hello' %}</span>
-                                        {% get_current_language as LANGUAGE_CODE %}
-                                        {% get_available_languages as LANGUAGES %}
-                                        {% get_language_info_list for LANGUAGES as languages %}
-                                        {% for language in languages %}
-                                            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                                {{ language.name_local }} ({{ language.code }})
-                                            </option>
-                                        {% endfor %}
+                                       {{data}}
 
                                         <span class="empty__text-1">Confirmation Email Has Been Sent To Your Email Address</span>
 
@@ -39,4 +34,21 @@
             <!--====== End - Section 1 ======-->
         </div>
         <!--====== End - App Content ======-->
+        <script>
+            var x = document.getElementById("demo");
+            
+            function getLocation() {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+              } else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+              }
+            }
+            
+            function showPosition(position) {
+              x.innerHTML = "Latitude: " + position.coords.latitude + 
+              "<br>Longitude: " + position.coords.longitude;
+            }
+            
+            </script>
 {% endblock %}

@@ -52,27 +52,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django.contrib.gis',
     # myapps
     "STORE",
     # packages
-    'crispy_forms',
+    'crispy_forms',    
     'bootstrap_datepicker_plus',   
     'django_filters',
     "cities_light",
     "ajax_select",
     'ckeditor',
     'ckeditor_uploader',
-   "rosetta",
-    # "Pay_Mob",
+   "rosetta",   
+   # "Pay_Mob",
     # "django_countries",
     'allauth',         
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',
-]       
-
-     
+    'allauth.socialaccount.providers.google',    
+]         
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -87,15 +86,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'E_commerce.urls'
-
+# GDAL_LIBRARY_PATH= BASE_DIR/"test"
 TEMPLATES = [
-    {
+    {  
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR/"templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
+                'django.template.context_processors.debug', 
                 'django.template.context_processors.request',   
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -110,8 +109,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'E_commerce.wsgi.application'
-
-
 
 
 #COUNTRIES
@@ -221,10 +218,10 @@ AUTHENTICATION_BACKENDS = [
 # DATABASES = {    
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': str(os.path.join(BASE_DIR ,'db.sqlite3')),
 #     }
-# }
-
+# }    
+  
 DATABASES={
     "default":{
         "ENGINE":"django.db.backends.postgresql_psycopg2",

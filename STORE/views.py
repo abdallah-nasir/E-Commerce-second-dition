@@ -1881,19 +1881,18 @@ def quick_add(request,id):
 import csv   
 from django.utils.translation import gettext as _
 from django.utils.translation import get_language,activate,gettext
-
-
+from geopy.geocoders import Nominatim
+import geocoder
 def test(request):  
-    trans =transalte(language="ar")
-    context={"trans":trans}       
-    return render(request,"test.html",context)
+    my_list=[1,2,2]
+    return render(request,"test.html",{"data":g.latlng})
 
 def transalte(language):
     current_lang=get_language()
     try:
         activate(language)
         text=gettext("hello")
-    finally:
+    finally:   
         activate(current_lang)
     return text
 def success(request):
