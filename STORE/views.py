@@ -1884,7 +1884,7 @@ from django.utils.translation import get_language,activate,gettext
 
 def test(request):  
     my_list=[1,2,2]
-    return render(request,"test.html",{"data":g.latlng})
+    return render(request,"test.html")
 
 def transalte(language):
     current_lang=get_language()
@@ -1893,7 +1893,7 @@ def transalte(language):
         text=gettext("hello")
     finally:   
         activate(current_lang)
-    return text
+    return text    
 def success(request):
     return render(request,"success.html")
 
